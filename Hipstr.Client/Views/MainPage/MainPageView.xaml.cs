@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml.Controls;
+using Autofac;
 
 namespace Hipstr.Client.Views.MainPage
 {

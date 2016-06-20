@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
+using Hipstr.Core.Services;
 
 namespace Hipstr.Client.Commands
 {

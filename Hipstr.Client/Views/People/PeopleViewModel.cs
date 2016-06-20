@@ -1,5 +1,8 @@
 ﻿using Hipstr.Core.Models;
+using Hipstr.Core.Models.HipChat;
+using Hipstr.Core.Services;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hipstr.Client.Views.People
 {
@@ -7,13 +10,21 @@ namespace Hipstr.Client.Views.People
 	{
 		public List<Person> People { get; set; }
 
-		public PeopleViewModel()
+		private readonly IHipChatService _hipChatService;
+
+		public PeopleViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
+
+		public PeopleViewModel(IHipChatService hipChatService)
 		{
-			People = new List<Person> {
-				new Person("Ian Burns"),
-				new Person("Hayley Garment"),
-				new Person("Brett Moquin")
-			};
+			_hipChatService = hipChatService;
+			UpdateUserList();
+		}
+
+		public void UpdateUserList()
+		{
+			CollectionWrapper<UserSummary> wrapper = _hipChatService.GetUsers();
+			List<Person> people = wrapper.Items.Select(userSummary => new Person(userSummary.Name)).ToList();
+			People = people;
 		}
 	}
 }

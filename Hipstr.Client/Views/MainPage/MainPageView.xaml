@@ -112,22 +112,22 @@
 		</Grid.ColumnDefinitions>
 		<RadioButton Style="{StaticResource TabRadioButtonStyle}"
 					 Grid.Row="0"
-					 Grid.Column="0">History</RadioButton>
-		<RadioButton Style="{StaticResource TabRadioButtonStyle}"
-					 Grid.Row="0"
-					 Grid.Column="1"
+					 Grid.Column="0"
 					 Command="{Binding Path=TeamsChangeViewCommand}"
 					 CommandParameter="{Binding ElementName=ContentFrame}">Teams</RadioButton>
 		<RadioButton Style="{StaticResource TabRadioButtonStyle}"
 					 Grid.Row="0"
-					 Grid.Column="2"
+					 Grid.Column="1"
 					 Command="{Binding Path=RoomsChangeViewCommand}"
 					 CommandParameter="{Binding ElementName=ContentFrame}">Rooms</RadioButton>
 		<RadioButton Style="{StaticResource TabRadioButtonStyle}"
 					 Grid.Row="0"
-					 Grid.Column="3"
+					 Grid.Column="2"
 					 Command="{Binding Path=PeopleChangeViewCommand}"
 					 CommandParameter="{Binding ElementName=ContentFrame}">People</RadioButton>
+		<RadioButton Style="{StaticResource TabRadioButtonStyle}"
+					 Grid.Row="0"
+					 Grid.Column="3">History</RadioButton>
 		<Frame Name="ContentFrame"
 			   Grid.Row="1"
 			   Grid.Column="0"

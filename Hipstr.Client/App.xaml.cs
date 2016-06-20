@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Hipstr.Client.Views.MainPage;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Hipstr.Client.Views.MainPage;
 
 namespace Hipstr.Client
 {
@@ -22,6 +22,9 @@ namespace Hipstr.Client
 			Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
 				Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
 				Microsoft.ApplicationInsights.WindowsCollectors.Session);
+
+			IoCContainer.Build();
+
 			InitializeComponent();
 			Suspending += OnSuspending;
 		}
