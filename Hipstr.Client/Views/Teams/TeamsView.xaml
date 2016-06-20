@@ -12,6 +12,13 @@
 	</Page.DataContext>
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<ListView ItemsSource="{Binding Teams}"/>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<ListView Grid.Row="0" ItemsSource="{Binding Teams}"/>
+		<CommandBar Grid.Row="1">
+			<AppBarButton Icon="Add" Label="Add Team"/>
+		</CommandBar>
 	</Grid>
 </Page>
