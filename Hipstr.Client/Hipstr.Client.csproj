@@ -98,10 +98,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Commands\SwitchToPeopleViewCommand.cs" />
-    <Compile Include="Commands\SwitchToRoomsViewCommand.cs" />
-    <Compile Include="Commands\SwitchToHistoryViewCommand.cs" />
-    <Compile Include="Commands\SwitchToTeamsViewCommand.cs" />
+    <Compile Include="Commands\AddTeamCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToAddTeamViewCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToUsersViewCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToRoomsViewCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToHistoryViewCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToTeamsViewCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToViewCommand.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
@@ -116,6 +119,10 @@
       <DependentUpon>PeopleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\People\PeopleViewModel.cs" />
+    <Compile Include="Views\Teams\AddTeamView.xaml.cs">
+      <DependentUpon>AddTeamView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Teams\AddTeamViewModel.cs" />
     <Compile Include="Views\Teams\TeamsView.xaml.cs">
       <DependentUpon>TeamsView.xaml</DependentUpon>
     </Compile>
@@ -157,6 +164,10 @@
     <Page Include="Views\People\PeopleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Teams\AddTeamView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Teams\TeamsView.xaml">
       <SubType>Designer</SubType>

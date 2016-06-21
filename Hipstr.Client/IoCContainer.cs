@@ -1,7 +1,8 @@
 ﻿
-using System.Net.Http;
 using Autofac;
+using Autofac.Builder;
 using Hipstr.Core.Services;
+using System.Net.Http;
 
 namespace Hipstr.Client
 {
@@ -21,12 +22,13 @@ namespace Hipstr.Client
 		private static void InitializeInjectionMappings(ContainerBuilder builder)
 		{
 			builder.RegisterType<IHipChatService, HipChatService>();
+			builder.RegisterType<INavigationService, NavigationService>().InstancePerLifetimeScope();
 			builder.RegisterType<HttpClient, HttpClient>();
 		}
 
-		private static void RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
+		private static IRegistrationBuilder<InstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
 		{
-			builder.RegisterType<InstanceType>().As<Interface>();
+			return builder.RegisterType<InstanceType>().As<Interface>();
 		}
 
 		public static Interface Resolve<Interface>()

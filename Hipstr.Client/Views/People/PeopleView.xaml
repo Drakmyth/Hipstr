@@ -12,6 +12,6 @@
 	</Page.DataContext>
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<ListView ItemsSource="{Binding People}"/>
+		<ListView ItemsSource="{Binding Users}"/>
 	</Grid>
 </Page>

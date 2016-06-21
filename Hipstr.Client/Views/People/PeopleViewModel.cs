@@ -8,7 +8,7 @@ namespace Hipstr.Client.Views.People
 {
 	public class PeopleViewModel
 	{
-		public List<Person> People { get; set; }
+		public List<User> Users { get; set; }
 
 		private readonly IHipChatService _hipChatService;
 
@@ -23,8 +23,8 @@ namespace Hipstr.Client.Views.People
 		public void UpdateUserList()
 		{
 			CollectionWrapper<UserSummary> wrapper = _hipChatService.GetUsers();
-			List<Person> people = wrapper.Items.Select(userSummary => new Person(userSummary.Name)).ToList();
-			People = people;
+			List<User> users = wrapper.Items.Select(userSummary => new User(userSummary.Name)).ToList();
+			Users = users;
 		}
 	}
 }

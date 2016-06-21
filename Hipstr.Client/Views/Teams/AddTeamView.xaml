@@ -1,0 +1,43 @@
+﻿<Page
+    x:Class="Hipstr.Client.Views.Teams.AddTeamView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:viewModel="using:Hipstr.Client.Views.Teams"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+	<Page.DataContext>
+		<viewModel:AddTeamViewModel/>
+	</Page.DataContext>
+
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+					   Grid.Row="0">
+			<TextBlock Name="PageTitle"
+					   Margin="10 10 10 5"
+					   FontSize="32">Add Team</TextBlock>
+			<TextBox Name="NameTextBox"
+					 Header="Team Name"
+					 Margin="10 5"
+					 RelativePanel.Below="PageTitle"
+					 RelativePanel.AlignLeftWithPanel="True"
+					 RelativePanel.AlignRightWithPanel="True"/>
+			<TextBox Header="API Key"
+					 Margin="10 5"
+					 RelativePanel.Below="NameTextBox"
+					 RelativePanel.AlignLeftWithPanel="True"
+					 RelativePanel.AlignRightWithPanel="True"/>
+		</RelativePanel>
+		<CommandBar Grid.Row="1">
+			<AppBarButton Icon="Cancel" Label="Cancel"/>
+			<AppBarButton Icon="Accept" Label="Accept"/>
+		</CommandBar>
+	</Grid>
+</Page>
+

@@ -1,10 +1,10 @@
 ﻿namespace Hipstr.Core.Models
 {
-	public class Person
+	public class User
 	{
 		public string Name { get; set; }
 
-		public Person(string name)
+		public User(string name)
 		{
 			Name = name;
 		}
