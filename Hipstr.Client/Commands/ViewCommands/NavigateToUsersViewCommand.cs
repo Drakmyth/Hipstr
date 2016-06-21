@@ -1,6 +1,6 @@
-﻿using Hipstr.Client.Views.People;
+﻿using Hipstr.Client.Views.Users;
 
 namespace Hipstr.Client.Commands.ViewCommands
 {
-	public class NavigateToUsersViewCommand : NavigateToViewCommand<PeopleView> { }
+	public class NavigateToUsersViewCommand : NavigateToViewCommand<UsersView> { }
 }

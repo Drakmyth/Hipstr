@@ -115,10 +115,10 @@
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Rooms\RoomsViewModel.cs" />
-    <Compile Include="Views\People\PeopleView.xaml.cs">
-      <DependentUpon>PeopleView.xaml</DependentUpon>
+    <Compile Include="Views\Users\UsersView.xaml.cs">
+      <DependentUpon>UsersView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\People\PeopleViewModel.cs" />
+    <Compile Include="Views\Users\UsersViewModel.cs" />
     <Compile Include="Views\Teams\AddTeamView.xaml.cs">
       <DependentUpon>AddTeamView.xaml</DependentUpon>
     </Compile>
@@ -161,7 +161,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\People\PeopleView.xaml">
+    <Page Include="Views\Users\UsersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

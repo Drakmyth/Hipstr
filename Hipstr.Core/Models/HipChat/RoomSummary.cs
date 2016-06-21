@@ -11,5 +11,11 @@ namespace Hipstr.Core.Models.HipChat
 		public string Name { get; set; }
 		public string Privacy { get; set; }
 		public string Version { get; set; }
+
+		// TODO: Replace with DataTemplate in View
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

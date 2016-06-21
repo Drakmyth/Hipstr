@@ -1,14 +1,14 @@
 ﻿<Page
-    x:Class="Hipstr.Client.Views.People.PeopleView"
+    x:Class="Hipstr.Client.Views.Users.UsersView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:viewModel="using:Hipstr.Client.Views.People"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:users="using:Hipstr.Client.Views.Users"
     mc:Ignorable="d">
 
 	<Page.DataContext>
-		<viewModel:PeopleViewModel/>
+		<users:UsersViewModel/>
 	</Page.DataContext>
 
 	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
