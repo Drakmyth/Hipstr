@@ -1,0 +1,14 @@
+﻿<Rooms:RoomsViewModel xmlns:Rooms="using:Hipstr.Client.Views.Rooms" xmlns:HipChat="using:Hipstr.Core.Models.HipChat">
+	<Rooms:RoomsViewModel.Rooms>
+		<HipChat:RoomSummary Id="66" IsArchived="True" Name="Kitchen" Privacy="Aenean duis nunc mauris nam" Version="Nullam curabitur class"/>
+		<HipChat:RoomSummary Id="17" IsArchived="False" Name="Master Bedroom" Privacy="Phasellus maecenas" Version="Amet curae integer"/>
+		<HipChat:RoomSummary Id="37" IsArchived="True" Name="Bathroom" Privacy="Quisque bibendum donec" Version="Parturient etiam ante arcu vestibulum"/>
+		<HipChat:RoomSummary Id="63" IsArchived="False" Name="Living Room" Privacy="Aptent vestibulum adipiscing parturient convallis" Version="Dignissim vivamus fusce aliquam"/>
+		<HipChat:RoomSummary Id="88" IsArchived="True" Name="Main Hall" Privacy="Dis auctor aliquet erat" Version="Congue eleifend"/>
+		<HipChat:RoomSummary Id="84" IsArchived="False" Name="Library" Privacy="Elementum blandit vestibulum vestibulum" Version="Eros hac leo cursus"/>
+		<HipChat:RoomSummary Id="71" IsArchived="True" Name="Garage" Privacy="Mus faucibus parturient vestibulum" Version="Proin habitant augue nibh"/>
+		<HipChat:RoomSummary Id="88" IsArchived="False" Name="Parlor" Privacy="Non fringilla nisi habitasse inceptos" Version="Hendrerit interdum dictum"/>
+		<HipChat:RoomSummary Id="45" IsArchived="True" Name="Basement" Privacy="Nunc per" Version="Lectus imperdiet malesuada libero fames"/>
+		<HipChat:RoomSummary Id="27" IsArchived="False" Name="Stairwell" Privacy="Conubia vestibulum" Version="Felis ipsum sed penatibus cubilia"/>
+	</Rooms:RoomsViewModel.Rooms>
+</Rooms:RoomsViewModel>

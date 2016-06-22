@@ -1,0 +1,14 @@
+﻿<Users:UsersViewModel xmlns:Users="using:Hipstr.Client.Views.Users" xmlns:HipChat="using:Hipstr.Core.Models.HipChat">
+	<Users:UsersViewModel.Users>
+		<HipChat:UserSummary Id="66" Name="Jesper Aaberg" Version="Nullam curabitur class" MentionName="JAaberg" />
+		<HipChat:UserSummary Id="17" Name="Ellen Adams" Version="Amet curae integer" MentionName="EAdams" />
+		<HipChat:UserSummary Id="37" Name="Terry Adams" Version="Parturient etiam ante arcu vestibulum" MentionName="TAdams" />
+		<HipChat:UserSummary Id="63" Name="Terry Adams" Version="Dignissim vivamus fusce aliquam" MentionName="TAdams" />
+		<HipChat:UserSummary Id="88" Name="Michael Pfeiffer" Version="Congue eleifend" MentionName="MPfeiffer" />
+		<HipChat:UserSummary Id="84" Name="Carol Philips" Version="Eros hac leo cursus" MentionName="CPhilips" />
+		<HipChat:UserSummary Id="71" Name="Toni Poe" Version="Proin habitant augue nibh" MentionName="TPoe" />
+		<HipChat:UserSummary Id="88" Name="Cassie Hicks" Version="Hendrerit interdum dictum" MentionName="CHicks" />
+		<HipChat:UserSummary Id="45" Name="Luca Argentiero" Version="Lectus imperdiet malesuada libero fames" MentionName="LArgentiero" />
+		<HipChat:UserSummary Id="27" Name="Brian Perry" Version="Felis ipsum sed penatibus cubilia" MentionName="BPerry" />
+	</Users:UsersViewModel.Users>
+</Users:UsersViewModel>

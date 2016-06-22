@@ -21,7 +21,7 @@ namespace Hipstr.Client
 		public App()
 		{
 			WindowsAppInitializer.InitializeAsync(WindowsCollectors.Metadata | WindowsCollectors.Session);
-
+			
 			IoCContainer.Build();
 
 			InitializeComponent();

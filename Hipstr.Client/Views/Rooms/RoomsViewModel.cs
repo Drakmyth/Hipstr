@@ -1,6 +1,6 @@
 ﻿using Hipstr.Core.Models.HipChat;
 using Hipstr.Core.Services;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -8,7 +8,7 @@ namespace Hipstr.Client.Views.Rooms
 	{
 		private readonly IHipChatService _hipChatService;
 
-		public IEnumerable<RoomSummary> Rooms { get; set; }
+		public ObservableCollection<RoomSummary> Rooms { get; set; }
 
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
 
@@ -21,7 +21,7 @@ namespace Hipstr.Client.Views.Rooms
 		public void UpdateRoomList()
 		{
 			CollectionWrapper<RoomSummary> wrapper = _hipChatService.GetRooms();
-			Rooms = wrapper.Items;
+			Rooms = new ObservableCollection<RoomSummary>(wrapper.Items);
 		}
 	}
 }
