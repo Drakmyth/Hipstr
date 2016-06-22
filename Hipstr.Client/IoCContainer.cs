@@ -1,5 +1,4 @@
-﻿
-using Autofac;
+﻿using Autofac;
 using Autofac.Builder;
 using Hipstr.Core.Services;
 using System.Net.Http;
@@ -21,6 +20,7 @@ namespace Hipstr.Client
 
 		private static void InitializeInjectionMappings(ContainerBuilder builder)
 		{
+			builder.RegisterType<ITeamService, TeamService>();
 			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<INavigationService, NavigationService>().InstancePerLifetimeScope();
 			builder.RegisterType<HttpClient, HttpClient>();

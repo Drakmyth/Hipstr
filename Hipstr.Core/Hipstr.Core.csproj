@@ -115,6 +115,7 @@
     <Compile Include="Services\HipChatService.cs" />
     <Compile Include="Services\IHipChatService.cs" />
     <Compile Include="Services\INavigationService.cs" />
+    <Compile Include="Services\ITeamService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\TeamService.cs" />
     <EmbeddedResource Include="Properties\Hipstr.Core.rd.xml" />
