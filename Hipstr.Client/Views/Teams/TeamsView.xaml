@@ -11,12 +11,21 @@
 		<viewModel:TeamsViewModel/>
 	</Page.DataContext>
 
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+		  d:DataContext="{d:DesignData Source=/SampleData/TeamsViewModelSampleData.xaml}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{Binding Teams}"/>
+		<ListView Grid.Row="0" ItemsSource="{Binding Teams}">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Text="{Binding Name}"/>
+					</StackPanel>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
 		<CommandBar Grid.Row="1">
 			<AppBarButton Icon="Add" Label="Add Team" Command="{Binding AddTeamCommand}" CommandParameter="{Binding }"/>
 		</CommandBar>
