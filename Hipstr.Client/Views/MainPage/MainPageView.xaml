@@ -131,7 +131,7 @@
 		<Frame Name="ContentFrame"
 			   Grid.Row="1"
 			   Grid.Column="0"
-			   Grid.ColumnSpan="4"/>
+			   Grid.ColumnSpan="4" />
 	</Grid>
 </Page>
 

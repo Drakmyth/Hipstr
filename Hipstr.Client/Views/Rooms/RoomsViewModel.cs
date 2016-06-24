@@ -1,5 +1,6 @@
 ﻿using Hipstr.Core.Models.HipChat;
 using Hipstr.Core.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Hipstr.Client.Views.Rooms
@@ -20,8 +21,15 @@ namespace Hipstr.Client.Views.Rooms
 
 		public void UpdateRoomList()
 		{
-			CollectionWrapper<RoomSummary> wrapper = _hipChatService.GetRooms();
-			Rooms = new ObservableCollection<RoomSummary>(wrapper.Items);
+			IEnumerable<CollectionWrapper<RoomSummary>> wrappers = _hipChatService.GetRooms();
+
+			List<RoomSummary> rooms = new List<RoomSummary>();
+			foreach (CollectionWrapper<RoomSummary> wrapper in wrappers)
+			{
+				rooms.AddRange(wrapper.Items);
+			}
+
+			Rooms = new ObservableCollection<RoomSummary>(rooms);
 		}
 	}
 }

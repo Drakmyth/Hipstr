@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Hipstr.Core.Models;
+using Hipstr.Core.Models.HipChat;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Hipstr.Core.Models.HipChat;
-using Newtonsoft.Json;
 
 namespace Hipstr.Core.Services
 {
@@ -11,27 +13,44 @@ namespace Hipstr.Core.Services
 	{
 		// TODO: Get API_KEY from user
 		// TODO: Notify user when API_KEY is about to expire
-		private const string API_KEY = "---API KEY GOES HERE---"; // API_KEY is good for 1 year from generation date.
+		
 		private readonly Uri ROOT_URI = new Uri("http://www.hipchat.com");
 
+		private readonly ITeamService _teamService;
 		private readonly HttpClient _httpClient;
 
-		public HipChatService(HttpClient httpClient)
+		public HipChatService(HttpClient httpClient, ITeamService teamService)
 		{
 			_httpClient = httpClient;
-			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", API_KEY);
+			_teamService = teamService;
 		}
 
-		public CollectionWrapper<RoomSummary> GetRooms()
+		public IEnumerable<CollectionWrapper<RoomSummary>> GetRooms()
 		{
-			Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/room"));
-			get.Wait();
+			IEnumerable<Team> teams = _teamService.GetTeams();
 
-			Task<string> json = get.Result.Content.ReadAsStringAsync();
-			json.Wait();
+			List<Task<HttpResponseMessage>> roomRequests = new List<Task<HttpResponseMessage>>();
 
-			CollectionWrapper<RoomSummary> summary = JsonConvert.DeserializeObject<CollectionWrapper<RoomSummary>>(json.Result);
-			return summary;
+			foreach (Team team in teams)
+			{
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+				Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/room"));
+				roomRequests.Add(get);
+			}
+
+			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(roomRequests);
+			requestTasks.Wait();
+
+			List<CollectionWrapper<RoomSummary>> rooms = new List<CollectionWrapper<RoomSummary>>();
+			foreach (HttpResponseMessage response in requestTasks.Result)
+			{
+				Task<string> json = response.Content.ReadAsStringAsync();
+				json.Wait();
+				CollectionWrapper<RoomSummary> room = JsonConvert.DeserializeObject<CollectionWrapper<RoomSummary>>(json.Result);
+				rooms.Add(room);
+			}
+
+			return rooms;
 		}
 
 		public CollectionWrapper<UserSummary> GetUsers()

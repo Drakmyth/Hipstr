@@ -1,10 +1,11 @@
 ﻿using Hipstr.Core.Models.HipChat;
+using System.Collections.Generic;
 
 namespace Hipstr.Core.Services
 {
 	public interface IHipChatService
 	{
-		CollectionWrapper<RoomSummary> GetRooms();
+		IEnumerable<CollectionWrapper<RoomSummary>> GetRooms();
 		CollectionWrapper<UserSummary> GetUsers();
 	}
 }
