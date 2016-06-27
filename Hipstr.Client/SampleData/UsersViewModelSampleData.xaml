@@ -1,15 +1,15 @@
 ﻿<users:UsersViewModel xmlns:users="using:Hipstr.Client.Views.Users" xmlns:models="using:Hipstr.Core.Models">
 	<users:UsersViewModel.Users>
-		<models:User Id="66" Name="Jesper Aaberg" MentionName="JAaberg" />
-		<models:User Id="17" Name="Ellen Adams" MentionName="EAdams" />
-		<models:User Id="37" Name="Terry Adams" MentionName="TAdams" />
-		<models:User Id="63" Name="Terry Adams" MentionName="TAdams" />
-		<models:User Id="88" Name="Michael Pfeiffer" MentionName="MPfeiffer" />
-		<models:User Id="84" Name="Carol Philips" MentionName="CPhilips" />
-		<models:User Id="71" Name="Toni Poe" MentionName="TPoe" />
-		<models:User Id="88" Name="Cassie Hicks" MentionName="CHicks" />
-		<models:User Id="45" Name="Luca Argentiero" MentionName="LArgentiero" />
-		<models:User Id="27" Name="Brian Perry" MentionName="BPerry" />
+		<models:User Id="66" Name="Jesper Aaberg" Handle="JAaberg" />
+		<models:User Id="17" Name="Ellen Adams" Handle="EAdams" />
+		<models:User Id="37" Name="Terry Adams" Handle="TAdams" />
+		<models:User Id="63" Name="Terry Adams" Handle="TAdams" />
+		<models:User Id="88" Name="Michael Pfeiffer" Handle="MPfeiffer" />
+		<models:User Id="84" Name="Carol Philips" Handle="CPhilips" />
+		<models:User Id="71" Name="Toni Poe" Handle="TPoe" />
+		<models:User Id="88" Name="Cassie Hicks" Handle="CHicks" />
+		<models:User Id="45" Name="Luca Argentiero" Handle="LArgentiero" />
+		<models:User Id="27" Name="Brian Perry" Handle="BPerry" />
 	</users:UsersViewModel.Users>
 </users:UsersViewModel>
 

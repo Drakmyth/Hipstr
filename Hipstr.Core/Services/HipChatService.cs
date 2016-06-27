@@ -92,7 +92,7 @@ namespace Hipstr.Core.Services
 					User user = new User
 					{
 						Id = hcUser.Id,
-						MentionName = hcUser.MentionName,
+						Handle = hcUser.MentionName,
 						Name = hcUser.Name
 					};
 
