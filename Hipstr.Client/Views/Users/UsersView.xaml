@@ -27,9 +27,12 @@
 		<ListView Grid.Row="0" ItemsSource="{Binding Users}">
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
+					<StackPanel>
 						<TextBlock Text="{Binding Name}"
 								   Foreground="White"/>
+						<TextBlock Text="{Binding Team.Name}"
+								   Foreground="LightGray"
+								   FontSize="10"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>

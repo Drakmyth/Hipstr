@@ -24,24 +24,15 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0"
-				  ItemsSource="{Binding Rooms}">
+		<ListView Grid.Row="0" ItemsSource="{Binding Rooms}">
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<StackPanel>
 						<TextBlock Text="{Binding Name}"
-								   Foreground="White"
-								   Margin="0 0 10 0"/>
+								   Foreground="White"/>
 						<TextBlock Text="{Binding Team.Name}"
-								   Foreground="White"
-								   FontSize="6"
-								   VerticalAlignment="Bottom"
-								   FontWeight="Bold"/>
-						<TextBlock Text="{Binding Topic}"
-								   Foreground="White"
-								   FontSize="6"
-								   VerticalAlignment="Bottom"
-								   FontWeight="Bold"/>
+								   Foreground="LightGray"
+								   FontSize="10"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
