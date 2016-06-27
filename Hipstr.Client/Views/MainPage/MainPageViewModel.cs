@@ -1,4 +1,5 @@
 ﻿using Hipstr.Client.Commands.ViewCommands;
+using Hipstr.Client.Views.Teams;
 using System;
 using System.Windows.Input;
 using Windows.UI.Core;
@@ -12,12 +13,14 @@ namespace Hipstr.Client.Views.MainPage
 		public ICommand NavigateToTeamsViewCommand { get; set; }
 		public ICommand NavigateToRoomsViewCommand { get; set; }
 		public ICommand NavigateToUsersViewCommand { get; set; }
+		public Type DefaultMainPage { get; set; }
 
 		public MainPageViewModel()
 		{
 			NavigateToTeamsViewCommand = new NavigateToTeamsViewCommand();
 			NavigateToRoomsViewCommand = new NavigateToRoomsViewCommand();
 			NavigateToUsersViewCommand = new NavigateToUsersViewCommand();
+			DefaultMainPage = typeof(TeamsView);
 			SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
 		}
 

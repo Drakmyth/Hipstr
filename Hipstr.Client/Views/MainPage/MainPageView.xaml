@@ -12,6 +12,9 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Styles/Colors.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="RadioButton">
 				<Setter Property="Template">
 					<Setter.Value>
@@ -21,8 +24,6 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
-			<SolidColorBrush x:Key="HipChatBackground" Color="#FF205081"/>
-			<SolidColorBrush x:Key="HipChatControl" Color="#FF3572B0"/>
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -90,7 +91,8 @@
 					</RadioButton>
 				</StackPanel>
 			</SplitView.Pane>
-			<Frame Name="ContentFrame"/>
+			<Frame Name="ContentFrame"
+				   SourcePageType="{Binding DefaultMainPage}"/>
 		</SplitView>
 	</Grid>
 </Page>
