@@ -65,16 +65,42 @@ namespace Hipstr.Core.Services
 			return rooms;
 		}
 
-		public HipChatCollectionWrapper<HipChatUser> GetUsers()
+		public IEnumerable<User> GetUsers()
 		{
-			Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/user"));
-			get.Wait();
+			IEnumerable<Team> teams = _teamService.GetTeams();
 
-			Task<string> json = get.Result.Content.ReadAsStringAsync();
-			json.Wait();
+			List<Task<HttpResponseMessage>> userRequests = new List<Task<HttpResponseMessage>>();
 
-			HipChatCollectionWrapper<HipChatUser> summary = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
-			return summary;
+			foreach (Team team in teams)
+			{
+				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+				Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/user"));
+				userRequests.Add(get);
+			}
+
+			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(userRequests);
+			requestTasks.Wait();
+
+			List<User> users = new List<User>();
+			foreach (HttpResponseMessage response in requestTasks.Result)
+			{
+				Task<string> json = response.Content.ReadAsStringAsync();
+				json.Wait();
+				HipChatCollectionWrapper<HipChatUser> userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
+				foreach (HipChatUser hcUser in userWrapper.Items)
+				{
+					User user = new User
+					{
+						Id = hcUser.Id,
+						MentionName = hcUser.MentionName,
+						Name = hcUser.Name
+					};
+
+					users.Add(user);
+				}
+			}
+
+			return users;
 		}
 	}
 }

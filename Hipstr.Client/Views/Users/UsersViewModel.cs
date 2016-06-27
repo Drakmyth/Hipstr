@@ -1,5 +1,6 @@
-﻿using Hipstr.Core.Models.HipChat;
+﻿using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Hipstr.Client.Views.Users
@@ -8,7 +9,7 @@ namespace Hipstr.Client.Views.Users
 	{
 		private readonly IHipChatService _hipChatService;
 
-		public ObservableCollection<HipChatUser> Users { get; set; }
+		public ObservableCollection<User> Users { get; set; }
 
 		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
 
@@ -20,8 +21,8 @@ namespace Hipstr.Client.Views.Users
 
 		public void UpdateUserList()
 		{
-			HipChatCollectionWrapper<HipChatUser> wrapper = _hipChatService.GetUsers();
-			Users = new ObservableCollection<HipChatUser>(wrapper.Items);
+			IEnumerable<User> users = _hipChatService.GetUsers();
+			Users = new ObservableCollection<User>(users);
 		}
 	}
 }
