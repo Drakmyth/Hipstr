@@ -1,3 +1,3 @@
-﻿<main:MainPageViewModel xmlns:main="using:Hipstr.Client.Views.MainPage" Title="Title Goes Here">
+﻿<main:MainPageViewModel xmlns:main="using:Hipstr.Client.Views.MainPage" Title="Title Goes Here" FrameContent="">
 </main:MainPageViewModel>
 
