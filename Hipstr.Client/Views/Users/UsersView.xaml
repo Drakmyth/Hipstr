@@ -20,7 +20,11 @@
 
 	<Grid Background="{StaticResource HipChatBackground}"
 		  d:DataContext="{d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}">
-		<ListView ItemsSource="{Binding Users}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<ListView Grid.Row="0" ItemsSource="{Binding Users}">
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
@@ -30,5 +34,12 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+		<CommandBar Grid.Row="1"
+					Background="{StaticResource HipChatControl}"
+					Foreground="White">
+			<AppBarButton Icon="Refresh"
+						  Label="Refresh"
+						  Foreground="White"/>
+		</CommandBar>
 	</Grid>
 </Page>
