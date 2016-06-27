@@ -10,13 +10,22 @@
 		<viewModel:RoomsViewModel/>
 	</Page.DataContext>
 
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+	<Page.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Styles/Colors.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Page.Resources>
+
+	<Grid Background="{StaticResource HipChatBackground}"
 		  d:DataContext="{d:DesignData Source=/SampleData/RoomsViewModelSampleData.xaml}">
 		<ListView ItemsSource="{Binding Rooms}">
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{Binding Name}"/>
+						<TextBlock Text="{Binding Name}"
+								   Foreground="White"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
