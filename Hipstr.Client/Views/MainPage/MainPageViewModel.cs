@@ -1,41 +1,63 @@
 ﻿using Hipstr.Client.Commands.ViewCommands;
-using Hipstr.Client.Views.Teams;
-using System;
+using System.ComponentModel;
 using System.Windows.Input;
-using Windows.UI.Core;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace Hipstr.Client.Views.MainPage
 {
-	public class MainPageViewModel
+	public class MainPageViewModel : ViewModelBase
 	{
-		public event EventHandler<BackRequestedEventArgs> BackRequested;
+		public ICommand NavigateToTeamsViewCommand { get; }
+		public ICommand NavigateToRoomsViewCommand { get; }
+		public ICommand NavigateToUsersViewCommand { get; }
 
-		public ICommand NavigateToTeamsViewCommand { get; set; }
-		public ICommand NavigateToRoomsViewCommand { get; set; }
-		public ICommand NavigateToUsersViewCommand { get; set; }
-		public Type DefaultMainPage { get; set; }
+		private FrameworkElement _frameContent;
+		public FrameworkElement FrameContent
+		{
+			get
+			{
+				return _frameContent;
+			}
+			set
+			{
+				_frameContent = value;
+				OnPropertyChanged(nameof(FrameContent));
+			}
+		}
+
+		private string _title;
+		public string Title
+		{
+			get
+			{
+				return _title;
+			}
+			set
+			{
+				_title = value;
+				OnPropertyChanged(nameof(Title));
+			}
+		}
 
 		public MainPageViewModel()
 		{
 			NavigateToTeamsViewCommand = new NavigateToTeamsViewCommand();
 			NavigateToRoomsViewCommand = new NavigateToRoomsViewCommand();
 			NavigateToUsersViewCommand = new NavigateToUsersViewCommand();
-			DefaultMainPage = typeof(TeamsView);
-			SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+			PropertyChanged += OnFrameContentChanged;
 		}
 
-		private void OnBackRequested(object sender, BackRequestedEventArgs e)
+		private void OnFrameContentChanged(object sender, PropertyChangedEventArgs e)
 		{
-			//			BackRequested?.Invoke(this, e);
-			//
-			//			if (e.Handled) return;
-			//
-			//			Frame rootFrame = (Frame)WindowCurrent.Content;
-			//			if (rootFrame.CanGoBack)
-			//			{
-			//				e.Handled = true;
-			//				rootFrame.GoBack();
-			//			}
+			if (e.PropertyName != nameof(FrameContent)) return;
+
+			Page page = FrameContent as Page;
+			ITitled titled = page?.DataContext as ITitled;
+			if (titled != null)
+			{
+				Title = titled.Title;
+			}
 		}
 	}
 }

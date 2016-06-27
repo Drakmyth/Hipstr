@@ -107,9 +107,13 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\IUserConverter.cs" />
+    <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
+    <Compile Include="Models\HipChat\HipChatMessage.cs" />
     <Compile Include="Models\HipChat\HipChatRoom.cs" />
     <Compile Include="Models\HipChat\HipChatUser.cs" />
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />

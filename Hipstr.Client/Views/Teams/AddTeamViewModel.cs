@@ -1,6 +1,6 @@
 ﻿namespace Hipstr.Client.Views.Teams
 {
-	public class AddTeamViewModel
+	public class AddTeamViewModel : ViewModelBase
 	{
 		
 	}

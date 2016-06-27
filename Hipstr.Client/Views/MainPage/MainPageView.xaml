@@ -27,21 +27,34 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}">
+	<Grid Background="{StaticResource HipChatBackground}"
+		  d:DataContext="{d:DesignData Source=/SampleData/MainPageViewModelSampleData.xaml}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="*"/>
 		</Grid.RowDefinitions>
-		<Button Grid.Row="0"
-				Width="{Binding ElementName=MenuSplitView, Path=CompactPaneLength}"
-				Click="HamburgerButton_Click"
-				Background="{StaticResource HipChatControl}">
-			<StackPanel>
-				<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
-				<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
-				<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
-			</StackPanel>
-		</Button>
+		<RelativePanel Grid.Row="0">
+			<Button Name="MenuButton"
+					Width="{Binding ElementName=MenuSplitView, Path=CompactPaneLength}"
+					Padding="0 10"
+					Click="HamburgerButton_Click"
+					Background="{StaticResource HipChatControl}">
+				<StackPanel>
+					<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
+					<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
+					<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
+				</StackPanel>
+			</Button>
+			<TextBlock RelativePanel.RightOf="MenuButton"
+					   RelativePanel.AlignVerticalCenterWith="MenuButton"
+					   Margin="10 0 0 0"
+					   FontWeight="Bold"
+					   Foreground="White"
+					   Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			<ComboBox RelativePanel.AlignRightWithPanel="True"
+					  RelativePanel.AlignVerticalCenterWith="MenuButton"
+					  Margin="0 0 5 0"/>
+		</RelativePanel>
 		<SplitView Name="MenuSplitView"
 				   Grid.Row="1"
 				   DisplayMode="Overlay"
@@ -92,7 +105,7 @@
 				</StackPanel>
 			</SplitView.Pane>
 			<Frame Name="ContentFrame"
-				   SourcePageType="{Binding DefaultMainPage}"/>
+				   Content="{Binding FrameContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 		</SplitView>
 	</Grid>
 </Page>

@@ -106,6 +106,8 @@
     <Compile Include="Commands\ViewCommands\NavigateToTeamsViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToViewCommand.cs" />
     <Compile Include="IoCContainer.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Views\ITitled.cs" />
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
@@ -127,6 +129,7 @@
       <DependentUpon>TeamsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Teams\TeamsViewModel.cs" />
+    <Compile Include="Views\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -158,6 +161,10 @@
       <SubType>Designer</SubType>
     </DesignData>
     <DesignData Include="SampleData\TeamsViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
+    <DesignData Include="SampleData\MainPageViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>

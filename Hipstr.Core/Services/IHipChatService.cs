@@ -7,5 +7,6 @@ namespace Hipstr.Core.Services
 	{
 		IEnumerable<Room> GetRooms();
 		IEnumerable<User> GetUsers();
+		IEnumerable<Message> GetMessages(Room room);
 	}
 }

@@ -20,10 +20,15 @@
 
 	<Grid Background="{StaticResource HipChatBackground}"
 		  d:DataContext="{d:DesignData Source=/SampleData/RoomsViewModelSampleData.xaml}">
-		<ListView ItemsSource="{Binding Rooms}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<ListView Grid.Row="0"
+				  ItemsSource="{Binding Rooms}">
 			<ListView.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Orientation="Horizontal">
+					<StackPanel>
 						<TextBlock Text="{Binding Name}"
 								   Foreground="White"
 								   Margin="0 0 10 0"/>
@@ -32,9 +37,21 @@
 								   FontSize="6"
 								   VerticalAlignment="Bottom"
 								   FontWeight="Bold"/>
+						<TextBlock Text="{Binding Topic}"
+								   Foreground="White"
+								   FontSize="6"
+								   VerticalAlignment="Bottom"
+								   FontWeight="Bold"/>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+		<CommandBar Grid.Row="1"
+					Background="{StaticResource HipChatControl}"
+					Foreground="White">
+			<AppBarButton Icon="Refresh"
+						  Label="Refresh"
+						  Foreground="White"/>
+		</CommandBar>
 	</Grid>
 </Page>

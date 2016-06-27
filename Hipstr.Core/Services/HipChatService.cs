@@ -1,4 +1,5 @@
-﻿using Hipstr.Core.Models;
+﻿using Hipstr.Core.Converters;
+using Hipstr.Core.Models;
 using Hipstr.Core.Models.HipChat;
 using Newtonsoft.Json;
 using System;
@@ -18,11 +19,13 @@ namespace Hipstr.Core.Services
 
 		private readonly ITeamService _teamService;
 		private readonly HttpClient _httpClient;
+		private readonly IUserConverter _userConverter;
 
-		public HipChatService(HttpClient httpClient, ITeamService teamService)
+		public HipChatService(HttpClient httpClient, ITeamService teamService, IUserConverter userConverter)
 		{
 			_httpClient = httpClient;
 			_teamService = teamService;
+			_userConverter = userConverter;
 		}
 
 		public IEnumerable<Room> GetRooms()
@@ -95,19 +98,38 @@ namespace Hipstr.Core.Services
 				HipChatCollectionWrapper<HipChatUser> userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
 				foreach (HipChatUser hcUser in userWrapper.Items)
 				{
-					User user = new User
-					{
-						Id = hcUser.Id,
-						Handle = hcUser.MentionName,
-						Name = hcUser.Name,
-						Team = taskTeamMapping[task]
-					};
-
+					User user = _userConverter.HipChatUserToUser(hcUser, taskTeamMapping[task]);
 					users.Add(user);
 				}
 			}
 
 			return users;
+		}
+
+		public IEnumerable<Message> GetMessages(Room room)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
+			Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, $"/v2/room/{room.Id}/history"));
+			get.Wait();
+
+			Task<string> json = get.Result.Content.ReadAsStringAsync();
+			json.Wait();
+
+			List<Message> messages = new List<Message>();
+			HipChatCollectionWrapper<HipChatMessage> messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatMessage>>(json.Result);
+			foreach (HipChatMessage hcMessage in messageWrapper.Items)
+			{
+				Message message = new Message
+				{
+					PostedBy = _userConverter.HipChatUserToUser(hcMessage.From, room.Team),
+					Date = hcMessage.Date,
+					Text = hcMessage.Message
+				};
+
+				messages.Add(message);
+			}
+
+			return messages;
 		}
 	}
 }

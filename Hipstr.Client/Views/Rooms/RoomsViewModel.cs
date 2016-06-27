@@ -5,10 +5,11 @@ using System.Collections.ObjectModel;
 
 namespace Hipstr.Client.Views.Rooms
 {
-	public class RoomsViewModel
+	public class RoomsViewModel : ViewModelBase, ITitled
 	{
 		private readonly IHipChatService _hipChatService;
 
+		public string Title => "Rooms";
 		public ObservableCollection<Room> Rooms { get; set; }
 
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
