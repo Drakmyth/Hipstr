@@ -12,7 +12,6 @@ namespace Hipstr.Client.Views.Rooms
 		public ObservableCollection<Room> Rooms { get; set; }
 
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
-
 		public RoomsViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
@@ -22,7 +21,6 @@ namespace Hipstr.Client.Views.Rooms
 		public void UpdateRoomList()
 		{
 			IEnumerable<Room> rooms = _hipChatService.GetRooms();
-
 			Rooms = new ObservableCollection<Room>(rooms);
 		}
 	}

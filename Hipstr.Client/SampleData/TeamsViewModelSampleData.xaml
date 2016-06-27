@@ -1,15 +1,15 @@
-﻿<teams:TeamsViewModel xmlns:teams="using:Hipstr.Client.Views.Teams" xmlns:model="using:Hipstr.Core.Models">
+﻿<teams:TeamsViewModel xmlns:teams="using:Hipstr.Client.Views.Teams" xmlns:models="using:Hipstr.Core.Models">
 	<teams:TeamsViewModel.Teams>
-		<model:Team Name="GitHub" ApiKey="Nullam curabitur class"/>
-		<model:Team Name="Spring" ApiKey="Amet curae integer"/>
-		<model:Team Name="ExtraSpace" ApiKey="Parturient etiam ante arcu vestibulum"/>
-		<model:Team Name="Slalom" ApiKey="Dignissim vivamus fusce aliquam"/>
-		<model:Team Name="Zebra" ApiKey="Congue eleifend"/>
-		<model:Team Name="Nostalgic Games" ApiKey="Eros hac leo cursus"/>
-		<model:Team Name="Allied" ApiKey="Proin habitant augue nibh"/>
-		<model:Team Name="Apex" ApiKey="Hendrerit interdum dictum"/>
-		<model:Team Name="Microsoft" ApiKey="Lectus imperdiet malesuada libero fames"/>
-		<model:Team Name="Coverity" ApiKey="Felis ipsum sed penatibus cubilia"/>
+		<models:Team Name="GitHub" ApiKey="Nullam curabitur class"/>
+		<models:Team Name="Spring" ApiKey="Amet curae integer"/>
+		<models:Team Name="ExtraSpace" ApiKey="Parturient etiam ante arcu vestibulum"/>
+		<models:Team Name="Slalom" ApiKey="Dignissim vivamus fusce aliquam"/>
+		<models:Team Name="Zebra" ApiKey="Congue eleifend"/>
+		<models:Team Name="Nostalgic Games" ApiKey="Eros hac leo cursus"/>
+		<models:Team Name="Allied" ApiKey="Proin habitant augue nibh"/>
+		<models:Team Name="Apex" ApiKey="Hendrerit interdum dictum"/>
+		<models:Team Name="Microsoft" ApiKey="Lectus imperdiet malesuada libero fames"/>
+		<models:Team Name="Coverity" ApiKey="Felis ipsum sed penatibus cubilia"/>
 	</teams:TeamsViewModel.Teams>
 </teams:TeamsViewModel>
 
