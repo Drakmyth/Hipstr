@@ -5,5 +5,6 @@
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Handle { get; set; }
+		public Team Team { get; set; }
 	}
 }

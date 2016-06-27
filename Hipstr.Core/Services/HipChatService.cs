@@ -29,22 +29,26 @@ namespace Hipstr.Core.Services
 		{
 			IEnumerable<Team> teams = _teamService.GetTeams();
 
-			List<Task<HttpResponseMessage>> roomRequests = new List<Task<HttpResponseMessage>>();
-
+			Dictionary<Task<HttpResponseMessage>, Team> taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
 			foreach (Team team in teams)
 			{
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 				Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/room"));
-				roomRequests.Add(get);
+				taskTeamMapping.Add(get, team);
 			}
 
-			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(roomRequests);
+			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(taskTeamMapping.Keys);
+
+			// TODO: Don't wait for all teams to return room list before processing results
 			requestTasks.Wait();
 
 			List<Room> rooms = new List<Room>();
-			foreach (HttpResponseMessage response in requestTasks.Result)
+			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
 			{
+				HttpResponseMessage response = task.Result;
 				Task<string> json = response.Content.ReadAsStringAsync();
+
+				// TODO: Process rooms in parallel
 				json.Wait();
 				HipChatCollectionWrapper<HipChatRoom> roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json.Result);
 				foreach (HipChatRoom hcRoom in roomWrapper.Items)
@@ -54,8 +58,8 @@ namespace Hipstr.Core.Services
 						Id = hcRoom.Id,
 						IsArchived = hcRoom.IsArchived,
 						Name = hcRoom.Name,
-						Privacy = hcRoom.Privacy
-						// Team = team
+						Privacy = hcRoom.Privacy,
+						Team = taskTeamMapping[task]
 					};
 
 					rooms.Add(room);
@@ -69,21 +73,23 @@ namespace Hipstr.Core.Services
 		{
 			IEnumerable<Team> teams = _teamService.GetTeams();
 
-			List<Task<HttpResponseMessage>> userRequests = new List<Task<HttpResponseMessage>>();
-
+			Dictionary<Task<HttpResponseMessage>, Team> taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
 			foreach (Team team in teams)
 			{
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 				Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/user"));
-				userRequests.Add(get);
+				taskTeamMapping.Add(get, team);
 			}
 
-			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(userRequests);
+			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(taskTeamMapping.Keys);
+
+			// TODO: Don't wait for all teams to return user list before processing results
 			requestTasks.Wait();
 
 			List<User> users = new List<User>();
-			foreach (HttpResponseMessage response in requestTasks.Result)
+			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
 			{
+				HttpResponseMessage response = task.Result;
 				Task<string> json = response.Content.ReadAsStringAsync();
 				json.Wait();
 				HipChatCollectionWrapper<HipChatUser> userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
@@ -93,7 +99,8 @@ namespace Hipstr.Core.Services
 					{
 						Id = hcUser.Id,
 						Handle = hcUser.MentionName,
-						Name = hcUser.Name
+						Name = hcUser.Name,
+						Team = taskTeamMapping[task]
 					};
 
 					users.Add(user);
