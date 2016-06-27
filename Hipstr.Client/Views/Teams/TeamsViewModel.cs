@@ -19,7 +19,6 @@ namespace Hipstr.Client.Views.Teams
 			_teamService = teamService;
 
 			// TODO: Pull this into loading persistance
-			// TODO: Make it not required to view team list before rooms will load
 			_teamService.AddTeam(new Team("---Default Team Name---", "---API KEY goes here---")); // API_KEY is good for 1 year from generation date.
 
 			RefreshTeamList();
