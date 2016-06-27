@@ -1,15 +1,15 @@
 ﻿<users:UsersViewModel xmlns:users="using:Hipstr.Client.Views.Users" xmlns:hipChat="using:Hipstr.Core.Models.HipChat">
 	<users:UsersViewModel.Users>
-		<hipChat:UserSummary Id="66" Name="Jesper Aaberg" Version="Nullam curabitur class" MentionName="JAaberg" />
-		<hipChat:UserSummary Id="17" Name="Ellen Adams" Version="Amet curae integer" MentionName="EAdams" />
-		<hipChat:UserSummary Id="37" Name="Terry Adams" Version="Parturient etiam ante arcu vestibulum" MentionName="TAdams" />
-		<hipChat:UserSummary Id="63" Name="Terry Adams" Version="Dignissim vivamus fusce aliquam" MentionName="TAdams" />
-		<hipChat:UserSummary Id="88" Name="Michael Pfeiffer" Version="Congue eleifend" MentionName="MPfeiffer" />
-		<hipChat:UserSummary Id="84" Name="Carol Philips" Version="Eros hac leo cursus" MentionName="CPhilips" />
-		<hipChat:UserSummary Id="71" Name="Toni Poe" Version="Proin habitant augue nibh" MentionName="TPoe" />
-		<hipChat:UserSummary Id="88" Name="Cassie Hicks" Version="Hendrerit interdum dictum" MentionName="CHicks" />
-		<hipChat:UserSummary Id="45" Name="Luca Argentiero" Version="Lectus imperdiet malesuada libero fames" MentionName="LArgentiero" />
-		<hipChat:UserSummary Id="27" Name="Brian Perry" Version="Felis ipsum sed penatibus cubilia" MentionName="BPerry" />
+		<hipChat:HipChatUser Id="66" Name="Jesper Aaberg" Version="Nullam curabitur class" MentionName="JAaberg" />
+		<hipChat:HipChatUser Id="17" Name="Ellen Adams" Version="Amet curae integer" MentionName="EAdams" />
+		<hipChat:HipChatUser Id="37" Name="Terry Adams" Version="Parturient etiam ante arcu vestibulum" MentionName="TAdams" />
+		<hipChat:HipChatUser Id="63" Name="Terry Adams" Version="Dignissim vivamus fusce aliquam" MentionName="TAdams" />
+		<hipChat:HipChatUser Id="88" Name="Michael Pfeiffer" Version="Congue eleifend" MentionName="MPfeiffer" />
+		<hipChat:HipChatUser Id="84" Name="Carol Philips" Version="Eros hac leo cursus" MentionName="CPhilips" />
+		<hipChat:HipChatUser Id="71" Name="Toni Poe" Version="Proin habitant augue nibh" MentionName="TPoe" />
+		<hipChat:HipChatUser Id="88" Name="Cassie Hicks" Version="Hendrerit interdum dictum" MentionName="CHicks" />
+		<hipChat:HipChatUser Id="45" Name="Luca Argentiero" Version="Lectus imperdiet malesuada libero fames" MentionName="LArgentiero" />
+		<hipChat:HipChatUser Id="27" Name="Brian Perry" Version="Felis ipsum sed penatibus cubilia" MentionName="BPerry" />
 	</users:UsersViewModel.Users>
 </users:UsersViewModel>
 

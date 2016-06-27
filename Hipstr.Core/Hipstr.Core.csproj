@@ -107,10 +107,12 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\HipChat\CollectionWrapper.cs" />
-    <Compile Include="Models\HipChat\RoomSummary.cs" />
-    <Compile Include="Models\HipChat\UserSummary.cs" />
+    <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
+    <Compile Include="Models\HipChat\HipChatRoom.cs" />
+    <Compile Include="Models\HipChat\HipChatUser.cs" />
+    <Compile Include="Models\Room.cs" />
     <Compile Include="Models\Team.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HipChatService.cs" />
     <Compile Include="Services\IHipChatService.cs" />

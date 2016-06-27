@@ -13,7 +13,7 @@ namespace Hipstr.Core.Services
 	{
 		// TODO: Get API_KEY from user
 		// TODO: Notify user when API_KEY is about to expire
-		
+
 		private readonly Uri ROOT_URI = new Uri("http://www.hipchat.com");
 
 		private readonly ITeamService _teamService;
@@ -25,7 +25,7 @@ namespace Hipstr.Core.Services
 			_teamService = teamService;
 		}
 
-		public IEnumerable<CollectionWrapper<RoomSummary>> GetRooms()
+		public IEnumerable<Room> GetRooms()
 		{
 			IEnumerable<Team> teams = _teamService.GetTeams();
 
@@ -41,19 +41,31 @@ namespace Hipstr.Core.Services
 			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(roomRequests);
 			requestTasks.Wait();
 
-			List<CollectionWrapper<RoomSummary>> rooms = new List<CollectionWrapper<RoomSummary>>();
+			List<Room> rooms = new List<Room>();
 			foreach (HttpResponseMessage response in requestTasks.Result)
 			{
 				Task<string> json = response.Content.ReadAsStringAsync();
 				json.Wait();
-				CollectionWrapper<RoomSummary> room = JsonConvert.DeserializeObject<CollectionWrapper<RoomSummary>>(json.Result);
-				rooms.Add(room);
+				HipChatCollectionWrapper<HipChatRoom> roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json.Result);
+				foreach (HipChatRoom hcRoom in roomWrapper.Items)
+				{
+					Room room = new Room
+					{
+						Id = hcRoom.Id,
+						IsArchived = hcRoom.IsArchived,
+						Name = hcRoom.Name,
+						Privacy = hcRoom.Privacy
+						// Team = team
+					};
+
+					rooms.Add(room);
+				}
 			}
 
 			return rooms;
 		}
 
-		public CollectionWrapper<UserSummary> GetUsers()
+		public HipChatCollectionWrapper<HipChatUser> GetUsers()
 		{
 			Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/user"));
 			get.Wait();
@@ -61,7 +73,7 @@ namespace Hipstr.Core.Services
 			Task<string> json = get.Result.Content.ReadAsStringAsync();
 			json.Wait();
 
-			CollectionWrapper<UserSummary> summary = JsonConvert.DeserializeObject<CollectionWrapper<UserSummary>>(json.Result);
+			HipChatCollectionWrapper<HipChatUser> summary = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
 			return summary;
 		}
 	}

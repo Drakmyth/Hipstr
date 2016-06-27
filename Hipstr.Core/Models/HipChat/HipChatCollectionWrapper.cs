@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Hipstr.Core.Models.HipChat
 {
-	public class CollectionWrapper<TItem>
+	public class HipChatCollectionWrapper<TItem>
 	{
 		public IEnumerable<TItem> Items { get; set; }
 		public Dictionary<string, Uri> Links { get; set; }

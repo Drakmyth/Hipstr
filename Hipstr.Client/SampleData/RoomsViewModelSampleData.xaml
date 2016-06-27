@@ -1,15 +1,15 @@
-﻿<rooms:RoomsViewModel xmlns:rooms="using:Hipstr.Client.Views.Rooms" xmlns:hipChat="using:Hipstr.Core.Models.HipChat">
+﻿<rooms:RoomsViewModel xmlns:rooms="using:Hipstr.Client.Views.Rooms" xmlns:models="using:Hipstr.Core.Models">
 	<rooms:RoomsViewModel.Rooms>
-		<hipChat:RoomSummary Id="66" IsArchived="True" Name="Kitchen" Privacy="Aenean duis nunc mauris nam" Version="Nullam curabitur class"/>
-		<hipChat:RoomSummary Id="17" IsArchived="False" Name="Master Bedroom" Privacy="Phasellus maecenas" Version="Amet curae integer"/>
-		<hipChat:RoomSummary Id="37" IsArchived="True" Name="Bathroom" Privacy="Quisque bibendum donec" Version="Parturient etiam ante arcu vestibulum"/>
-		<hipChat:RoomSummary Id="63" IsArchived="False" Name="Living Room" Privacy="Aptent vestibulum adipiscing parturient convallis" Version="Dignissim vivamus fusce aliquam"/>
-		<hipChat:RoomSummary Id="88" IsArchived="True" Name="Main Hall" Privacy="Dis auctor aliquet erat" Version="Congue eleifend"/>
-		<hipChat:RoomSummary Id="84" IsArchived="False" Name="Library" Privacy="Elementum blandit vestibulum vestibulum" Version="Eros hac leo cursus"/>
-		<hipChat:RoomSummary Id="71" IsArchived="True" Name="Garage" Privacy="Mus faucibus parturient vestibulum" Version="Proin habitant augue nibh"/>
-		<hipChat:RoomSummary Id="88" IsArchived="False" Name="Parlor" Privacy="Non fringilla nisi habitasse inceptos" Version="Hendrerit interdum dictum"/>
-		<hipChat:RoomSummary Id="45" IsArchived="True" Name="Basement" Privacy="Nunc per" Version="Lectus imperdiet malesuada libero fames"/>
-		<hipChat:RoomSummary Id="27" IsArchived="False" Name="Stairwell" Privacy="Conubia vestibulum" Version="Felis ipsum sed penatibus cubilia"/>
+		<models:Room Id="66" IsArchived="True" Name="Kitchen" Privacy="Aenean duis nunc mauris nam"/>
+		<models:Room Id="17" IsArchived="False" Name="Master Bedroom" Privacy="Phasellus maecenas"/>
+		<models:Room Id="37" IsArchived="True" Name="Bathroom" Privacy="Quisque bibendum donec"/>
+		<models:Room Id="63" IsArchived="False" Name="Living Room" Privacy="Aptent vestibulum adipiscing parturient convallis"/>
+		<models:Room Id="88" IsArchived="True" Name="Main Hall" Privacy="Dis auctor aliquet erat"/>
+		<models:Room Id="84" IsArchived="False" Name="Library" Privacy="Elementum blandit vestibulum vestibulum"/>
+		<models:Room Id="71" IsArchived="True" Name="Garage" Privacy="Mus faucibus parturient vestibulum"/>
+		<models:Room Id="88" IsArchived="False" Name="Parlor" Privacy="Non fringilla nisi habitasse inceptos"/>
+		<models:Room Id="45" IsArchived="True" Name="Basement" Privacy="Nunc per"/>
+		<models:Room Id="27" IsArchived="False" Name="Stairwell" Privacy="Conubia vestibulum"/>
 	</rooms:RoomsViewModel.Rooms>
 </rooms:RoomsViewModel>
 
