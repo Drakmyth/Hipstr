@@ -4,6 +4,7 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:viewModel="using:Hipstr.Client.Views.MainPage"
+	  xmlns:converters="using:Hipstr.Client.Converters"
 	  mc:Ignorable="d">
 
 	<Page.DataContext>
@@ -24,6 +25,7 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
+			<converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -53,7 +55,20 @@
 					   Text="{Binding Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 			<ComboBox RelativePanel.AlignRightWithPanel="True"
 					  RelativePanel.AlignVerticalCenterWith="MenuButton"
-					  Margin="0 0 5 0"/>
+					  Margin="0 0 5 0"
+					  BorderThickness="0"
+					  Background="Transparent"
+					  Foreground="White"
+					  RequestedTheme="Dark"
+					  Visibility="{Binding ShowFilters, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource BoolToVis}}"
+					  ItemsSource="{Binding Filters}">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding DisplayName}"
+								   Foreground="White"/>
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
 		</RelativePanel>
 		<SplitView Name="MenuSplitView"
 				   Grid.Row="1"
@@ -72,7 +87,6 @@
 					<Rectangle Height="1" Fill="Black"/>
 					<RadioButton Name="TeamsButton"
 								 Command="{Binding NavigateToTeamsViewCommand}"
-								 CommandParameter="{Binding ElementName=ContentFrame}"
 								 Click="RadioButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Globe" Foreground="White"/>
@@ -80,7 +94,6 @@
 						</StackPanel>
 					</RadioButton>
 					<RadioButton Command="{Binding NavigateToRoomsViewCommand}"
-								 CommandParameter="{Binding ElementName=ContentFrame}"
 								 Click="RadioButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Message" Foreground="White"/>
@@ -88,7 +101,6 @@
 						</StackPanel>
 					</RadioButton>
 					<RadioButton Command="{Binding NavigateToUsersViewCommand}"
-								 CommandParameter="{Binding ElementName=ContentFrame}"
 								 Click="RadioButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="People" Foreground="White"/>
@@ -109,4 +121,6 @@
 		</SplitView>
 	</Grid>
 </Page>
+
+
 

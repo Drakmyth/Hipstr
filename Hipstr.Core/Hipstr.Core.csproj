@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Converters\IUserConverter.cs" />
     <Compile Include="Converters\UserConverter.cs" />
+    <Compile Include="Models\FilterItem.cs" />
     <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
     <Compile Include="Models\HipChat\HipChatMessage.cs" />
     <Compile Include="Models\HipChat\HipChatRoom.cs" />

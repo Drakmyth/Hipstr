@@ -105,8 +105,10 @@
     <Compile Include="Commands\ViewCommands\NavigateToHistoryViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToTeamsViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToViewCommand.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Views\IFilterable.cs" />
     <Compile Include="Views\ITitled.cs" />
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
