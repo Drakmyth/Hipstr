@@ -100,6 +100,7 @@
     </Compile>
     <Compile Include="Commands\AddTeamCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToAddTeamViewCommand.cs" />
+    <Compile Include="Commands\ViewCommands\NavigateToMessagesViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToUsersViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToRoomsViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToHistoryViewCommand.cs" />
@@ -115,9 +116,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainPage\MainPageViewModel.cs" />
-    <Compile Include="Views\MessagesPage\MessagesPageViewModel.cs" />
-    <Compile Include="Views\MessagesPage\MessagesPageView.xaml.cs">
-      <DependentUpon>MessagesPageView.xaml</DependentUpon>
+    <Compile Include="Views\Messages\MessagesViewModel.cs" />
+    <Compile Include="Views\Messages\MessagesView.xaml.cs">
+      <DependentUpon>MessagesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Rooms\RoomsView.xaml.cs">
       <DependentUpon>RoomsView.xaml</DependentUpon>
@@ -174,7 +175,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
-    <DesignData Include="SampleData\MessagesPageViewModelSampleData.xaml">
+    <DesignData Include="SampleData\MessagesViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
@@ -186,7 +187,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\MessagesPage\MessagesPageView.xaml">
+    <Page Include="Views\Messages\MessagesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

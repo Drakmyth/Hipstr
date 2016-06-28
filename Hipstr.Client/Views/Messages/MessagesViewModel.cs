@@ -1,9 +1,9 @@
 ﻿using Hipstr.Core.Models;
 using System.Collections.ObjectModel;
 
-namespace Hipstr.Client.Views.MessagesPage
+namespace Hipstr.Client.Views.Messages
 {
-	public class MessagesPageViewModel
+	public class MessagesViewModel
 	{
 		public ObservableCollection<Message> Messages { get; set; }
 	}

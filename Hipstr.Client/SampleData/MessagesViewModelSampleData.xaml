@@ -1,5 +1,6 @@
-﻿<MessagesPage:MessagesPageViewModel xmlns:MessagesPage="using:Hipstr.Client.Views.MessagesPage" xmlns:Models="using:Hipstr.Core.Models">
-	<MessagesPage:MessagesPageViewModel.Messages>
+﻿<messages:MessagesViewModel xmlns:Models="using:Hipstr.Core.Models"
+									xmlns:messages="using:Hipstr.Client.Views.Messages">
+	<messages:MessagesViewModel.Messages>
 		<Models:Message Date="06/27/2016 20:06:37" Text="Class cras nam maecenas aliquam integer quisque duis aenean sed curae dis est vivamus donec etiam hac aliquam praesent fusce lorem leo nunc amet accumsan aliquet mauris ante blandit commodo nullam aptent arcu auctor morbi nulla conubia bibendum dictumst eleifend congue">
 			<Models:Message.PostedBy>
 				<Models:User Handle="someone@example.com" Id="89" Name="Aaberg, Jesper">
@@ -90,5 +91,5 @@
 				</Models:User>
 			</Models:Message.PostedBy>
 		</Models:Message>
-	</MessagesPage:MessagesPageViewModel.Messages>
-</MessagesPage:MessagesPageViewModel>
+	</messages:MessagesViewModel.Messages>
+</messages:MessagesViewModel>

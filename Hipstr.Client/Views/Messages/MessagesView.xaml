@@ -1,15 +1,15 @@
 ﻿<Page
-    x:Class="Hipstr.Client.Views.MessagesPage.MessagesPageView"
+    x:Class="Hipstr.Client.Views.Messages.MessagesView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:messagesPage="using:Hipstr.Client.Views.MessagesPage"
+    xmlns:messages="using:Hipstr.Client.Views.Messages"
     mc:Ignorable="d"
 	Name="MessagesPage">
 
 	<Page.DataContext>
-		<messagesPage:MessagesPageViewModel/>
+		<messages:MessagesViewModel/>
 	</Page.DataContext>
 
 	<Page.Resources>
@@ -21,7 +21,7 @@
 	</Page.Resources>
 
 	<Grid Background="{StaticResource HipChatBackground}"
-		  d:DataContext="{d:DesignData Source=/SampleData/MessagesPageViewModelSampleData.xaml}">
+		  d:DataContext="{d:DesignData Source=/SampleData/MessagesViewModelSampleData.xaml}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
