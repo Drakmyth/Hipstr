@@ -1,7 +1,5 @@
 ﻿using Hipstr.Client.Commands.ViewCommands;
-using Hipstr.Client.Views.Teams;
 using Hipstr.Core.Models;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;

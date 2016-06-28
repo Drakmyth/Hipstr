@@ -115,6 +115,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainPage\MainPageViewModel.cs" />
+    <Compile Include="Views\MessagesPage\MessagesPageViewModel.cs" />
+    <Compile Include="Views\MessagesPage\MessagesPageView.xaml.cs">
+      <DependentUpon>MessagesPageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Rooms\RoomsView.xaml.cs">
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>
@@ -170,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>
+    <DesignData Include="SampleData\MessagesPageViewModelSampleData.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </DesignData>
     <Page Include="Styles\Colors.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -177,6 +185,10 @@
     <Page Include="Views\MainPage\MainPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MessagesPage\MessagesPageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Rooms\RoomsView.xaml">
       <Generator>MSBuild:Compile</Generator>
