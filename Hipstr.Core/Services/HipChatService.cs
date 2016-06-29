@@ -4,9 +4,12 @@ using Hipstr.Core.Models.HipChat;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Windows.Data.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Hipstr.Core.Services
 {
@@ -116,8 +119,11 @@ namespace Hipstr.Core.Services
 			json.Wait();
 
 			List<Message> messages = new List<Message>();
-			HipChatCollectionWrapper<HipChatMessage> messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatMessage>>(json.Result);
-			foreach (HipChatMessage hcMessage in messageWrapper.Items)
+
+			HipChatCollectionWrapper<object> messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json.Result);
+			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
+			IEnumerable<HipChatMessage> hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
+			foreach (HipChatMessage hcMessage in hcMessages)
 			{
 				Message message = new Message
 				{

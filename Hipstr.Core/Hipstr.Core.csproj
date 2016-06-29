@@ -112,6 +112,8 @@
     <Compile Include="Models\FilterItem.cs" />
     <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
     <Compile Include="Models\HipChat\HipChatMessage.cs" />
+    <Compile Include="Models\HipChat\HipChatNotification.cs" />
+    <Compile Include="Models\HipChat\HipChatNotificationSender.cs" />
     <Compile Include="Models\HipChat\HipChatRoom.cs" />
     <Compile Include="Models\HipChat\HipChatUser.cs" />
     <Compile Include="Models\Message.cs" />

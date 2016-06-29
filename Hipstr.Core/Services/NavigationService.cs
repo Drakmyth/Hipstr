@@ -22,14 +22,9 @@ namespace Hipstr.Core.Services
 			_frame = frame;
 		}
 
-		public void NavigateToPageOfType<T>()
+		public void NavigateToPageOfType<T>(object parameter)
 		{
-			NavigateToPageOfType(typeof(T));
-		}
-
-		public void NavigateToPageOfType(Type type)
-		{
-			Frame.Navigate(type);
+			Frame.Navigate(typeof(T), parameter);
 		}
 	}
 }

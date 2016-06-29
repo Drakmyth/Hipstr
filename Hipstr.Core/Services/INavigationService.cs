@@ -5,8 +5,7 @@ namespace Hipstr.Core.Services
 {
 	public interface INavigationService
 	{
-		void NavigateToPageOfType<T>();
-		void NavigateToPageOfType(Type type);
+		void NavigateToPageOfType<T>(object parameter);
 		Type CurrentPageType { get; }
 		void SetFrame(Frame frame);
 	}

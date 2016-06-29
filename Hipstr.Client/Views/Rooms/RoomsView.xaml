@@ -4,6 +4,8 @@
 	  xmlns:viewModel="using:Hipstr.Client.Views.Rooms"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+	  xmlns:interactions="using:Microsoft.Xaml.Interactions.Core"
 	  mc:Ignorable="d">
 
 	<Page.DataContext>
@@ -24,7 +26,16 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{Binding Rooms}">
+		<ListView Name="RoomList"
+				  Grid.Row="0"
+				  ItemsSource="{Binding Rooms}">
+			<interactivity:Interaction.Behaviors>
+				<interactions:EventTriggerBehavior EventName="SelectionChanged"
+												   SourceObject="{Binding ElementName=RoomList}">
+					<interactions:InvokeCommandAction Command="{Binding NavigateToMessagesViewCommand}"
+													  CommandParameter="{Binding ElementName=RoomList, Path=SelectedItem}"/>
+				</interactions:EventTriggerBehavior>
+			</interactivity:Interaction.Behaviors>
 			<ListView.ItemTemplate>
 				<DataTemplate>
 					<StackPanel>

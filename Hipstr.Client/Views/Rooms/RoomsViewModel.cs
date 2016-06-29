@@ -1,8 +1,10 @@
-﻿using Hipstr.Core.Models;
+﻿using Hipstr.Client.Commands.ViewCommands;
+using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -12,6 +14,7 @@ namespace Hipstr.Client.Views.Rooms
 
 		public string Title => "Rooms";
 		public ObservableCollection<Room> Rooms { get; set; }
+		public ICommand NavigateToMessagesViewCommand { get; }
 
 		private ObservableCollection<FilterItem> _filters;
 		public ObservableCollection<FilterItem> Filters
@@ -32,6 +35,7 @@ namespace Hipstr.Client.Views.Rooms
 		public RoomsViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
+			NavigateToMessagesViewCommand = new NavigateToMessagesViewCommand();
 
 			UpdateRooms();
 			UpdateFilters();

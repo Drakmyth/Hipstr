@@ -1,4 +1,7 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Diagnostics;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using Hipstr.Core.Models;
 
 namespace Hipstr.Client.Views.Messages
 {
@@ -7,6 +10,11 @@ namespace Hipstr.Client.Views.Messages
 		public MessagesView()
 		{
 			InitializeComponent();
+		}
+
+		protected override void OnNavigatedTo(NavigationEventArgs e)
+		{
+			Debug.WriteLine(e.Parameter?.GetType());
 		}
 	}
 }

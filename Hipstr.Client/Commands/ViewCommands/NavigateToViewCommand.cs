@@ -23,7 +23,7 @@ namespace Hipstr.Client.Commands.ViewCommands
 
 		public virtual void Execute(object parameter)
 		{
-			_navigationService.NavigateToPageOfType<T>();
+			_navigationService.NavigateToPageOfType<T>(parameter);
 		}
 	}
 }
