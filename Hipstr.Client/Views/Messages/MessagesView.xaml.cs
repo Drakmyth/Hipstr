@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
+﻿using Hipstr.Core.Models;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Hipstr.Core.Models;
 
 namespace Hipstr.Client.Views.Messages
 {
@@ -14,7 +13,7 @@ namespace Hipstr.Client.Views.Messages
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			Debug.WriteLine(e.Parameter?.GetType());
+			((MessagesViewModel)DataContext).Room = (Room)e.Parameter;
 		}
 	}
 }
