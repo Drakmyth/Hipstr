@@ -13,7 +13,6 @@ namespace Hipstr.Client.Views.Users
 		public ObservableCollection<User> Users { get; set; }
 
 		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
-
 		public UsersViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;

@@ -14,22 +14,8 @@ namespace Hipstr.Client.Views.Rooms
 
 		public string Title => "Rooms";
 		public ObservableCollection<Room> Rooms { get; set; }
+		public ObservableCollection<FilterItem> Filters { get; set; }
 		public ICommand NavigateToMessagesViewCommand { get; }
-
-		private ObservableCollection<FilterItem> _filters;
-		public ObservableCollection<FilterItem> Filters
-		{
-			get
-			{
-				return _filters;
-			}
-			set
-			{
-				OnPropertyChanging();
-				_filters = value;
-				OnPropertyChanged();
-			}
-		}
 
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
 		public RoomsViewModel(IHipChatService hipChatService)
