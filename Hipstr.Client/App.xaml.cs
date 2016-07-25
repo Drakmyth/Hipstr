@@ -1,6 +1,6 @@
 ﻿using Hipstr.Client.Views.MainPage;
-using Microsoft.ApplicationInsights;
 using System;
+using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -20,8 +20,6 @@ namespace Hipstr.Client
 		/// </summary>
 		public App()
 		{
-			WindowsAppInitializer.InitializeAsync(WindowsCollectors.Metadata | WindowsCollectors.Session);
-			
 			IoCContainer.Build();
 
 			InitializeComponent();
@@ -36,7 +34,7 @@ namespace Hipstr.Client
 		protected override void OnLaunched(LaunchActivatedEventArgs e)
 		{
 #if DEBUG
-			if (System.Diagnostics.Debugger.IsAttached)
+			if (Debugger.IsAttached)
 			{
 				DebugSettings.EnableFrameRateCounter = true;
 			}
