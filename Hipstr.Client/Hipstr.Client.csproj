@@ -99,6 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Commands\AddTeamCommand.cs" />
+    <Compile Include="Commands\ReloadRoomCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToAddTeamViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToMessagesViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToUsersViewCommand.cs" />

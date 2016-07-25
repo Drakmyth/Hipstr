@@ -55,7 +55,9 @@
 					Foreground="White">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
-						  Foreground="White"/>
+						  Foreground="White"
+						  Command="{Binding ReloadRoomCommand}"/>
 		</CommandBar>
 	</Grid>
 </Page>
+
