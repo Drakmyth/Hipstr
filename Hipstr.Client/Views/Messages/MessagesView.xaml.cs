@@ -6,14 +6,17 @@ namespace Hipstr.Client.Views.Messages
 {
 	public sealed partial class MessagesView : Page
 	{
+		public MessagesViewModel ViewModel => DataContext as MessagesViewModel;
+
 		public MessagesView()
 		{
 			InitializeComponent();
+			DataContext = new MessagesViewModel();
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			((MessagesViewModel)DataContext).Room = (Room)e.Parameter;
+			ViewModel.Room = (Room)e.Parameter;
 		}
 	}
 }

@@ -89,9 +89,6 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -100,14 +97,9 @@
     </Compile>
     <Compile Include="Commands\AddTeamCommand.cs" />
     <Compile Include="Commands\ReloadRoomCommand.cs" />
-    <Compile Include="Commands\ViewCommands\NavigateToAddTeamViewCommand.cs" />
-    <Compile Include="Commands\ViewCommands\NavigateToMessagesViewCommand.cs" />
-    <Compile Include="Commands\ViewCommands\NavigateToUsersViewCommand.cs" />
-    <Compile Include="Commands\ViewCommands\NavigateToRoomsViewCommand.cs" />
-    <Compile Include="Commands\ViewCommands\NavigateToHistoryViewCommand.cs" />
-    <Compile Include="Commands\ViewCommands\NavigateToTeamsViewCommand.cs" />
     <Compile Include="Commands\ViewCommands\NavigateToViewCommand.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Views\IFilterable.cs" />
@@ -143,7 +135,6 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <None Include="Hipstr.Client_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />
@@ -173,10 +164,6 @@
       <SubType>Designer</SubType>
     </DesignData>
     <DesignData Include="SampleData\MainPageViewModelSampleData.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </DesignData>
-    <DesignData Include="SampleData\MessagesViewModelSampleData.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </DesignData>

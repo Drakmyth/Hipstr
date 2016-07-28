@@ -1,29 +1,20 @@
-﻿using Hipstr.Core.Services;
-using System;
+﻿using System;
 using System.Windows.Input;
 
 namespace Hipstr.Client.Commands.ViewCommands
 {
-	public abstract class NavigateToViewCommand<T> : ICommand
+	public class NavigateToViewCommand<T> : ICommand
 	{
 		public event EventHandler CanExecuteChanged;
 
-		private readonly INavigationService _navigationService;
-
-		protected NavigateToViewCommand() : this(IoCContainer.Resolve<INavigationService>()) { }
-		private NavigateToViewCommand(INavigationService navigationService)
+		public bool CanExecute(object parameter)
 		{
-			_navigationService = navigationService;
+			return App.Frame.CurrentSourcePageType != typeof(T);
 		}
 
-		public virtual bool CanExecute(object parameter)
+		public void Execute(object parameter)
 		{
-			return _navigationService.CurrentPageType != typeof(T);
-		}
-
-		public virtual void Execute(object parameter)
-		{
-			_navigationService.NavigateToPageOfType<T>(parameter);
+			App.Frame.Navigate(typeof(T), parameter);
 		}
 	}
 }

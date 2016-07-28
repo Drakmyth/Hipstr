@@ -5,11 +5,8 @@
     xmlns:viewModel="using:Hipstr.Client.Views.Teams"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:Hipstr.Core.Models"
     mc:Ignorable="d">
-
-	<Page.DataContext>
-		<viewModel:TeamsViewModel/>
-	</Page.DataContext>
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -25,11 +22,11 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{Binding Teams}">
+		<ListView Grid.Row="0" ItemsSource="{x:Bind ViewModel.Teams}">
 			<ListView.ItemTemplate>
-				<DataTemplate>
+				<DataTemplate x:DataType="models:Team">
 					<StackPanel Orientation="Horizontal">
-						<TextBlock Text="{Binding Name}"
+						<TextBlock Text="{x:Bind Name}"
 								   Foreground="White"/>
 					</StackPanel>
 				</DataTemplate>
@@ -40,7 +37,7 @@
 					Foreground="White">
 			<AppBarButton Icon="Add"
 						  Label="Add Team"
-						  Command="{Binding AddTeamCommand}"
+						  Command="{x:Bind ViewModel.AddTeamCommand}"
 						  Foreground="White"/>
 		</CommandBar>
 	</Grid>

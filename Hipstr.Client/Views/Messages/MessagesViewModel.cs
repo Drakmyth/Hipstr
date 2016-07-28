@@ -2,15 +2,16 @@
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Hipstr.Client.Commands.ViewCommands;
+using Hipstr.Client.Views.Rooms;
 
 namespace Hipstr.Client.Views.Messages
 {
 	public class MessagesViewModel : ViewModelBase, IRoomReloader//, ITitled
 	{
 		public ICommand ReloadRoomCommand { get; set; }
+		public ICommand NavigateToRoomsViewCommand { get; set; }
 
 		private readonly List<Message> _messages;
 		public IEnumerable<Message> Messages
@@ -59,6 +60,7 @@ namespace Hipstr.Client.Views.Messages
 
 			_messages = new List<Message>();
 			ReloadRoomCommand = new ReloadRoomCommand(this);
+			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 		}
 
 		private void OnRoomChanged()

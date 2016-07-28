@@ -4,6 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Xaml;
+using Hipstr.Client.Views.Rooms;
+using Hipstr.Client.Views.Teams;
+using Hipstr.Client.Views.Users;
 
 namespace Hipstr.Client.Views.MainPage
 {
@@ -53,9 +56,9 @@ namespace Hipstr.Client.Views.MainPage
 
 		public MainPageViewModel()
 		{
-			NavigateToTeamsViewCommand = new NavigateToTeamsViewCommand();
-			NavigateToRoomsViewCommand = new NavigateToRoomsViewCommand();
-			NavigateToUsersViewCommand = new NavigateToUsersViewCommand();
+			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>();
+			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
+			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView>();
 			Filters = new ObservableCollection<FilterItem>();
 		}
 

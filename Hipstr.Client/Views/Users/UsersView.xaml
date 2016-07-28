@@ -4,11 +4,8 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:viewModel="using:Hipstr.Client.Views.Users"
+	  xmlns:models="using:Hipstr.Core.Models"
 	  mc:Ignorable="d">
-
-	<Page.DataContext>
-		<viewModel:UsersViewModel/>
-	</Page.DataContext>
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -24,13 +21,13 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{Binding Users}">
+		<ListView Grid.Row="0" ItemsSource="{x:Bind ViewModel.Users}">
 			<ListView.ItemTemplate>
-				<DataTemplate>
+				<DataTemplate x:DataType="models:User">
 					<StackPanel>
-						<TextBlock Text="{Binding Name}"
+						<TextBlock Text="{x:Bind Name}"
 								   Foreground="White"/>
-						<TextBlock Text="{Binding Team.Name}"
+						<TextBlock Text="{x:Bind Team.Name}"
 								   Foreground="LightGray"
 								   FontSize="10"/>
 					</StackPanel>

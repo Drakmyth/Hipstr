@@ -6,6 +6,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Hipstr.Client.Views.Teams;
 
 namespace Hipstr.Client
 {
@@ -14,6 +15,8 @@ namespace Hipstr.Client
 	/// </summary>
 	sealed partial class App : Application
 	{
+		public static Frame Frame { get; private set; }
+
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
@@ -39,16 +42,15 @@ namespace Hipstr.Client
 				DebugSettings.EnableFrameRateCounter = true;
 			}
 #endif
-			Frame rootFrame = Window.Current.Content as Frame;
 
 			// Do not repeat app initialization when the Window already has content,
 			// just ensure that the window is active
-			if (rootFrame == null)
+			if (Window.Current.Content == null)
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
-				rootFrame = new Frame();
-
-				rootFrame.NavigationFailed += OnNavigationFailed;
+				Frame = Window.Current.Content as Frame;
+				Frame = new Frame();
+				Frame.NavigationFailed += OnNavigationFailed;
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
@@ -56,17 +58,17 @@ namespace Hipstr.Client
 				}
 
 				// Place the frame in the current Window
-				Window.Current.Content = rootFrame;
+				Window.Current.Content = new MainPageView(Frame);
 			}
 
 			if (e.PrelaunchActivated == false)
 			{
-				if (rootFrame.Content == null)
+				if (Frame.Content == null)
 				{
 					// When the navigation stack isn't restored navigate to the first page,
 					// configuring the new page by passing required information as a navigation
 					// parameter
-					rootFrame.Navigate(typeof(MainPageView), e.Arguments);
+					Frame.Navigate(typeof(TeamsView), e.Arguments);
 				}
 				// Ensure the current window is active
 				Window.Current.Activate();

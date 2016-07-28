@@ -24,7 +24,7 @@ namespace Hipstr.Client.Views.Teams
 
 			RefreshTeamList();
 
-			AddTeamCommand = new NavigateToAddTeamViewCommand();
+			AddTeamCommand = new NavigateToViewCommand<AddTeamView>();
 		}
 
 		private void RefreshTeamList()

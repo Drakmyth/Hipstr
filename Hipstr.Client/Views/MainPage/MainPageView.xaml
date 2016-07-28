@@ -3,13 +3,9 @@
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:viewModel="using:Hipstr.Client.Views.MainPage"
 	  xmlns:converters="using:Hipstr.Client.Converters"
+	  xmlns:models="using:Hipstr.Core.Models"
 	  mc:Ignorable="d">
-
-	<Page.DataContext>
-		<viewModel:MainPageViewModel/>
-	</Page.DataContext>
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -37,7 +33,7 @@
 		</Grid.RowDefinitions>
 		<RelativePanel Grid.Row="0">
 			<Button Name="MenuButton"
-					Width="{Binding ElementName=MenuSplitView, Path=CompactPaneLength}"
+					Width="{x:Bind MenuSplitView.CompactPaneLength}"
 					Padding="0 10"
 					Click="HamburgerButton_Click"
 					Background="{StaticResource HipChatControl}">
@@ -52,7 +48,7 @@
 					   Margin="10 0 0 0"
 					   FontWeight="Bold"
 					   Foreground="White"
-					   Text="{Binding Title}"/>
+					   Text="{x:Bind ViewModel.Title}"/>
 			<ComboBox RelativePanel.AlignRightWithPanel="True"
 					  RelativePanel.AlignVerticalCenterWith="MenuButton"
 					  Margin="0 0 5 0"
@@ -60,11 +56,11 @@
 					  Background="Transparent"
 					  Foreground="White"
 					  RequestedTheme="Dark"
-					  Visibility="{Binding ShowFilters, Converter={StaticResource BoolToVis}}"
-					  ItemsSource="{Binding Filters}">
+					  Visibility="{x:Bind ViewModel.ShowFilters, Converter={StaticResource BoolToVis}}"
+					  ItemsSource="{x:Bind ViewModel.Filters}">
 				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<TextBlock Text="{Binding DisplayName}"
+					<DataTemplate x:DataType="models:FilterItem">
+						<TextBlock Text="{x:Bind DisplayName}"
 								   Foreground="White"/>
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
@@ -74,7 +70,7 @@
 				   Grid.Row="1"
 				   DisplayMode="Overlay"
 				   IsPaneOpen="False"
-				   OpenPaneLength="{Binding ElementName=TeamsButton, Path=Width}"
+				   OpenPaneLength="{x:Bind TeamsButton.Width}"
 				   PaneBackground="{StaticResource HipChatControl}">
 			<SplitView.Pane>
 				<StackPanel>
@@ -86,21 +82,21 @@
 					</RadioButton>
 					<Rectangle Height="1" Fill="Black"/>
 					<RadioButton Name="TeamsButton"
-								 Command="{Binding NavigateToTeamsViewCommand}"
+								 Command="{x:Bind ViewModel.NavigateToTeamsViewCommand}"
 								 Click="RadioButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Globe" Foreground="White"/>
 							<TextBlock Text="Teams" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
 					</RadioButton>
-					<RadioButton Command="{Binding NavigateToRoomsViewCommand}"
+					<RadioButton Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}"
 								 Click="RadioButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Message" Foreground="White"/>
 							<TextBlock Text="Rooms" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
 					</RadioButton>
-					<RadioButton Command="{Binding NavigateToUsersViewCommand}"
+					<RadioButton Command="{x:Bind ViewModel.NavigateToUsersViewCommand}"
 								 Click="RadioButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="People" Foreground="White"/>
@@ -116,8 +112,6 @@
 					</RadioButton>
 				</StackPanel>
 			</SplitView.Pane>
-			<Frame Name="ContentFrame"
-				   Content="{Binding FrameContent}"/>
 		</SplitView>
 	</Grid>
 </Page>

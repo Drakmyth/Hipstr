@@ -1,4 +1,5 @@
 ﻿using Hipstr.Client.Commands.ViewCommands;
+using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
@@ -17,11 +18,26 @@ namespace Hipstr.Client.Views.Rooms
 		public ObservableCollection<FilterItem> Filters { get; set; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 
+		private Room _selectedRoom;
+		public Room SelectedRoom
+		{
+			get { return _selectedRoom; }
+			set
+			{
+				if (_selectedRoom == value) return;
+
+				OnPropertyChanging();
+				_selectedRoom = value;
+				OnPropertyChanged();
+				OnSelectedRoomChanged();
+			}
+		}
+
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
 		public RoomsViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
-			NavigateToMessagesViewCommand = new NavigateToMessagesViewCommand();
+			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 
 			UpdateRooms();
 			UpdateFilters();
@@ -37,6 +53,14 @@ namespace Hipstr.Client.Views.Rooms
 		{
 			IEnumerable<FilterItem> filters = Rooms.GroupBy(room => room.Team.Name).Select(group => new FilterItem { DisplayName = group.Key }).ToList();
 			Filters = new ObservableCollection<FilterItem>(filters);
+		}
+
+		private void OnSelectedRoomChanged()
+		{
+			if (NavigateToMessagesViewCommand.CanExecute(SelectedRoom))
+			{
+				NavigateToMessagesViewCommand.Execute(SelectedRoom);
+			}
 		}
 	}
 }

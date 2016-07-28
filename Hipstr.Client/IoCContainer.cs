@@ -23,7 +23,6 @@ namespace Hipstr.Client
 		{
 			builder.RegisterType<ITeamService, TeamService>().InstancePerLifetimeScope(); // TODO: Pull local state into persistence layer, then these can be per request instead of per lifetime
 			builder.RegisterType<IHipChatService, HipChatService>().InstancePerLifetimeScope();
-			builder.RegisterType<INavigationService, NavigationService>().InstancePerLifetimeScope();
 			builder.RegisterType<IUserConverter, UserConverter>();
 			builder.RegisterType<HttpClient, HttpClient>();
 		}

@@ -3,12 +3,8 @@
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:messages="using:Hipstr.Client.Views.Messages"
+	  xmlns:models="using:Hipstr.Core.Models"
 	  mc:Ignorable="d">
-
-	<Page.DataContext>
-		<messages:MessagesViewModel/>
-	</Page.DataContext>
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -18,14 +14,13 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}"
-		  d:DataContext="{d:DesignData Source=/SampleData/MessagesViewModelSampleData.xaml}">
+	<Grid Background="{StaticResource HipChatBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 		<ListView Grid.Row="0"
-				  ItemsSource="{Binding Messages}"
+				  ItemsSource="{x:Bind ViewModel.Messages}"
 				  SelectionMode="None">
 			<ListView.ItemContainerStyle>
 				<Style TargetType="ListViewItem">
@@ -33,16 +28,16 @@
 				</Style>
 			</ListView.ItemContainerStyle>
 			<ListView.ItemTemplate>
-				<DataTemplate>
+				<DataTemplate x:DataType="models:Message">
 					<StackPanel Margin="0 10">
 						<Grid>
-							<TextBlock Text="{Binding PostedBy.Name}"
+							<TextBlock Text="{x:Bind PostedBy.Name}"
 								   Foreground="White"/>
-							<TextBlock Text="{Binding Date}"
+							<TextBlock Text="{x:Bind Date}"
 								   Foreground="White"
 								   HorizontalAlignment="Right"/>
 						</Grid>
-						<TextBlock Text="{Binding Text}"
+						<TextBlock Text="{x:Bind Text}"
 								   TextWrapping="Wrap"
 								   Foreground="White"
 								   Margin="15 5 0 5"/>
@@ -56,7 +51,8 @@
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="White"
-						  Command="{Binding ReloadRoomCommand}"/>
+						  Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}"
+						  CommandParameter="{x:Bind ViewModel.Room}"/>
 		</CommandBar>
 	</Grid>
 </Page>

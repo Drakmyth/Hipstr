@@ -1,16 +1,17 @@
-﻿using Hipstr.Core.Services;
-using Windows.UI.Xaml;
+﻿using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Hipstr.Client.Views.MainPage
 {
 	public sealed partial class MainPageView : Page
 	{
-		public MainPageView() : this(IoCContainer.Resolve<INavigationService>()) { }
-		private MainPageView(INavigationService navigationService)
+		public MainPageViewModel ViewModel => DataContext as MainPageViewModel;
+
+		public MainPageView(UIElement frame)
 		{
 			InitializeComponent();
-			navigationService.SetFrame(ContentFrame);
+			MenuSplitView.Content = frame;
+			DataContext = new MainPageViewModel();
 		}
 
 		private void HamburgerButton_Click(object sender, RoutedEventArgs e)
