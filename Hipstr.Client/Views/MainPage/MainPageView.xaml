@@ -12,16 +12,82 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
-			<Style TargetType="RadioButton">
+			<converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+			<Style x:Key="HamburgerButtonStyle" TargetType="Button">
+				<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
+				<Setter Property="Foreground" Value="White"/>
+				<Setter Property="Padding" Value="0"/>
 				<Setter Property="Template">
 					<Setter.Value>
-						<ControlTemplate>
-							<ContentPresenter Margin="15"/>
+						<ControlTemplate TargetType="Button">
+							<Grid x:Name="RootGrid" Background="{TemplateBinding Background}">
+								<VisualStateManager.VisualStateGroups>
+									<VisualStateGroup x:Name="CommonStates">
+										<VisualState x:Name="Normal">
+											<Storyboard>
+												<PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="PointerOver">
+											<Storyboard>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="Pressed">
+											<Storyboard>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+													<!--<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>-->
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+											</Storyboard>
+										</VisualState>
+										<VisualState x:Name="Disabled">
+											<Storyboard>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledTransparentBrush}"/>
+												</ObjectAnimationUsingKeyFrames>
+											</Storyboard>
+										</VisualState>
+									</VisualStateGroup>
+								</VisualStateManager.VisualStateGroups>
+								<ContentPresenter x:Name="ContentPresenter"
+												  AutomationProperties.AccessibilityView="Raw"
+												  BorderBrush="{TemplateBinding BorderBrush}"
+												  BorderThickness="{TemplateBinding BorderThickness}"
+												  ContentTemplate="{TemplateBinding ContentTemplate}"
+												  ContentTransitions="{TemplateBinding ContentTransitions}"
+												  Content="{TemplateBinding Content}"
+												  Padding="{TemplateBinding Padding}"
+												  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+												  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+							</Grid>
 						</ControlTemplate>
 					</Setter.Value>
 				</Setter>
 			</Style>
-			<converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+			<Style x:Key="MenuItemButtonStyle" TargetType="Button" BasedOn="{StaticResource HamburgerButtonStyle}">
+				<Setter Property="Padding" Value="15"/>
+				<Setter Property="HorizontalContentAlignment" Value="Left"/>
+			</Style>
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -33,14 +99,13 @@
 		</Grid.RowDefinitions>
 		<RelativePanel Grid.Row="0">
 			<Button Name="MenuButton"
-					Width="{x:Bind MenuSplitView.CompactPaneLength}"
-					Padding="0 10"
-					Click="HamburgerButton_Click"
-					Background="{StaticResource HipChatControl}">
-				<StackPanel>
-					<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
-					<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
-					<Rectangle Width="15" Height="2" Margin="2" Fill="White"/>
+					Width="40"
+					Style="{StaticResource HamburgerButtonStyle}"
+					Click="HamburgerButton_Click">
+				<StackPanel Width="15" HorizontalAlignment="Center" Padding="0 10">
+					<Rectangle Height="2" Margin="0 1.5" Fill="White"/>
+					<Rectangle Height="2" Margin="0 1.5" Fill="White"/>
+					<Rectangle Height="2" Margin="0 1.5" Fill="White"/>
 				</StackPanel>
 			</Button>
 			<TextBlock RelativePanel.RightOf="MenuButton"
@@ -60,8 +125,7 @@
 					  ItemsSource="{x:Bind ViewModel.Filters}">
 				<ComboBox.ItemTemplate>
 					<DataTemplate x:DataType="models:FilterItem">
-						<TextBlock Text="{x:Bind DisplayName}"
-								   Foreground="White"/>
+						<TextBlock Text="{x:Bind DisplayName}" Foreground="White"/>
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
@@ -70,51 +134,59 @@
 				   Grid.Row="1"
 				   DisplayMode="Overlay"
 				   IsPaneOpen="False"
-				   OpenPaneLength="{x:Bind TeamsButton.Width}"
+				   OpenPaneLength="150"
 				   PaneBackground="{StaticResource HipChatControl}">
 			<SplitView.Pane>
 				<StackPanel>
-					<RadioButton Click="RadioButton_Click">
+					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
+							Style="{StaticResource MenuItemButtonStyle}"
+							Click="MenuButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Clock" Foreground="White"/>
 							<TextBlock Text="Recent" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
-					</RadioButton>
+					</Button>
 					<Rectangle Height="1" Fill="Black"/>
-					<RadioButton Name="TeamsButton"
-								 Command="{x:Bind ViewModel.NavigateToTeamsViewCommand}"
-								 Click="RadioButton_Click">
+					<Button Name="TeamsButton"
+							Width="{x:Bind MenuSplitView.OpenPaneLength}"
+							Style="{StaticResource MenuItemButtonStyle}"
+							Click="MenuButton_Click"
+							Command="{x:Bind ViewModel.NavigateToTeamsViewCommand}">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Globe" Foreground="White"/>
 							<TextBlock Text="Teams" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
-					</RadioButton>
-					<RadioButton Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}"
-								 Click="RadioButton_Click">
+					</Button>
+					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
+							Style="{StaticResource MenuItemButtonStyle}"
+							Click="MenuButton_Click"
+							Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Message" Foreground="White"/>
 							<TextBlock Text="Rooms" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
-					</RadioButton>
-					<RadioButton Command="{x:Bind ViewModel.NavigateToUsersViewCommand}"
-								 Click="RadioButton_Click">
+					</Button>
+					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
+							Style="{StaticResource MenuItemButtonStyle}"
+							Click="MenuButton_Click"
+							Command="{x:Bind ViewModel.NavigateToUsersViewCommand}">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="People" Foreground="White"/>
 							<TextBlock Text="Users" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
-					</RadioButton>
+					</Button>
 					<Rectangle Height="1" Fill="Black"/>
-					<RadioButton Click="RadioButton_Click">
+					<Button Name="SettingsButton"
+							Width="{x:Bind MenuSplitView.OpenPaneLength}"
+							Style="{StaticResource MenuItemButtonStyle}"
+							Click="MenuButton_Click">
 						<StackPanel Orientation="Horizontal">
 							<SymbolIcon Symbol="Setting" Foreground="White"/>
 							<TextBlock Text="Settings" Margin="15 0 0 0" Foreground="White"/>
 						</StackPanel>
-					</RadioButton>
+					</Button>
 				</StackPanel>
 			</SplitView.Pane>
 		</SplitView>
 	</Grid>
 </Page>
-
-
-

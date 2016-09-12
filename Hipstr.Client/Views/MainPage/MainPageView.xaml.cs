@@ -1,4 +1,7 @@
-﻿using Windows.UI.Xaml;
+﻿using Windows.Foundation.Metadata;
+using Windows.UI;
+using Windows.UI.ViewManagement;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
 namespace Hipstr.Client.Views.MainPage
@@ -19,7 +22,7 @@ namespace Hipstr.Client.Views.MainPage
 			MenuSplitView.IsPaneOpen = !MenuSplitView.IsPaneOpen;
 		}
 
-		private void RadioButton_Click(object sender, RoutedEventArgs e)
+		private void MenuButton_Click(object sender, RoutedEventArgs e)
 		{
 			MenuSplitView.IsPaneOpen = false;
 		}
