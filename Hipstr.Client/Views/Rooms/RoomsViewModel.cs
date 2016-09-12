@@ -1,11 +1,11 @@
-﻿using Hipstr.Client.Commands.ViewCommands;
-using Hipstr.Client.Views.Messages;
+﻿using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Hipstr.Client.Commands;
 
 namespace Hipstr.Client.Views.Rooms
 {

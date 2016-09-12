@@ -1,9 +1,9 @@
-﻿using Hipstr.Client.Commands.ViewCommands;
-using Hipstr.Core.Models;
+﻿using Hipstr.Core.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Xaml;
+using Hipstr.Client.Commands;
 using Hipstr.Client.Views.Rooms;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;

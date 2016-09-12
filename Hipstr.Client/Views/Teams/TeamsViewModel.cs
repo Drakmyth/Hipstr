@@ -1,8 +1,8 @@
-﻿using Hipstr.Client.Commands.ViewCommands;
-using Hipstr.Core.Models;
+﻿using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Hipstr.Client.Commands;
 
 namespace Hipstr.Client.Views.Teams
 {
