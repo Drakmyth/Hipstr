@@ -30,13 +30,14 @@
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:Message">
 					<StackPanel Margin="0 10">
-						<Grid>
+						<RelativePanel>
 							<TextBlock Text="{x:Bind PostedBy.Name}"
-								   Foreground="White"/>
+								   Foreground="White"
+									   RelativePanel.AlignLeftWithPanel="True"/>
 							<TextBlock Text="{x:Bind Date}"
 								   Foreground="White"
-								   HorizontalAlignment="Right"/>
-						</Grid>
+								   RelativePanel.AlignRightWithPanel="True"/>
+						</RelativePanel>
 						<TextBlock Text="{x:Bind Text}"
 								   TextWrapping="Wrap"
 								   Foreground="White"
@@ -51,9 +52,7 @@
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="White"
-						  Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}"
-						  CommandParameter="{x:Bind ViewModel.Room}"/>
+						  Command="{x:Bind ViewModel.ReloadRoomCommand}"/>
 		</CommandBar>
 	</Grid>
 </Page>
-

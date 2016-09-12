@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace Hipstr.Client.Commands.ViewCommands
+namespace Hipstr.Client.Commands
 {
 	public class NavigateToViewCommand<T> : ICommand
 	{
