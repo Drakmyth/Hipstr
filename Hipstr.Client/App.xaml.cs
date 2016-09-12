@@ -1,12 +1,15 @@
 ﻿using Hipstr.Client.Views.MainPage;
+using Hipstr.Client.Views.Teams;
 using System;
 using System.Diagnostics;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.Foundation.Metadata;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Hipstr.Client.Views.Teams;
 
 namespace Hipstr.Client
 {
@@ -72,7 +75,19 @@ namespace Hipstr.Client
 				}
 				// Ensure the current window is active
 				Window.Current.Activate();
+
+				SetStatusBarColors();
 			}
+		}
+
+		private static void SetStatusBarColors()
+		{
+			if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) return;
+
+			StatusBar statusBar = StatusBar.GetForCurrentView();
+			statusBar.BackgroundColor = Color.FromArgb(255, 32, 80, 129);
+			statusBar.ForegroundColor = Colors.White;
+			statusBar.BackgroundOpacity = 1;
 		}
 
 		/// <summary>
