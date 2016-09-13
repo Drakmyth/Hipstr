@@ -9,12 +9,15 @@ namespace Hipstr.Client.Commands
 
 		public bool CanExecute(object parameter)
 		{
-			return App.Frame.CurrentSourcePageType != typeof(T);
+			return true;
 		}
 
 		public void Execute(object parameter)
 		{
-			App.Frame.Navigate(typeof(T), parameter);
+			if (App.Frame.CurrentSourcePageType != typeof(T))
+			{
+				App.Frame.Navigate(typeof(T), parameter);
+			}
 		}
 	}
 }
