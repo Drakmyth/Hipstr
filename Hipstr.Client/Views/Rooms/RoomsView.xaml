@@ -22,8 +22,7 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Name="RoomList"
-				  Grid.Row="0"
+		<ListView Grid.Row="0"
 				  ItemsSource="{x:Bind ViewModel.Rooms}"
 				  SelectedItem="{x:Bind ViewModel.SelectedRoom, Mode=TwoWay, Converter={StaticResource ObjToSelf}}">
 			<ListView.ItemTemplate>

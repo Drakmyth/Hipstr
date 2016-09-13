@@ -1,12 +1,10 @@
-﻿using Hipstr.Core.Models;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Input;
-using Windows.UI.Xaml;
-using Hipstr.Client.Commands;
+﻿using Hipstr.Client.Commands;
 using Hipstr.Client.Views.Rooms;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
+using Hipstr.Core.Models;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Hipstr.Client.Views.MainPage
 {
@@ -16,19 +14,6 @@ namespace Hipstr.Client.Views.MainPage
 		public ICommand NavigateToRoomsViewCommand { get; }
 		public ICommand NavigateToUsersViewCommand { get; }
 		public ObservableCollection<FilterItem> Filters { get; }
-
-		private FrameworkElement _frameContent;
-		public FrameworkElement FrameContent
-		{
-			get { return _frameContent; }
-			set
-			{
-				OnPropertyChanging();
-				_frameContent = value;
-				OnPropertyChanged();
-				OnFrameContentChanged();
-			}
-		}
 
 		private string _title;
 		public string Title
@@ -60,23 +45,6 @@ namespace Hipstr.Client.Views.MainPage
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView>();
 			Filters = new ObservableCollection<FilterItem>();
-		}
-
-		private void OnFrameContentChanged()
-		{
-			ITitled titled = FrameContent.DataContext as ITitled;
-			if (titled != null)
-			{
-				Title = titled.Title;
-			}
-
-			IFilterable filterable = FrameContent.DataContext as IFilterable;
-			if (filterable != null)
-			{
-				Filters.Clear();
-				filterable.Filters.ToList().ForEach(filter => Filters.Add(filter));
-				ShowFilters = Filters.Any();
-			}
 		}
 	}
 }

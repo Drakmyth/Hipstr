@@ -1,6 +1,6 @@
-﻿using Hipstr.Client.Annotations;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Hipstr.Client.Properties;
 
 namespace Hipstr.Client.Views
 {

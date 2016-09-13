@@ -51,8 +51,8 @@ namespace Hipstr.Client
 			if (Window.Current.Content == null)
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
-				Frame = Window.Current.Content as Frame;
 				Frame = new Frame();
+				
 				Frame.NavigationFailed += OnNavigationFailed;
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -60,7 +60,7 @@ namespace Hipstr.Client
 					//TODO: Load state from previously suspended application
 				}
 
-				// Place the frame in the current Window
+				// Create a MainPageView to hold the frame and place it in the current Window
 				Window.Current.Content = new MainPageView(Frame);
 			}
 
@@ -85,7 +85,7 @@ namespace Hipstr.Client
 			if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) return;
 
 			StatusBar statusBar = StatusBar.GetForCurrentView();
-			statusBar.BackgroundColor = Color.FromArgb(255, 32, 80, 129);
+			statusBar.BackgroundColor = Color.FromArgb(255, 32, 80, 129); // HipChatBackground
 			statusBar.ForegroundColor = Colors.White;
 			statusBar.BackgroundOpacity = 1;
 		}
