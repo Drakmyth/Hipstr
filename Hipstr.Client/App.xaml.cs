@@ -6,6 +6,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation.Metadata;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -52,8 +53,9 @@ namespace Hipstr.Client
 			{
 				// Create a Frame to act as the navigation context and navigate to the first page
 				Frame = new Frame();
-				
+
 				Frame.NavigationFailed += OnNavigationFailed;
+				Frame.Navigated += OnNavigated;
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
@@ -62,22 +64,24 @@ namespace Hipstr.Client
 
 				// Create a MainPageView to hold the frame and place it in the current Window
 				Window.Current.Content = new MainPageView(Frame);
+
+				// Register a handler for BackRequested events and set the visibility of the Back button
+				SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+				UpdateBackButtonVisibility();
 			}
 
-			if (e.PrelaunchActivated == false)
+			if (Frame.Content == null)
 			{
-				if (Frame.Content == null)
-				{
-					// When the navigation stack isn't restored navigate to the first page,
-					// configuring the new page by passing required information as a navigation
-					// parameter
-					Frame.Navigate(typeof(TeamsView), e.Arguments);
-				}
-				// Ensure the current window is active
-				Window.Current.Activate();
-
-				SetStatusBarColors();
+				// When the navigation stack isn't restored navigate to the first page,
+				// configuring the new page by passing required information as a navigation
+				// parameter
+				Frame.Navigate(typeof(TeamsView), e.Arguments);
 			}
+			// Ensure the current window is active
+			Window.Current.Activate();
+
+			// Make Status Bar match app aesthetic
+			SetStatusBarColors();
 		}
 
 		private static void SetStatusBarColors()
@@ -95,9 +99,31 @@ namespace Hipstr.Client
 		/// </summary>
 		/// <param name="sender">The Frame which failed navigation</param>
 		/// <param name="e">Details about the navigation failure</param>
-		private static void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+		private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
 		{
 			throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+		}
+
+		private void OnNavigated(object sender, NavigationEventArgs e)
+		{
+			// Each time a navigation event occurs, update the Back button's visibility
+			UpdateBackButtonVisibility();
+		}
+
+		private void UpdateBackButtonVisibility()
+		{
+			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = Frame.CanGoBack ?
+				AppViewBackButtonVisibility.Visible :
+				AppViewBackButtonVisibility.Collapsed;
+		}
+
+		private void OnBackRequested(object sender, BackRequestedEventArgs e)
+		{
+			if (Frame.CanGoBack)
+			{
+				e.Handled = true;
+				Frame.GoBack();
+			}
 		}
 
 		/// <summary>
@@ -107,7 +133,7 @@ namespace Hipstr.Client
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private static void OnSuspending(object sender, SuspendingEventArgs e)
+		private void OnSuspending(object sender, SuspendingEventArgs e)
 		{
 			SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity
