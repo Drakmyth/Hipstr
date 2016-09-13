@@ -3,6 +3,7 @@ using Hipstr.Client.Views.Rooms;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Messages
@@ -12,15 +13,18 @@ namespace Hipstr.Client.Views.Messages
 		public ICommand ReloadRoomCommand { get; set; }
 		public ICommand NavigateToRoomsViewCommand { get; set; }
 
-		private readonly List<Message> _messages;
-		public IEnumerable<Message> Messages
+		private readonly ObservableCollection<Message> _messages;
+		public ObservableCollection<Message> Messages
 		{
 			get { return _messages; }
 			set
 			{
 				OnPropertyChanging();
 				_messages.Clear();
-				_messages.AddRange(value);
+				foreach (Message message in value)
+				{
+					_messages.Add(message);
+				}
 				OnPropertyChanged();
 			}
 		}
@@ -57,7 +61,7 @@ namespace Hipstr.Client.Views.Messages
 		{
 			_hipChatService = hipChatService;
 
-			_messages = new List<Message>();
+			_messages = new ObservableCollection<Message>();
 			ReloadRoomCommand = new RelayCommand(ReloadRoom);
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 		}
@@ -68,10 +72,10 @@ namespace Hipstr.Client.Views.Messages
 			ReloadRoom();
 		}
 
-		public void ReloadRoom()
+		private void ReloadRoom()
 		{
 			IEnumerable<Message> messages = _hipChatService.GetMessages(_room);
-			Messages = messages;
+			Messages = new ObservableCollection<Message>(messages);
 		}
 	}
 }
