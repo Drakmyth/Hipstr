@@ -116,14 +116,13 @@
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Rooms\RoomsViewModel.cs" />
+    <Compile Include="Views\Teams\AddTeamDialog.xaml.cs">
+      <DependentUpon>AddTeamDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Users\UsersView.xaml.cs">
       <DependentUpon>UsersView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Users\UsersViewModel.cs" />
-    <Compile Include="Views\Teams\AddTeamView.xaml.cs">
-      <DependentUpon>AddTeamView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Teams\AddTeamViewModel.cs" />
     <Compile Include="Views\Teams\TeamsView.xaml.cs">
       <DependentUpon>TeamsView.xaml</DependentUpon>
     </Compile>
@@ -182,13 +181,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\Teams\AddTeamDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Users\UsersView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Teams\AddTeamView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Teams\TeamsView.xaml">
       <SubType>Designer</SubType>

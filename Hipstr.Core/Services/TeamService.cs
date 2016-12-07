@@ -16,6 +16,7 @@ namespace Hipstr.Core.Services
 		public void AddTeam(Team team)
 		{
 			_teams.Add(team);
+			// TODO: Persistance this
 		}
 
 		public bool TeamExists(string apiKey)

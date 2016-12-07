@@ -1,8 +1,10 @@
-﻿using Hipstr.Core.Models;
+﻿using Hipstr.Client.Commands;
+using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Hipstr.Client.Commands;
 
 namespace Hipstr.Client.Views.Teams
 {
@@ -14,22 +16,40 @@ namespace Hipstr.Client.Views.Teams
 
 		private readonly ITeamService _teamService;
 
-		public TeamsViewModel() : this(IoCContainer.Resolve<ITeamService>()) { }
+		public TeamsViewModel() : this(IoCContainer.Resolve<ITeamService>())
+		{
+		}
+
 		public TeamsViewModel(ITeamService teamService)
 		{
 			_teamService = teamService;
-
-			// TODO: Pull this into loading persistance
-			_teamService.AddTeam(new Team("---Default Team Name---", "---API KEY goes here---")); // API_KEY is good for 1 year from generation date.
+			Teams = new ObservableCollection<Team>();
 
 			RefreshTeamList();
 
-			AddTeamCommand = new NavigateToViewCommand<AddTeamView>();
+			AddTeamCommand = new RelayCommand(async () =>
+			{
+				var dialog = new AddTeamDialog();
+				ModalResult<Team> team = await dialog.ShowAsync();
+				if (!team.Cancelled)
+				{
+					string teamName = dialog.TeamName;
+					string apiKey = dialog.ApiKey;
+
+					_teamService.AddTeam(new Team(teamName, apiKey));
+					RefreshTeamList();
+				}
+			});
 		}
 
 		private void RefreshTeamList()
 		{
-			Teams = new ObservableCollection<Team>(_teamService.GetTeams());
+			Teams.Clear();
+			IEnumerable<Team> teams = _teamService.GetTeams();
+			foreach (Team team in teams)
+			{
+				Teams.Add(team);
+			}
 		}
 	}
 }
