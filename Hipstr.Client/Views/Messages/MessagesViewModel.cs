@@ -22,7 +22,6 @@ namespace Hipstr.Client.Views.Messages
 			get { return _messages; }
 			set
 			{
-				OnPropertyChanging();
 				_messages.Clear();
 				_messages.AddRange(value);
 				OnPropertyChanged();
@@ -36,7 +35,6 @@ namespace Hipstr.Client.Views.Messages
 			get { return _title; }
 			set
 			{
-				OnPropertyChanging();
 				_title = value;
 				OnPropertyChanged();
 			}
@@ -49,7 +47,6 @@ namespace Hipstr.Client.Views.Messages
 			get { return _room; }
 			set
 			{
-				OnPropertyChanging();
 				_room = value;
 				OnPropertyChanged();
 				OnRoomChanged();

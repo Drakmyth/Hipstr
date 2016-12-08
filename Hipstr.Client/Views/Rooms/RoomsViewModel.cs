@@ -28,7 +28,6 @@ namespace Hipstr.Client.Views.Rooms
 			{
 				if (_selectedRoom == value) return;
 
-				OnPropertyChanging();
 				_selectedRoom = value;
 				OnPropertyChanged();
 				OnSelectedRoomChanged();

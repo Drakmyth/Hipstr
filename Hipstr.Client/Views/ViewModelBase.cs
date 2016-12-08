@@ -4,15 +4,9 @@ using Hipstr.Client.Properties;
 
 namespace Hipstr.Client.Views
 {
-	public class ViewModelBase : INotifyPropertyChanging, INotifyPropertyChanged
+	public class ViewModelBase : INotifyPropertyChanged
 	{
-		public event PropertyChangingEventHandler PropertyChanging;
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		protected virtual void OnPropertyChanging([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-		}
 
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

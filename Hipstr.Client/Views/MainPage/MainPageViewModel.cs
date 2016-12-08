@@ -21,7 +21,6 @@ namespace Hipstr.Client.Views.MainPage
 			get { return _title; }
 			set
 			{
-				OnPropertyChanging();
 				_title = value;
 				OnPropertyChanged();
 			}
@@ -33,7 +32,6 @@ namespace Hipstr.Client.Views.MainPage
 			get { return _showFilters; }
 			set
 			{
-				OnPropertyChanging();
 				_showFilters = value;
 				OnPropertyChanged();
 			}
