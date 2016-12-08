@@ -13,7 +13,7 @@ namespace Hipstr.Client.Views.Teams
 	{
 		public string Title => "Teams";
 		public ObservableCollection<Team> Teams { get; set; }
-		public ICommand AddTeamCommand { get; set; }
+		public ICommand AddTeamCommand { get; }
 
 		private readonly ITeamService _teamService;
 
@@ -28,19 +28,21 @@ namespace Hipstr.Client.Views.Teams
 
 			RefreshTeamList().Wait();
 
-			AddTeamCommand = new RelayCommand(async () =>
-			{
-				var dialog = new AddTeamDialog();
-				ModalResult<Team> team = await dialog.ShowAsync();
-				if (!team.Cancelled)
-				{
-					string teamName = dialog.TeamName;
-					string apiKey = dialog.ApiKey;
+			AddTeamCommand = new RelayCommand(OnAddTeamCommand);
+		}
 
-					_teamService.AddTeamAsync(new Team(teamName, apiKey));
-					await RefreshTeamList();
-				}
-			});
+		private async void OnAddTeamCommand()
+		{
+			var dialog = new AddTeamDialog();
+			ModalResult<Team> team = await dialog.ShowAsync();
+			if (!team.Cancelled)
+			{
+				string teamName = dialog.TeamName;
+				string apiKey = dialog.ApiKey;
+
+				_teamService.AddTeamAsync(new Team(teamName, apiKey));
+				await RefreshTeamList();
+			}
 		}
 
 		private async Task RefreshTeamList()
