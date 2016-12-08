@@ -1,4 +1,4 @@
-﻿namespace Hipstr.Core.Models
+﻿namespace Hipstr.Client.Views
 {
 	public class ModalResult<T> where T : class
 	{
