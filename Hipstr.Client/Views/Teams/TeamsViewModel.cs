@@ -1,8 +1,8 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using Hipstr.Core.Utility.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -46,11 +46,7 @@ namespace Hipstr.Client.Views.Teams
 		private async Task RefreshTeamList()
 		{
 			Teams.Clear();
-			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
-			foreach (Team team in teams)
-			{
-				Teams.Add(team);
-			}
+			Teams.AddRange(await _teamService.GetTeamsAsync());
 		}
 	}
 }

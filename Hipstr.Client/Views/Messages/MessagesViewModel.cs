@@ -2,6 +2,7 @@
 using Hipstr.Client.Views.Rooms;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using Hipstr.Core.Utility.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -23,10 +24,7 @@ namespace Hipstr.Client.Views.Messages
 			{
 				OnPropertyChanging();
 				_messages.Clear();
-				foreach (Message message in value)
-				{
-					_messages.Add(message);
-				}
+				_messages.AddRange(value);
 				OnPropertyChanged();
 			}
 		}

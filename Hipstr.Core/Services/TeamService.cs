@@ -1,30 +1,27 @@
 ﻿using Hipstr.Core.Models;
-using Newtonsoft.Json;
-using System;
+using Hipstr.Core.Utility.Extensions;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.Storage;
 
 namespace Hipstr.Core.Services
 {
 	public class TeamService : ITeamService
 	{
-		private List<Team> _teams;
+		private readonly IList<Team> _teams;
+		private readonly IDataService _dataService;
 
-		public TeamService()
+		public TeamService(IDataService dataService)
 		{
 			_teams = new List<Team>();
+			_dataService = dataService;
 		}
 
 		public async void AddTeamAsync(Team team)
 		{
 			_teams.Add(team);
-
-			StorageFolder folder = ApplicationData.Current.LocalFolder;
-			StorageFile storageFile = await folder.CreateFileAsync("myFile.txt", CreationCollisionOption.OpenIfExists);
-			string json = JsonConvert.SerializeObject(_teams);
-			await FileIO.WriteTextAsync(storageFile, json);
+			await _dataService.SaveTeamsAsync(_teams);
 		}
 
 		public bool TeamExists(string apiKey)
@@ -39,12 +36,9 @@ namespace Hipstr.Core.Services
 
 		public async Task<IEnumerable<Team>> GetTeamsAsync()
 		{
-			StorageFolder folder = ApplicationData.Current.LocalFolder;
-			StorageFile storageFile = await folder.CreateFileAsync("myFile.txt", CreationCollisionOption.OpenIfExists);
-			string json = await FileIO.ReadTextAsync(storageFile);
-			_teams = string.IsNullOrEmpty(json) ? new List<Team>() : JsonConvert.DeserializeObject<List<Team>>(json);
-
-			return _teams;
+			_teams.Clear();
+			_teams.AddRange(await _dataService.LoadTeamsAsync());
+			return new ReadOnlyCollection<Team>(_teams);
 		}
 	}
 }

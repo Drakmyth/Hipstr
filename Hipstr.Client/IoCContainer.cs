@@ -14,16 +14,17 @@ namespace Hipstr.Client
 		{
 			if (Container != null) return;
 
-			ContainerBuilder builder = new ContainerBuilder();
+			var builder = new ContainerBuilder();
 			InitializeInjectionMappings(builder);
 			Container = builder.Build();
 		}
 
 		private static void InitializeInjectionMappings(ContainerBuilder builder)
 		{
-			builder.RegisterType<ITeamService, TeamService>().InstancePerLifetimeScope(); // TODO: Pull local state into persistence layer, then these can be per request instead of per lifetime
-			builder.RegisterType<IHipChatService, HipChatService>().InstancePerLifetimeScope();
+			builder.RegisterType<ITeamService, TeamService>();
+			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<IUserConverter, UserConverter>();
+			builder.RegisterType<IDataService, DataService>();
 			builder.RegisterType<HttpClient, HttpClient>();
 		}
 
