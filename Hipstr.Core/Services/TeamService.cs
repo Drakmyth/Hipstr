@@ -29,9 +29,10 @@ namespace Hipstr.Core.Services
 			return _teams.Any(t => t.ApiKey == apiKey);
 		}
 
-		public void RemoveTeam(Team team)
+		public async Task RemoveTeamAsync(Team team)
 		{
 			_teams.Remove(team);
+			await _dataService.SaveTeamsAsync(_teams);
 		}
 
 		public async Task<IEnumerable<Team>> GetTeamsAsync()

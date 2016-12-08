@@ -8,7 +8,7 @@ namespace Hipstr.Core.Services
 	{
 		void AddTeamAsync(Team team);
 		bool TeamExists(string apiKey);
-		void RemoveTeam(Team team);
+		Task RemoveTeamAsync(Team team);
 		Task<IEnumerable<Team>> GetTeamsAsync();
 	}
 }
