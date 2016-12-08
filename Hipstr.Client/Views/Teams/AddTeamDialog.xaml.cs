@@ -26,6 +26,7 @@ namespace Hipstr.Client.Views.Teams
 		private readonly Popup _parent;
 		private TaskCompletionSource<ModalResult<Team>> _taskCompletionSource;
 
+		// TODO: Commonize Dialog logic into a control baseclass or service
 		public AddTeamDialog()
 		{
 			InitializeComponent();
