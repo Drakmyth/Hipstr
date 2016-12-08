@@ -14,7 +14,6 @@ namespace Hipstr.Core.Services
 {
 	public class HipChatService : IHipChatService
 	{
-		// TODO: Get API_KEY from user
 		// TODO: Notify user when API_KEY is about to expire
 
 		private readonly Uri ROOT_URI = new Uri("http://www.hipchat.com");
@@ -30,11 +29,11 @@ namespace Hipstr.Core.Services
 			_userConverter = userConverter;
 		}
 
-		public IEnumerable<Room> GetRooms()
+		public async Task<IEnumerable<Room>> GetRoomsAsync()
 		{
-			IEnumerable<Team> teams = _teamService.GetTeams();
+			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 
-			Dictionary<Task<HttpResponseMessage>, Team> taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
+			var taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
 			foreach (Team team in teams)
 			{
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
@@ -47,7 +46,7 @@ namespace Hipstr.Core.Services
 			// TODO: Don't wait for all teams to return room list before processing results
 			requestTasks.Wait();
 
-			List<Room> rooms = new List<Room>();
+			var rooms = new List<Room>();
 			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
 			{
 				HttpResponseMessage response = task.Result;
@@ -55,30 +54,25 @@ namespace Hipstr.Core.Services
 
 				// TODO: Process rooms in parallel
 				json.Wait();
-				HipChatCollectionWrapper<HipChatRoom> roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json.Result);
-				foreach (HipChatRoom hcRoom in roomWrapper.Items)
+				var roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json.Result);
+				rooms.AddRange(roomWrapper.Items.Select(hcRoom => new Room
 				{
-					Room room = new Room
-					{
-						Id = hcRoom.Id,
-						IsArchived = hcRoom.IsArchived,
-						Name = hcRoom.Name,
-						Privacy = hcRoom.Privacy,
-						Team = taskTeamMapping[task]
-					};
-
-					rooms.Add(room);
-				}
+					Id = hcRoom.Id,
+					IsArchived = hcRoom.IsArchived,
+					Name = hcRoom.Name,
+					Privacy = hcRoom.Privacy,
+					Team = taskTeamMapping[task]
+				}));
 			}
 
 			return rooms;
 		}
 
-		public IEnumerable<User> GetUsers()
+		public async Task<IEnumerable<User>> GetUsersAsync()
 		{
-			IEnumerable<Team> teams = _teamService.GetTeams();
+			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 
-			Dictionary<Task<HttpResponseMessage>, Team> taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
+			var taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
 			foreach (Team team in teams)
 			{
 				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
@@ -91,50 +85,37 @@ namespace Hipstr.Core.Services
 			// TODO: Don't wait for all teams to return user list before processing results
 			requestTasks.Wait();
 
-			List<User> users = new List<User>();
+			var users = new List<User>();
 			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
 			{
 				HttpResponseMessage response = task.Result;
 				Task<string> json = response.Content.ReadAsStringAsync();
+
+				// TODO: Process users in parallel
 				json.Wait();
-				HipChatCollectionWrapper<HipChatUser> userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
-				foreach (HipChatUser hcUser in userWrapper.Items)
-				{
-					User user = _userConverter.HipChatUserToUser(hcUser, taskTeamMapping[task]);
-					users.Add(user);
-				}
+				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
+				users.AddRange(userWrapper.Items.Select(hcUser => _userConverter.HipChatUserToUser(hcUser, taskTeamMapping[task])));
 			}
 
 			return users;
 		}
 
-		public IEnumerable<Message> GetMessages(Room room)
+		public async Task<IEnumerable<Message>> GetMessagesAsync(Room room)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
-			Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, $"/v2/room/{room.Id}/history"));
-			get.Wait();
+			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(ROOT_URI, $"/v2/room/{room.Id}/history"));
+			string json = await get.Content.ReadAsStringAsync();
 
-			Task<string> json = get.Result.Content.ReadAsStringAsync();
-			json.Wait();
-
-			List<Message> messages = new List<Message>();
-
-			HipChatCollectionWrapper<object> messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json.Result);
+			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
 			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
-			IEnumerable<HipChatMessage> hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
-			foreach (HipChatMessage hcMessage in hcMessages)
+			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
+
+			return hcMessages.Select(hcMessage => new Message
 			{
-				Message message = new Message
-				{
-					PostedBy = _userConverter.HipChatUserToUser(hcMessage.From, room.Team),
-					Date = hcMessage.Date,
-					Text = hcMessage.Message
-				};
-
-				messages.Add(message);
-			}
-
-			return messages;
+				PostedBy = _userConverter.HipChatUserToUser(hcMessage.From, room.Team),
+				Date = hcMessage.Date,
+				Text = hcMessage.Message
+			}).ToList();
 		}
 	}
 }

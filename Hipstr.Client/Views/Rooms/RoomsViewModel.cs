@@ -1,11 +1,12 @@
-﻿using Hipstr.Client.Views.Messages;
+﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Commands;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -19,6 +20,7 @@ namespace Hipstr.Client.Views.Rooms
 		public ICommand NavigateToMessagesViewCommand { get; }
 
 		private Room _selectedRoom;
+
 		public Room SelectedRoom
 		{
 			get { return _selectedRoom; }
@@ -33,25 +35,28 @@ namespace Hipstr.Client.Views.Rooms
 			}
 		}
 
-		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
+		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>())
+		{
+		}
+
 		public RoomsViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 
-			UpdateRooms();
+			UpdateRoomsAsync().Wait();
 			UpdateFilters();
 		}
 
-		public void UpdateRooms()
+		private async Task UpdateRoomsAsync()
 		{
-			IEnumerable<Room> rooms = _hipChatService.GetRooms();
+			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
 			Rooms = new ObservableCollection<Room>(rooms);
 		}
 
-		public void UpdateFilters()
+		private void UpdateFilters()
 		{
-			IEnumerable<FilterItem> filters = Rooms.GroupBy(room => room.Team.Name).Select(group => new FilterItem { DisplayName = group.Key }).ToList();
+			IEnumerable<FilterItem> filters = Rooms.GroupBy(room => room.Team.Name).Select(group => new FilterItem {DisplayName = group.Key}).ToList();
 			Filters = new ObservableCollection<FilterItem>(filters);
 		}
 

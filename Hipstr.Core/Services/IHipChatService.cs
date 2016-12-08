@@ -1,12 +1,13 @@
 ﻿using Hipstr.Core.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Hipstr.Core.Services
 {
 	public interface IHipChatService
 	{
-		IEnumerable<Room> GetRooms();
-		IEnumerable<User> GetUsers();
-		IEnumerable<Message> GetMessages(Room room);
+		Task<IEnumerable<Room>> GetRoomsAsync();
+		Task<IEnumerable<User>> GetUsersAsync();
+		Task<IEnumerable<Message>> GetMessagesAsync(Room room);
 	}
 }

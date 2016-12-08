@@ -4,16 +4,18 @@ using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Messages
 {
-	public class MessagesViewModel : ViewModelBase//, ITitled
+	public class MessagesViewModel : ViewModelBase //, ITitled
 	{
 		public ICommand ReloadRoomCommand { get; set; }
 		public ICommand NavigateToRoomsViewCommand { get; set; }
 
 		private readonly ObservableCollection<Message> _messages;
+
 		public ObservableCollection<Message> Messages
 		{
 			get { return _messages; }
@@ -30,6 +32,7 @@ namespace Hipstr.Client.Views.Messages
 		}
 
 		private string _title;
+
 		public string Title
 		{
 			get { return _title; }
@@ -42,6 +45,7 @@ namespace Hipstr.Client.Views.Messages
 		}
 
 		private Room _room;
+
 		public Room Room
 		{
 			get { return _room; }
@@ -56,7 +60,10 @@ namespace Hipstr.Client.Views.Messages
 
 		private readonly IHipChatService _hipChatService;
 
-		public MessagesViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
+		public MessagesViewModel() : this(IoCContainer.Resolve<IHipChatService>())
+		{
+		}
+
 		public MessagesViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
@@ -74,8 +81,9 @@ namespace Hipstr.Client.Views.Messages
 
 		private void ReloadRoom()
 		{
-			IEnumerable<Message> messages = _hipChatService.GetMessages(_room);
-			Messages = new ObservableCollection<Message>(messages);
+			Task<IEnumerable<Message>> messagesTask = _hipChatService.GetMessagesAsync(_room);
+			messagesTask.Wait();
+			Messages = new ObservableCollection<Message>(messagesTask.Result);
 		}
 	}
 }

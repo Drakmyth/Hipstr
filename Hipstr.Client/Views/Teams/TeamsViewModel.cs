@@ -4,6 +4,7 @@ using Hipstr.Core.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Teams
@@ -25,7 +26,7 @@ namespace Hipstr.Client.Views.Teams
 			_teamService = teamService;
 			Teams = new ObservableCollection<Team>();
 
-			RefreshTeamList();
+			RefreshTeamList().Wait();
 
 			AddTeamCommand = new RelayCommand(async () =>
 			{
@@ -36,16 +37,16 @@ namespace Hipstr.Client.Views.Teams
 					string teamName = dialog.TeamName;
 					string apiKey = dialog.ApiKey;
 
-					_teamService.AddTeam(new Team(teamName, apiKey));
-					RefreshTeamList();
+					_teamService.AddTeamAsync(new Team(teamName, apiKey));
+					await RefreshTeamList();
 				}
 			});
 		}
 
-		private void RefreshTeamList()
+		private async Task RefreshTeamList()
 		{
 			Teams.Clear();
-			IEnumerable<Team> teams = _teamService.GetTeams();
+			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 			foreach (Team team in teams)
 			{
 				Teams.Add(team);

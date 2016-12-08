@@ -2,6 +2,7 @@
 using Hipstr.Core.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace Hipstr.Client.Views.Users
 {
@@ -12,16 +13,19 @@ namespace Hipstr.Client.Views.Users
 		public string Title => "Users";
 		public ObservableCollection<User> Users { get; set; }
 
-		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>()) { }
+		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>())
+		{
+		}
+
 		public UsersViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
-			UpdateUserList();
+			UpdateUserListAsync().Wait();
 		}
 
-		public void UpdateUserList()
+		public async Task UpdateUserListAsync()
 		{
-			IEnumerable<User> users = _hipChatService.GetUsers();
+			IEnumerable<User> users = await _hipChatService.GetUsersAsync();
 			Users = new ObservableCollection<User>(users);
 		}
 	}
