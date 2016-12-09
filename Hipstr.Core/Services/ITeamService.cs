@@ -6,7 +6,7 @@ namespace Hipstr.Core.Services
 {
 	public interface ITeamService
 	{
-		void AddTeamAsync(Team team);
+		Task AddTeamAsync(Team team);
 		bool TeamExists(string apiKey);
 		Task RemoveTeamAsync(Team team);
 		Task<IEnumerable<Team>> GetTeamsAsync();

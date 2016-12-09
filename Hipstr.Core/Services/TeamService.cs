@@ -18,7 +18,7 @@ namespace Hipstr.Core.Services
 			_dataService = dataService;
 		}
 
-		public async void AddTeamAsync(Team team)
+		public async Task AddTeamAsync(Team team)
 		{
 			_teams.Add(team);
 			await _dataService.SaveTeamsAsync(_teams);

@@ -41,20 +41,17 @@ namespace Hipstr.Core.Services
 				taskTeamMapping.Add(get, team);
 			}
 
-			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(taskTeamMapping.Keys);
-
-			// TODO: Don't wait for all teams to return room list before processing results
-			requestTasks.Wait();
+			// TODO: Parallel processing of teams
+			await Task.WhenAll(taskTeamMapping.Keys);
 
 			var rooms = new List<Room>();
 			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
 			{
 				HttpResponseMessage response = task.Result;
-				Task<string> json = response.Content.ReadAsStringAsync();
 
-				// TODO: Process rooms in parallel
-				json.Wait();
-				var roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json.Result);
+				// TODO: Parallel processing of rooms
+				string json = await response.Content.ReadAsStringAsync();
+				var roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json);
 				rooms.AddRange(roomWrapper.Items.Select(hcRoom => new Room
 				{
 					Id = hcRoom.Id,
@@ -80,20 +77,17 @@ namespace Hipstr.Core.Services
 				taskTeamMapping.Add(get, team);
 			}
 
-			Task<HttpResponseMessage[]> requestTasks = Task.WhenAll(taskTeamMapping.Keys);
-
-			// TODO: Don't wait for all teams to return user list before processing results
-			requestTasks.Wait();
+			// TODO: Parallel processing of teams
+			await Task.WhenAll(taskTeamMapping.Keys);
 
 			var users = new List<User>();
 			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
 			{
 				HttpResponseMessage response = task.Result;
-				Task<string> json = response.Content.ReadAsStringAsync();
 
-				// TODO: Process users in parallel
-				json.Wait();
-				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json.Result);
+				// TODO: Parallel processing of users
+				string json = await response.Content.ReadAsStringAsync();
+				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json);
 				users.AddRange(userWrapper.Items.Select(hcUser => _userConverter.HipChatUserToUser(hcUser, taskTeamMapping[task])));
 			}
 

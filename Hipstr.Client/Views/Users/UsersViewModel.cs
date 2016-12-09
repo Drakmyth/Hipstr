@@ -1,5 +1,6 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using Hipstr.Core.Utility.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
@@ -20,13 +21,14 @@ namespace Hipstr.Client.Views.Users
 		public UsersViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
-			UpdateUserListAsync().Wait();
+			Users = new ObservableCollection<User>();
 		}
 
 		public async Task UpdateUserListAsync()
 		{
 			IEnumerable<User> users = await _hipChatService.GetUsersAsync();
-			Users = new ObservableCollection<User>(users);
+			Users.Clear();
+			Users.AddRange(users);
 		}
 	}
 }

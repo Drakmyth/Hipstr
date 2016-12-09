@@ -14,9 +14,10 @@ namespace Hipstr.Client.Views.Messages
 			DataContext = new MessagesViewModel();
 		}
 
-		protected override void OnNavigatedTo(NavigationEventArgs e)
+		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.Room = (Room)e.Parameter;
+			await ViewModel.ReloadMessagesAsync();
 		}
 	}
 }

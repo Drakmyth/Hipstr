@@ -7,6 +7,8 @@
 	xmlns:models="using:Hipstr.Core.Models"
 	xmlns:teams="using:Hipstr.Client.Views.Teams"
 	xmlns:converters="using:Hipstr.Client.Converters"
+	xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	mc:Ignorable="d">
 
 	<Page.Resources>
@@ -14,7 +16,6 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -24,7 +25,7 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{x:Bind ViewModel.Teams}">
+		<ListView Grid.Row="0" ItemsSource="{x:Bind ViewModel.Teams}" Holding="OnTeamRightTapped">
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:Team">
 					<StackPanel Orientation="Horizontal">
@@ -33,6 +34,21 @@
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
+			<ListView.Resources>
+				<Style x:Key="DeleteFlyoutPresenterStyle" TargetType="MenuFlyoutPresenter">
+					<Setter Property="Background" Value="{StaticResource HipChatControl}" />
+					<Setter Property="Foreground" Value="White" />
+				</Style>
+				<MenuFlyout x:Name="DeleteFlyout" MenuFlyoutPresenterStyle="{StaticResource DeleteFlyoutPresenterStyle}">
+					<MenuFlyout.Items>
+						<MenuFlyoutItem Text="Delete"
+						                Background="{StaticResource HipChatControl}"
+						                Foreground="White"
+						                Command="{x:Bind ViewModel.DeleteTeamCommand}"
+						                CommandParameter="{x:Bind ViewModel.TappedTeam, Mode=OneWay}" />
+					</MenuFlyout.Items>
+				</MenuFlyout>
+			</ListView.Resources>
 		</ListView>
 		<CommandBar Grid.Row="1"
 		            Background="{StaticResource HipChatControl}"

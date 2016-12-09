@@ -1,4 +1,5 @@
 ﻿using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -10,6 +11,12 @@ namespace Hipstr.Client.Views.Rooms
 		{
 			InitializeComponent();
 			DataContext = new RoomsViewModel();
+		}
+
+		protected override async void OnNavigatedTo(NavigationEventArgs e)
+		{
+			await ViewModel.UpdateRoomsAsync();
+			ViewModel.UpdateFilters();
 		}
 	}
 }

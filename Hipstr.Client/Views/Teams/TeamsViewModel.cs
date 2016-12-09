@@ -14,6 +14,19 @@ namespace Hipstr.Client.Views.Teams
 		public string Title => "Teams";
 		public ObservableCollection<Team> Teams { get; set; }
 		public ICommand AddTeamCommand { get; }
+		public ICommand DeleteTeamCommand { get; }
+
+		private Team _tappedTeam;
+
+		public Team TappedTeam
+		{
+			get { return _tappedTeam; }
+			set
+			{
+				_tappedTeam = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private readonly ITeamService _teamService;
 
@@ -26,12 +39,11 @@ namespace Hipstr.Client.Views.Teams
 			_teamService = teamService;
 			Teams = new ObservableCollection<Team>();
 
-			RefreshTeamList().Wait();
-
-			AddTeamCommand = new RelayCommand(OnAddTeamCommand);
+			AddTeamCommand = new RelayCommandAsync(OnAddTeamCommand);
+			DeleteTeamCommand = new RelayCommandAsync<Team>(OnDeleteTeamCommandAsync, team => team != null);
 		}
 
-		private async void OnAddTeamCommand()
+		private async Task OnAddTeamCommand()
 		{
 			var dialog = new AddTeamDialog();
 			ModalResult<Team> team = await dialog.ShowAsync();
@@ -40,12 +52,18 @@ namespace Hipstr.Client.Views.Teams
 				string teamName = dialog.TeamName;
 				string apiKey = dialog.ApiKey;
 
-				_teamService.AddTeamAsync(new Team(teamName, apiKey));
-				await RefreshTeamList();
+				await _teamService.AddTeamAsync(new Team(teamName, apiKey));
+				await RefreshTeamListAsync();
 			}
 		}
 
-		private async Task RefreshTeamList()
+		private async Task OnDeleteTeamCommandAsync(Team team)
+		{
+			await _teamService.RemoveTeamAsync(team);
+			await RefreshTeamListAsync();
+		}
+
+		public async Task RefreshTeamListAsync()
 		{
 			Teams.Clear();
 			Teams.AddRange(await _teamService.GetTeamsAsync());

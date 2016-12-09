@@ -1,4 +1,8 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Hipstr.Core.Models;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Input;
+using Windows.UI.Xaml.Navigation;
 
 namespace Hipstr.Client.Views.Teams
 {
@@ -10,6 +14,18 @@ namespace Hipstr.Client.Views.Teams
 		{
 			InitializeComponent();
 			DataContext = new TeamsViewModel();
+		}
+
+		private void OnTeamRightTapped(object sender, HoldingRoutedEventArgs e)
+		{
+			ViewModel.TappedTeam = ((FrameworkElement)e.OriginalSource).DataContext as Team;
+			var listView = (ListView)sender;
+			DeleteFlyout.ShowAt(listView, e.GetPosition(listView));
+		}
+
+		protected override async void OnNavigatedTo(NavigationEventArgs e)
+		{
+			await ViewModel.RefreshTeamListAsync();
 		}
 	}
 }

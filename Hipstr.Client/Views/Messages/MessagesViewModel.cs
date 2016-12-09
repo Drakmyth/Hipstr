@@ -14,19 +14,7 @@ namespace Hipstr.Client.Views.Messages
 	{
 		public ICommand ReloadRoomCommand { get; set; }
 		public ICommand NavigateToRoomsViewCommand { get; set; }
-
-		private readonly ObservableCollection<Message> _messages;
-
-		public ObservableCollection<Message> Messages
-		{
-			get { return _messages; }
-			set
-			{
-				_messages.Clear();
-				_messages.AddRange(value);
-				OnPropertyChanged();
-			}
-		}
+		public ObservableCollection<Message> Messages { get; set; }
 
 		private string _title;
 
@@ -49,7 +37,6 @@ namespace Hipstr.Client.Views.Messages
 			{
 				_room = value;
 				OnPropertyChanged();
-				OnRoomChanged();
 			}
 		}
 
@@ -63,22 +50,16 @@ namespace Hipstr.Client.Views.Messages
 		{
 			_hipChatService = hipChatService;
 
-			_messages = new ObservableCollection<Message>();
-			ReloadRoomCommand = new RelayCommand(ReloadRoom);
+			Messages = new ObservableCollection<Message>();
+			ReloadRoomCommand = new RelayCommandAsync(ReloadMessagesAsync);
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 		}
 
-		private void OnRoomChanged()
+		public async Task ReloadMessagesAsync()
 		{
-			Title = _room.Name;
-			ReloadRoom();
-		}
-
-		private void ReloadRoom()
-		{
-			Task<IEnumerable<Message>> messagesTask = _hipChatService.GetMessagesAsync(_room);
-			messagesTask.Wait();
-			Messages = new ObservableCollection<Message>(messagesTask.Result);
+			IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
+			Messages.Clear();
+			Messages.AddRange(messages);
 		}
 	}
 }

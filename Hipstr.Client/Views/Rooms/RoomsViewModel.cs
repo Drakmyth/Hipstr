@@ -2,6 +2,7 @@
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using Hipstr.Core.Utility.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -19,52 +20,31 @@ namespace Hipstr.Client.Views.Rooms
 		public ObservableCollection<FilterItem> Filters { get; set; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 
-		private Room _selectedRoom;
-
-		public Room SelectedRoom
-		{
-			get { return _selectedRoom; }
-			set
-			{
-				if (_selectedRoom == value) return;
-
-				_selectedRoom = value;
-				OnPropertyChanged();
-				OnSelectedRoomChanged();
-			}
-		}
-
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>())
 		{
 		}
 
 		public RoomsViewModel(IHipChatService hipChatService)
 		{
-			_hipChatService = hipChatService;
+			Rooms = new ObservableCollection<Room>();
+			Filters = new ObservableCollection<FilterItem>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 
-			UpdateRoomsAsync().Wait();
-			UpdateFilters();
+			_hipChatService = hipChatService;
 		}
 
-		private async Task UpdateRoomsAsync()
+		public async Task UpdateRoomsAsync()
 		{
 			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
-			Rooms = new ObservableCollection<Room>(rooms);
+			Rooms.Clear();
+			Rooms.AddRange(rooms);
 		}
 
-		private void UpdateFilters()
+		public void UpdateFilters()
 		{
 			IEnumerable<FilterItem> filters = Rooms.GroupBy(room => room.Team.Name).Select(group => new FilterItem {DisplayName = group.Key}).ToList();
-			Filters = new ObservableCollection<FilterItem>(filters);
-		}
-
-		private void OnSelectedRoomChanged()
-		{
-			if (NavigateToMessagesViewCommand.CanExecute(SelectedRoom))
-			{
-				NavigateToMessagesViewCommand.Execute(SelectedRoom);
-			}
+			Filters.Clear();
+			Filters.AddRange(filters);
 		}
 	}
 }
