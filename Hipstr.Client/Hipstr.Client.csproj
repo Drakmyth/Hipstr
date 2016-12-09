@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Commands\RelayCommandAsync.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -117,6 +118,9 @@
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Rooms\RoomsViewModel.cs" />
+    <Compile Include="Views\Teams\EditTeamDialog.xaml.cs">
+      <DependentUpon>EditTeamDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Teams\AddTeamDialog.xaml.cs">
       <DependentUpon>AddTeamDialog.xaml</DependentUpon>
     </Compile>
@@ -179,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Rooms\RoomsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Teams\EditTeamDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

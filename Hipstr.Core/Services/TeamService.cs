@@ -24,6 +24,14 @@ namespace Hipstr.Core.Services
 			await _dataService.SaveTeamsAsync(_teams);
 		}
 
+		public async Task EditTeamAsync(string oldApiKey, Team team)
+		{
+			Team teamToEdit = _teams.Where(t => t.ApiKey == oldApiKey).Single();
+			teamToEdit.Name = team.Name;
+			teamToEdit.ApiKey = team.ApiKey;
+			await _dataService.SaveTeamsAsync(_teams);
+		}
+
 		public bool TeamExists(string apiKey)
 		{
 			return _teams.Any(t => t.ApiKey == apiKey);

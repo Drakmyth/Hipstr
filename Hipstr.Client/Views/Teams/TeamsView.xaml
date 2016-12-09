@@ -41,6 +41,11 @@
 				</Style>
 				<MenuFlyout x:Name="DeleteFlyout" MenuFlyoutPresenterStyle="{StaticResource DeleteFlyoutPresenterStyle}">
 					<MenuFlyout.Items>
+						<MenuFlyoutItem Text="Edit"
+						                Background="{StaticResource HipChatControl}"
+						                Foreground="White"
+						                Command="{x:Bind ViewModel.EditTeamCommand}"
+						                CommandParameter="{x:Bind ViewModel.TappedTeam, Mode=OneWay}" />
 						<MenuFlyoutItem Text="Delete"
 						                Background="{StaticResource HipChatControl}"
 						                Foreground="White"
