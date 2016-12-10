@@ -1,8 +1,9 @@
 ﻿using Autofac;
-using Autofac.Builder;
 using Hipstr.Core.Converters;
 using Hipstr.Core.Services;
 using System.Net.Http;
+
+// ReSharper disable InconsistentNaming
 
 namespace Hipstr.Client
 {
@@ -28,9 +29,9 @@ namespace Hipstr.Client
 			builder.RegisterType<HttpClient, HttpClient>();
 		}
 
-		private static IRegistrationBuilder<InstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
+		private static void RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
 		{
-			return builder.RegisterType<InstanceType>().As<Interface>();
+			builder.RegisterType<InstanceType>().As<Interface>();
 		}
 
 		public static Interface Resolve<Interface>()
