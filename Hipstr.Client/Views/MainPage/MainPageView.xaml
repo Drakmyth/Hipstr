@@ -1,22 +1,22 @@
 ﻿<Page x:Class="Hipstr.Client.Views.MainPage.MainPageView"
-	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	  xmlns:converters="using:Hipstr.Client.Converters"
-	  xmlns:models="using:Hipstr.Core.Models"
-	  mc:Ignorable="d">
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:converters="using:Hipstr.Client.Converters"
+      xmlns:models="using:Hipstr.Core.Models"
+      mc:Ignorable="d">
 
 	<Page.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml"/>
+				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:BooleanToVisibilityConverter x:Key="BoolToVis"/>
+			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<Style x:Key="HamburgerButtonStyle" TargetType="Button">
-				<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
-				<Setter Property="Foreground" Value="White"/>
-				<Setter Property="Padding" Value="0"/>
+				<Setter Property="Background" Value="{StaticResource HipChatControl}" />
+				<Setter Property="Foreground" Value="White" />
+				<Setter Property="Padding" Value="0" />
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="Button">
@@ -25,164 +25,170 @@
 									<VisualStateGroup x:Name="CommonStates">
 										<VisualState x:Name="Normal">
 											<Storyboard>
-												<PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+												<PointerUpThemeAnimation Storyboard.TargetName="RootGrid" />
 											</Storyboard>
 										</VisualState>
 										<VisualState x:Name="PointerOver">
 											<Storyboard>
-												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush"
+												                               Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseMediumLowBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground"
+												                               Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<PointerUpThemeAnimation Storyboard.TargetName="RootGrid"/>
+												<PointerUpThemeAnimation Storyboard.TargetName="RootGrid" />
 											</Storyboard>
 										</VisualState>
 										<VisualState x:Name="Pressed">
 											<Storyboard>
 												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
 													<!--<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseMediumLowBrush}"/>-->
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush"
+												                               Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightTransparentBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground"
+												                               Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightBaseHighBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<PointerDownThemeAnimation Storyboard.TargetName="RootGrid"/>
+												<PointerDownThemeAnimation Storyboard.TargetName="RootGrid" />
 											</Storyboard>
 										</VisualState>
 										<VisualState x:Name="Disabled">
 											<Storyboard>
 												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="RootGrid">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}"/>
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlBackgroundBaseLowBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground"
+												                               Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}" />
 												</ObjectAnimationUsingKeyFrames>
-												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush" Storyboard.TargetName="ContentPresenter">
-													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledTransparentBrush}"/>
+												<ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="BorderBrush"
+												                               Storyboard.TargetName="ContentPresenter">
+													<DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledTransparentBrush}" />
 												</ObjectAnimationUsingKeyFrames>
 											</Storyboard>
 										</VisualState>
 									</VisualStateGroup>
 								</VisualStateManager.VisualStateGroups>
 								<ContentPresenter x:Name="ContentPresenter"
-												  AutomationProperties.AccessibilityView="Raw"
-												  BorderBrush="{TemplateBinding BorderBrush}"
-												  BorderThickness="{TemplateBinding BorderThickness}"
-												  ContentTemplate="{TemplateBinding ContentTemplate}"
-												  ContentTransitions="{TemplateBinding ContentTransitions}"
-												  Content="{TemplateBinding Content}"
-												  Padding="{TemplateBinding Padding}"
-												  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-												  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
+								                  AutomationProperties.AccessibilityView="Raw"
+								                  BorderBrush="{TemplateBinding BorderBrush}"
+								                  BorderThickness="{TemplateBinding BorderThickness}"
+								                  ContentTemplate="{TemplateBinding ContentTemplate}"
+								                  ContentTransitions="{TemplateBinding ContentTransitions}"
+								                  Content="{TemplateBinding Content}"
+								                  Padding="{TemplateBinding Padding}"
+								                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+								                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
 							</Grid>
 						</ControlTemplate>
 					</Setter.Value>
 				</Setter>
 			</Style>
 			<Style x:Key="MenuItemButtonStyle" TargetType="Button" BasedOn="{StaticResource HamburgerButtonStyle}">
-				<Setter Property="Padding" Value="15"/>
-				<Setter Property="HorizontalContentAlignment" Value="Left"/>
+				<Setter Property="Padding" Value="15" />
+				<Setter Property="HorizontalContentAlignment" Value="Left" />
 			</Style>
 		</ResourceDictionary>
 	</Page.Resources>
 
 	<Grid Background="{StaticResource HipChatBackground}"
-		  d:DataContext="{d:DesignData Source=/SampleData/MainPageViewModelSampleData.xaml}">
+	      d:DataContext="{d:DesignData Source=/SampleData/MainPageViewModelSampleData.xaml}">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
 		<RelativePanel Grid.Row="0">
 			<Button Name="MenuButton"
-					Width="40"
-					Style="{StaticResource HamburgerButtonStyle}"
-					Click="HamburgerButton_Click">
+			        Width="40"
+			        Style="{StaticResource HamburgerButtonStyle}"
+			        Click="HamburgerButton_Click">
 				<StackPanel Width="15" HorizontalAlignment="Center" Padding="0 10">
-					<Rectangle Height="2" Margin="0 1.5" Fill="White"/>
-					<Rectangle Height="2" Margin="0 1.5" Fill="White"/>
-					<Rectangle Height="2" Margin="0 1.5" Fill="White"/>
+					<Rectangle Height="2" Margin="0 1.5" Fill="White" />
+					<Rectangle Height="2" Margin="0 1.5" Fill="White" />
+					<Rectangle Height="2" Margin="0 1.5" Fill="White" />
 				</StackPanel>
 			</Button>
 			<TextBlock RelativePanel.RightOf="MenuButton"
-					   RelativePanel.AlignVerticalCenterWith="MenuButton"
-					   Margin="10 0 0 0"
-					   FontWeight="Bold"
-					   Foreground="White"
-					   Text="{x:Bind ViewModel.Title}"/>
+			           RelativePanel.AlignVerticalCenterWith="MenuButton"
+			           Margin="10 0 0 0"
+			           FontWeight="Bold"
+			           Foreground="White"
+			           Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
 			<ComboBox RelativePanel.AlignRightWithPanel="True"
-					  RelativePanel.AlignVerticalCenterWith="MenuButton"
-					  Margin="0 0 5 0"
-					  BorderThickness="0"
-					  Background="Transparent"
-					  Foreground="White"
-					  RequestedTheme="Dark"
-					  Visibility="{x:Bind ViewModel.ShowFilters, Converter={StaticResource BoolToVis}}"
-					  ItemsSource="{x:Bind ViewModel.Filters}">
+			          RelativePanel.AlignVerticalCenterWith="MenuButton"
+			          Margin="0 0 5 0"
+			          BorderThickness="0"
+			          Background="Transparent"
+			          Foreground="White"
+			          RequestedTheme="Dark"
+			          Visibility="{x:Bind ViewModel.ShowFilters, Converter={StaticResource BoolToVis}}"
+			          ItemsSource="{x:Bind ViewModel.Filters}">
 				<ComboBox.ItemTemplate>
 					<DataTemplate x:DataType="models:FilterItem">
-						<TextBlock Text="{x:Bind DisplayName}" Foreground="White"/>
+						<TextBlock Text="{x:Bind DisplayName}" Foreground="White" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
 		</RelativePanel>
 		<SplitView Name="MenuSplitView"
-				   Grid.Row="1"
-				   DisplayMode="Overlay"
-				   IsPaneOpen="False"
-				   OpenPaneLength="150"
-				   PaneBackground="{StaticResource HipChatControl}">
+		           Grid.Row="1"
+		           DisplayMode="Overlay"
+		           IsPaneOpen="False"
+		           OpenPaneLength="150"
+		           PaneBackground="{StaticResource HipChatControl}">
 			<SplitView.Pane>
 				<StackPanel>
 					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
-							Style="{StaticResource MenuItemButtonStyle}"
-							Click="MenuButton_Click">
+					        Style="{StaticResource MenuItemButtonStyle}"
+					        Click="MenuButton_Click">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Clock" Foreground="White"/>
-							<TextBlock Text="Recent" Margin="15 0 0 0" Foreground="White"/>
+							<SymbolIcon Symbol="Clock" Foreground="White" />
+							<TextBlock Text="Recent" Margin="15 0 0 0" Foreground="White" />
 						</StackPanel>
 					</Button>
-					<Rectangle Height="1" Fill="Black"/>
+					<Rectangle Height="1" Fill="Black" />
 					<Button Name="TeamsButton"
-							Width="{x:Bind MenuSplitView.OpenPaneLength}"
-							Style="{StaticResource MenuItemButtonStyle}"
-							Click="MenuButton_Click"
-							Command="{x:Bind ViewModel.NavigateToTeamsViewCommand}">
+					        Width="{x:Bind MenuSplitView.OpenPaneLength}"
+					        Style="{StaticResource MenuItemButtonStyle}"
+					        Click="MenuButton_Click"
+					        Command="{x:Bind ViewModel.NavigateToTeamsViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Globe" Foreground="White"/>
-							<TextBlock Text="Teams" Margin="15 0 0 0" Foreground="White"/>
+							<SymbolIcon Symbol="Globe" Foreground="White" />
+							<TextBlock Text="Teams" Margin="15 0 0 0" Foreground="White" />
 						</StackPanel>
 					</Button>
 					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
-							Style="{StaticResource MenuItemButtonStyle}"
-							Click="MenuButton_Click"
-							Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}">
+					        Style="{StaticResource MenuItemButtonStyle}"
+					        Click="MenuButton_Click"
+					        Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Message" Foreground="White"/>
-							<TextBlock Text="Rooms" Margin="15 0 0 0" Foreground="White"/>
+							<SymbolIcon Symbol="Message" Foreground="White" />
+							<TextBlock Text="Rooms" Margin="15 0 0 0" Foreground="White" />
 						</StackPanel>
 					</Button>
 					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
-							Style="{StaticResource MenuItemButtonStyle}"
-							Click="MenuButton_Click"
-							Command="{x:Bind ViewModel.NavigateToUsersViewCommand}">
+					        Style="{StaticResource MenuItemButtonStyle}"
+					        Click="MenuButton_Click"
+					        Command="{x:Bind ViewModel.NavigateToUsersViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="People" Foreground="White"/>
-							<TextBlock Text="Users" Margin="15 0 0 0" Foreground="White"/>
+							<SymbolIcon Symbol="People" Foreground="White" />
+							<TextBlock Text="Users" Margin="15 0 0 0" Foreground="White" />
 						</StackPanel>
 					</Button>
-					<Rectangle Height="1" Fill="Black"/>
+					<Rectangle Height="1" Fill="Black" />
 					<Button Name="SettingsButton"
-							Width="{x:Bind MenuSplitView.OpenPaneLength}"
-							Style="{StaticResource MenuItemButtonStyle}"
-							Click="MenuButton_Click">
+					        Width="{x:Bind MenuSplitView.OpenPaneLength}"
+					        Style="{StaticResource MenuItemButtonStyle}"
+					        Click="MenuButton_Click">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Setting" Foreground="White"/>
-							<TextBlock Text="Settings" Margin="15 0 0 0" Foreground="White"/>
+							<SymbolIcon Symbol="Setting" Foreground="White" />
+							<TextBlock Text="Settings" Margin="15 0 0 0" Foreground="White" />
 						</StackPanel>
 					</Button>
 				</StackPanel>
