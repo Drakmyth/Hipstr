@@ -19,9 +19,11 @@
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0"
+		<ListView x:Name ="MessagesListView"
+				  Grid.Row="0"
 				  ItemsSource="{x:Bind ViewModel.Messages}"
-				  SelectionMode="None">
+				  SelectionMode="None"
+				  LayoutUpdated="MessagesListView_OnLayoutUpdated">
 			<ListView.ItemContainerStyle>
 				<Style TargetType="ListViewItem">
 					<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
