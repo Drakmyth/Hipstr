@@ -7,8 +7,6 @@ namespace Hipstr.Client.Views.MainPage
 	{
 		public MainPageViewModel ViewModel => DataContext as MainPageViewModel;
 
-		// TODO: Consider creating a new ILifetimeScope in OnNavigatedTo and disposing it in OnNavigatedFrom for each Page
-
 		public MainPageView(UIElement frame)
 		{
 			InitializeComponent();

@@ -16,6 +16,7 @@ namespace Hipstr.Client.Views.MainPage
 		public ObservableCollection<FilterItem> Filters { get; }
 
 		private string _title;
+
 		public string Title
 		{
 			get { return _title; }
@@ -27,6 +28,7 @@ namespace Hipstr.Client.Views.MainPage
 		}
 
 		private bool _showFilters;
+
 		public bool ShowFilters
 		{
 			get { return _showFilters; }
@@ -39,6 +41,7 @@ namespace Hipstr.Client.Views.MainPage
 
 		public MainPageViewModel()
 		{
+			_title = "";
 			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>();
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView>();

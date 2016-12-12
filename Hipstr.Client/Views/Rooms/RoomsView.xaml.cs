@@ -16,7 +16,6 @@ namespace Hipstr.Client.Views.Rooms
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			await ViewModel.UpdateRoomsAsync();
-			ViewModel.UpdateFilters();
 		}
 	}
 }

@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace Hipstr.Client.Views.Users
 {
-	public class UsersViewModel : ViewModelBase, ITitled
+	public class UsersViewModel : ViewModelBase
 	{
 		private readonly IHipChatService _hipChatService;
 
-		public string Title => "Users";
 		public ObservableCollection<User> Users { get; set; }
 
 		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>())

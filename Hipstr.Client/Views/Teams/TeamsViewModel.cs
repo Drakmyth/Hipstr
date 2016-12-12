@@ -9,9 +9,8 @@ using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Teams
 {
-	public class TeamsViewModel : ViewModelBase, ITitled
+	public class TeamsViewModel : ViewModelBase
 	{
-		public string Title => "Teams";
 		public ObservableCollection<Team> Teams { get; set; }
 		public ICommand AddTeamCommand { get; }
 		public ICommand EditTeamCommand { get; }

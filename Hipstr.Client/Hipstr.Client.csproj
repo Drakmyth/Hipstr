@@ -102,8 +102,6 @@
     <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Views\IFilterable.cs" />
-    <Compile Include="Views\ITitled.cs" />
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
