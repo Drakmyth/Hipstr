@@ -10,23 +10,11 @@ using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Messages
 {
-	public class MessagesViewModel : ViewModelBase //, ITitled
+	public class MessagesViewModel : ViewModelBase
 	{
 		public ICommand ReloadRoomCommand { get; set; }
 		public ICommand NavigateToRoomsViewCommand { get; set; }
 		public ObservableCollection<Message> Messages { get; set; }
-
-		private string _title;
-
-		public string Title
-		{
-			get { return _title; }
-			set
-			{
-				_title = value;
-				OnPropertyChanged();
-			}
-		}
 
 		private Room _room;
 
