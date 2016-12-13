@@ -4,7 +4,9 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d">
+	mc:Ignorable="d"
+	Loaded="OnLoaded"
+	Unloaded="OnUnloaded">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -25,12 +27,14 @@
 
 		<RelativePanel Background="{StaticResource HipChatBackground}"
 		               Grid.Row="0">
+			<!-- ReSharper disable once NotAccessedField.Local -->
 			<TextBlock Name="PageTitle"
 			           Margin="10 10 10 5"
 			           FontSize="32"
 			           Foreground="White">
 				Add Team
 			</TextBlock>
+			<!-- ReSharper disable once NotAccessedField.Local -->
 			<TextBox Name="TeamNameTextBox"
 			         Header="Team Name"
 			         Margin="10 5"
@@ -38,7 +42,9 @@
 			         RelativePanel.AlignLeftWithPanel="True"
 			         RelativePanel.AlignRightWithPanel="True"
 			         HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-			         Text="{x:Bind _teamName, Mode=TwoWay}" />
+			         Text="{x:Bind _teamName, Mode=TwoWay}"
+			         KeyUp="TeamNameTextBox_OnKeyUp" />
+			<!-- ReSharper disable once NotAccessedField.Local -->
 			<TextBox Name="ApiKeyTextBox"
 			         Header="API Key"
 			         Margin="10 5"
@@ -46,7 +52,8 @@
 			         RelativePanel.AlignLeftWithPanel="True"
 			         RelativePanel.AlignRightWithPanel="True"
 			         HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-			         Text="{x:Bind _apiKey, Mode=TwoWay}" />
+			         Text="{x:Bind _apiKey, Mode=TwoWay}"
+			         KeyUp="ApiKeyTextBox_OnKeyUp" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 		            Background="{StaticResource HipChatControl}"

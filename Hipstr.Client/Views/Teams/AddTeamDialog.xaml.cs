@@ -1,14 +1,15 @@
 ﻿using Hipstr.Core.Models;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 
 namespace Hipstr.Client.Views.Teams
@@ -40,9 +41,6 @@ namespace Hipstr.Client.Views.Teams
 				}
 			};
 			_parent.IsLightDismissEnabled = false;
-
-			Loaded += OnLoaded;
-			Unloaded += OnUnloaded;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
@@ -62,12 +60,6 @@ namespace Hipstr.Client.Views.Teams
 			ResizePopup();
 		}
 
-		private void OnBackRequested(object sender, BackRequestedEventArgs e)
-		{
-			Hide();
-			e.Handled = true;
-		}
-
 		private void ResizePopup()
 		{
 			Width = Window.VisibleBounds.Width;
@@ -82,17 +74,37 @@ namespace Hipstr.Client.Views.Teams
 			Margin = new Thickness(0, topMargin, 0, 0);
 		}
 
+		private void TeamNameTextBox_OnKeyUp(object sender, KeyRoutedEventArgs keyRoutedEventArgs)
+		{
+			if (keyRoutedEventArgs.Key == VirtualKey.Enter)
+			{
+				ApiKeyTextBox.Focus(FocusState.Keyboard);
+			}
+		}
+
+		private void ApiKeyTextBox_OnKeyUp(object sender, KeyRoutedEventArgs keyRoutedEventArgs)
+		{
+			if (keyRoutedEventArgs.Key == VirtualKey.Enter)
+			{
+				AcceptDialogButton.Focus(FocusState.Keyboard);
+			}
+		}
+
+		private void OnBackRequested(object sender, BackRequestedEventArgs e)
+		{
+			OnCancelled();
+			e.Handled = true;
+		}
+
 		public IAsyncOperation<ModalResult<Team>> ShowAsync()
 		{
 			_parent.IsOpen = true;
-			return AsyncInfo.Run(WaitForInput);
-		}
-
-		private Task<ModalResult<Team>> WaitForInput(CancellationToken token)
-		{
-			_taskCompletionSource = new TaskCompletionSource<ModalResult<Team>>();
-			token.Register(OnCancelled);
-			return _taskCompletionSource.Task;
+			return AsyncInfo.Run(token =>
+			{
+				_taskCompletionSource = new TaskCompletionSource<ModalResult<Team>>();
+				token.Register(OnCancelled);
+				return _taskCompletionSource.Task;
+			});
 		}
 
 		private void OnCancelled()
@@ -108,8 +120,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private void CancelDialogButton_OnClick(object sender, RoutedEventArgs e)
 		{
-			Hide();
-			_taskCompletionSource.SetResult(ModalResult<Team>.CancelledResult());
+			OnCancelled();
 		}
 
 		private void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
