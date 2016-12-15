@@ -4,7 +4,6 @@
       xmlns:models="using:Hipstr.Core.Models"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:converters="using:Hipstr.Client.Converters"
       xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:core="using:Microsoft.Xaml.Interactions.Core"
       mc:Ignorable="d">
@@ -17,12 +16,12 @@
 			<CollectionViewSource x:Name="GroupedRoomsSource"
 			                      Source="{x:Bind ViewModel.RoomGroups}"
 			                      IsSourceGrouped="True"
-			                      ItemsPath="Rooms" />
+			                      ItemsPath="Rooms"
+			                      d:Source="{Binding RoomGroups, Source={d:DesignData Source=/SampleData/RoomsViewModelSampleData.xaml}}" />
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}"
-	      d:DataContext="{d:DesignData Source=/SampleData/RoomsViewModelSampleData.xaml}">
+	<Grid Background="{StaticResource HipChatBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
