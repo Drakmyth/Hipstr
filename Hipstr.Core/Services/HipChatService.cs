@@ -15,16 +15,17 @@ namespace Hipstr.Core.Services
 	public class HipChatService : IHipChatService
 	{
 		// TODO: Notify user when API_KEY is about to expire
+		private const int MaxRoomResults = 1000;
+		private const bool IncludePrivateRooms = true;
+		private const bool IncludeArchivedRooms = true;
 
-		private readonly Uri ROOT_URI = new Uri("http://www.hipchat.com");
+		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
 		private readonly ITeamService _teamService;
-		private readonly HttpClient _httpClient;
 		private readonly IUserConverter _userConverter;
 
-		public HipChatService(HttpClient httpClient, ITeamService teamService, IUserConverter userConverter)
+		public HipChatService(ITeamService teamService, IUserConverter userConverter)
 		{
-			_httpClient = httpClient;
 			_teamService = teamService;
 			_userConverter = userConverter;
 		}
@@ -33,11 +34,10 @@ namespace Hipstr.Core.Services
 		{
 			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 
-			var taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
+			var taskTeamMapping = new Dictionary<Task<IEnumerable<Room>>, Team>();
 			foreach (Team team in teams)
 			{
-				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
-				Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/room"));
+				Task<IEnumerable<Room>> get = GetRoomsForTeam(team);
 				taskTeamMapping.Add(get, team);
 			}
 
@@ -45,35 +45,64 @@ namespace Hipstr.Core.Services
 			await Task.WhenAll(taskTeamMapping.Keys);
 
 			var rooms = new List<Room>();
-			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
+			foreach (Task<IEnumerable<Room>> task in taskTeamMapping.Keys)
 			{
-				HttpResponseMessage response = task.Result;
+				rooms.AddRange(task.Result);
+			}
 
-				// TODO: Parallel processing of rooms
+			return rooms;
+		}
+
+		private async Task<IEnumerable<Room>> GetRoomsForTeam(Team team)
+		{
+			var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+
+			var rooms = new List<Room>();
+			var loadAnotherPage = true;
+
+			while (loadAnotherPage)
+			{
+				HttpResponseMessage response = await GetPageOfRooms(httpClient, rooms.Count);
 				string json = await response.Content.ReadAsStringAsync();
 				var roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json);
+
 				rooms.AddRange(roomWrapper.Items.Select(hcRoom => new Room
 				{
 					Id = hcRoom.Id,
 					IsArchived = hcRoom.IsArchived,
 					Name = hcRoom.Name,
 					Privacy = hcRoom.Privacy,
-					Team = taskTeamMapping[task]
+					Team = team
 				}));
+
+				loadAnotherPage = roomWrapper.Items.Count() == MaxRoomResults;
 			}
 
 			return rooms;
 		}
 
+		private async Task<HttpResponseMessage> GetPageOfRooms(HttpClient httpClient, int startIndex)
+		{
+			string route = "/v2/room?"
+			               + $"start-index={startIndex}&"
+			               + $"max-results={MaxRoomResults}&"
+			               + $"include-private={IncludePrivateRooms}&"
+			               + $"include-archived={IncludeArchivedRooms}";
+
+			return await httpClient.GetAsync(new Uri(RootUri, route));
+		}
+
 		public async Task<IEnumerable<User>> GetUsersAsync()
 		{
+			var httpClient = new HttpClient();
 			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 
 			var taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
 			foreach (Team team in teams)
 			{
-				_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
-				Task<HttpResponseMessage> get = _httpClient.GetAsync(new Uri(ROOT_URI, "/v2/user"));
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+				Task<HttpResponseMessage> get = httpClient.GetAsync(new Uri(RootUri, "/v2/user"));
 				taskTeamMapping.Add(get, team);
 			}
 
@@ -96,8 +125,9 @@ namespace Hipstr.Core.Services
 
 		public async Task<IEnumerable<Message>> GetMessagesAsync(Room room)
 		{
-			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
-			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(ROOT_URI, $"/v2/room/{room.Id}/history"));
+			var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
+			HttpResponseMessage get = await httpClient.GetAsync(new Uri(RootUri, $"/v2/room/{room.Id}/history"));
 			string json = await get.Content.ReadAsStringAsync();
 
 			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
