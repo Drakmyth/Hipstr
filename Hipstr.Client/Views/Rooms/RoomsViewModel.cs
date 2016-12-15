@@ -5,6 +5,7 @@ using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -14,7 +15,7 @@ namespace Hipstr.Client.Views.Rooms
 	{
 		private readonly IHipChatService _hipChatService;
 
-		public ObservableCollection<Room> Rooms { get; set; }
+		public ObservableCollection<RoomGroup> RoomGroups { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 
 		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>())
@@ -23,7 +24,7 @@ namespace Hipstr.Client.Views.Rooms
 
 		public RoomsViewModel(IHipChatService hipChatService)
 		{
-			Rooms = new ObservableCollection<Room>();
+			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 
 			_hipChatService = hipChatService;
@@ -32,8 +33,13 @@ namespace Hipstr.Client.Views.Rooms
 		public async Task UpdateRoomsAsync()
 		{
 			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
-			Rooms.Clear();
-			Rooms.AddRange(rooms);
+
+			IEnumerable<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name)
+				.GroupBy(room => room.Name[0].ToString(), room => room,
+					(group, groupedRooms) => new RoomGroup(group, groupedRooms));
+
+			RoomGroups.Clear();
+			RoomGroups.AddRange(roomGroups);
 		}
 	}
 }

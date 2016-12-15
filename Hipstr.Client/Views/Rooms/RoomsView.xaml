@@ -14,7 +14,10 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:IdentityConverter x:Key="ObjToSelf" />
+			<CollectionViewSource x:Name="GroupedRoomsSource"
+			                      Source="{x:Bind ViewModel.RoomGroups}"
+			                      IsSourceGrouped="True"
+			                      ItemsPath="Rooms" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -26,7 +29,7 @@
 		</Grid.RowDefinitions>
 		<ListView x:Name="RoomList"
 		          Grid.Row="0"
-		          ItemsSource="{x:Bind ViewModel.Rooms}">
+		          ItemsSource="{Binding Source={StaticResource GroupedRoomsSource}}">
 			<interactivity:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind RoomList}">
 					<core:EventTriggerBehavior.Actions>
@@ -35,6 +38,16 @@
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
 			</interactivity:Interaction.Behaviors>
+			<ListView.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.HeaderTemplate>
+						<DataTemplate x:DataType="models:RoomGroup">
+							<TextBlock Text="{x:Bind Header}"
+							           Foreground="White" />
+						</DataTemplate>
+					</GroupStyle.HeaderTemplate>
+				</GroupStyle>
+			</ListView.GroupStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:Room">
 					<StackPanel>
