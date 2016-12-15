@@ -16,10 +16,7 @@ namespace Hipstr.Client.Views.Teams
 	public sealed partial class EditTeamDialog : UserControl
 	{
 		private string _teamName;
-		public string TeamName => _teamName;
-
 		private string _apiKey;
-		public string ApiKey => _apiKey;
 
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
@@ -27,7 +24,7 @@ namespace Hipstr.Client.Views.Teams
 		private TaskCompletionSource<ModalResult<Team>> _taskCompletionSource;
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
-		public EditTeamDialog(Team team)
+		public EditTeamDialog()
 		{
 			InitializeComponent();
 			_parent = new Popup {Child = this};
@@ -40,9 +37,6 @@ namespace Hipstr.Client.Views.Teams
 				}
 			};
 			_parent.IsLightDismissEnabled = false;
-
-			_teamName = team.Name;
-			_apiKey = team.ApiKey;
 
 			Loaded += OnLoaded;
 			Unloaded += OnUnloaded;
@@ -85,8 +79,11 @@ namespace Hipstr.Client.Views.Teams
 			Margin = new Thickness(0, topMargin, 0, 0);
 		}
 
-		public IAsyncOperation<ModalResult<Team>> ShowAsync()
+		public IAsyncOperation<ModalResult<Team>> ShowAsync(Team team)
 		{
+			_teamName = team.Name;
+			_apiKey = team.ApiKey;
+
 			_parent.IsOpen = true;
 			return AsyncInfo.Run(WaitForInput);
 		}

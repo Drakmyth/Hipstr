@@ -39,19 +39,19 @@ namespace Hipstr.Client.Views.Teams
 			_teamService = teamService;
 			Teams = new ObservableCollection<Team>();
 
-			AddTeamCommand = new RelayCommandAsync(OnAddTeamCommand);
+			AddTeamCommand = new RelayCommandAsync(OnAddTeamCommandAsync);
 			EditTeamCommand = new RelayCommandAsync<Team>(OnEditTeamCommandAsync, team => team != null);
 			DeleteTeamCommand = new RelayCommandAsync<Team>(OnDeleteTeamCommandAsync, team => team != null);
 		}
 
-		private async Task OnAddTeamCommand()
+		private async Task OnAddTeamCommandAsync()
 		{
 			var dialog = new AddTeamDialog();
 			ModalResult<Team> team = await dialog.ShowAsync();
 			if (!team.Cancelled)
 			{
-				string teamName = dialog.TeamName;
-				string apiKey = dialog.ApiKey;
+				string teamName = team.Result.Name;
+				string apiKey = team.Result.ApiKey;
 
 				// TODO: Duplicate API Key should show error message
 
@@ -62,12 +62,12 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task OnEditTeamCommandAsync(Team selectedTeam)
 		{
-			var dialog = new EditTeamDialog(selectedTeam);
-			ModalResult<Team> team = await dialog.ShowAsync();
+			var dialog = new EditTeamDialog();
+			ModalResult<Team> team = await dialog.ShowAsync(selectedTeam);
 			if (!team.Cancelled)
 			{
-				string teamName = dialog.TeamName;
-				string apiKey = dialog.ApiKey;
+				string teamName = team.Result.Name;
+				string apiKey = team.Result.ApiKey;
 
 				await _teamService.EditTeamAsync(selectedTeam.ApiKey, new Team(teamName, apiKey));
 				await RefreshTeamListAsync();

@@ -17,10 +17,7 @@ namespace Hipstr.Client.Views.Teams
 	public sealed partial class AddTeamDialog : UserControl
 	{
 		private string _teamName;
-		public string TeamName => _teamName;
-
 		private string _apiKey;
-		public string ApiKey => _apiKey;
 
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
