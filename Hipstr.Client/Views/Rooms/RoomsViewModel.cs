@@ -47,7 +47,7 @@ namespace Hipstr.Client.Views.Rooms
 			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
-			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync);
+			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
 
 			LoadingRooms = false;
 			_hipChatService = hipChatService;

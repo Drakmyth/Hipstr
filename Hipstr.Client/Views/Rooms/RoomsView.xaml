@@ -63,7 +63,9 @@
 		</ListView>
 		<ProgressRing Grid.Row="0"
 					  IsActive="{x:Bind ViewModel.LoadingRooms, Mode=OneWay}"
-					  Foreground="White" Width="50" Height="50" />
+					  Foreground="White"
+					  Width="50"
+					  Height="50" />
 		<CommandBar Grid.Row="1"
 		            Background="{StaticResource HipChatControl}"
 		            Foreground="White">
