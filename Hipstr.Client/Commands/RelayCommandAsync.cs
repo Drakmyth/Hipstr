@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -10,11 +11,25 @@ namespace Hipstr.Client.Commands
 
 		private readonly Func<Task> _execute;
 		private readonly Func<bool> _canExecute;
+		private readonly string _propertyName;
 
 		public RelayCommandAsync(Func<Task> execute, Func<bool> canExecute = null)
 		{
 			_execute = execute;
 			_canExecute = canExecute;
+		}
+
+		public RelayCommandAsync(Func<Task> execute, Func<bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, string propertyName) : this(execute, canExecute)
+		{
+			_propertyName = propertyName;
+			propertyChangedNotifier.PropertyChanged += OnPropertyChanged;
+		}
+
+		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != _propertyName) return;
+
+			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
 
 		public bool CanExecute(object parameter)
@@ -25,11 +40,6 @@ namespace Hipstr.Client.Commands
 		public async void Execute(object parameter)
 		{
 			await _execute?.Invoke();
-		}
-
-		public void RaiseCanExecuteChanged()
-		{
-			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 
@@ -54,11 +64,6 @@ namespace Hipstr.Client.Commands
 		public async void Execute(object parameter)
 		{
 			await _execute?.Invoke((T)parameter);
-		}
-
-		public void RaiseCanExecuteChanged()
-		{
-			CanExecuteChanged?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }
