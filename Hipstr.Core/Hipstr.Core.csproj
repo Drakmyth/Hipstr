@@ -107,6 +107,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Comparers\UserNameComparer.cs" />
     <Compile Include="Comparers\RoomNameComparer.cs" />
     <Compile Include="Converters\IUserConverter.cs" />
     <Compile Include="Converters\UserConverter.cs" />

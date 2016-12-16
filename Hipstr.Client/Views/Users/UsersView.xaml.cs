@@ -15,7 +15,7 @@ namespace Hipstr.Client.Views.Users
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
-			await ViewModel.UpdateUserListAsync();
+			await ViewModel.LoadUsersAsync();
 		}
 	}
 }

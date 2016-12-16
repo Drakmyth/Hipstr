@@ -11,15 +11,11 @@ namespace Hipstr.Core.Services
 	{
 		private const string TeamsFileName = "teams.json";
 		private const string RoomGroupsFileName = "roomGroups.json";
+		private const string UsersFileName = "users.json";
 
 		public async Task<IList<Team>> LoadTeamsAsync()
 		{
 			return await LoadDataAsync<Team>(TeamsFileName);
-		}
-
-		public async Task SaveTeamsAsync(IEnumerable<Team> teams)
-		{
-			await SaveDataAsync(TeamsFileName, teams);
 		}
 
 		public async Task<IList<RoomGroup>> LoadRoomGroupsAsync()
@@ -27,9 +23,24 @@ namespace Hipstr.Core.Services
 			return await LoadDataAsync<RoomGroup>(RoomGroupsFileName);
 		}
 
+		public async Task<IList<User>> LoadUsersAsync()
+		{
+			return await LoadDataAsync<User>(UsersFileName);
+		}
+
+		public async Task SaveTeamsAsync(IEnumerable<Team> teams)
+		{
+			await SaveDataAsync(TeamsFileName, teams);
+		}
+
 		public async Task SaveRoomGroupsAsync(IEnumerable<RoomGroup> roomGroups)
 		{
 			await SaveDataAsync(RoomGroupsFileName, roomGroups);
+		}
+
+		public async Task SaveUsersAsync(IEnumerable<User> users)
+		{
+			await SaveDataAsync(UsersFileName, users);
 		}
 
 		private async Task<IList<T>> LoadDataAsync<T>(string filename)
