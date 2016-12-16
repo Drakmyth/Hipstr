@@ -1,5 +1,4 @@
-﻿using Hipstr.Core.Converters;
-using Hipstr.Core.Models;
+﻿using Hipstr.Core.Models;
 using Hipstr.Core.Models.HipChat;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,15 +18,17 @@ namespace Hipstr.Core.Services
 		private const bool IncludePrivateRooms = true;
 		private const bool IncludeArchivedRooms = true;
 
+		private const int MaxUserResults = 1000;
+		private const bool IncludeGuestUsers = true;
+		private const bool IncludeDeletedUsers = false;
+
 		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
 		private readonly ITeamService _teamService;
-		private readonly IUserConverter _userConverter;
 
-		public HipChatService(ITeamService teamService, IUserConverter userConverter)
+		public HipChatService(ITeamService teamService)
 		{
 			_teamService = teamService;
-			_userConverter = userConverter;
 		}
 
 		public async Task<IEnumerable<Room>> GetRoomsAsync()
@@ -95,14 +96,12 @@ namespace Hipstr.Core.Services
 
 		public async Task<IEnumerable<User>> GetUsersAsync()
 		{
-			var httpClient = new HttpClient();
 			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 
-			var taskTeamMapping = new Dictionary<Task<HttpResponseMessage>, Team>();
+			var taskTeamMapping = new Dictionary<Task<IEnumerable<User>>, Team>();
 			foreach (Team team in teams)
 			{
-				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
-				Task<HttpResponseMessage> get = httpClient.GetAsync(new Uri(RootUri, "/v2/user"));
+				Task<IEnumerable<User>> get = GetUsersForTeam(team);
 				taskTeamMapping.Add(get, team);
 			}
 
@@ -110,17 +109,51 @@ namespace Hipstr.Core.Services
 			await Task.WhenAll(taskTeamMapping.Keys);
 
 			var users = new List<User>();
-			foreach (Task<HttpResponseMessage> task in taskTeamMapping.Keys)
+			foreach (Task<IEnumerable<User>> task in taskTeamMapping.Keys)
 			{
-				HttpResponseMessage response = task.Result;
-
-				// TODO: Parallel processing of users
-				string json = await response.Content.ReadAsStringAsync();
-				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json);
-				users.AddRange(userWrapper.Items.Select(hcUser => _userConverter.HipChatUserToUser(hcUser, taskTeamMapping[task])));
+				users.AddRange(task.Result);
 			}
 
 			return users;
+		}
+
+		private async Task<IEnumerable<User>> GetUsersForTeam(Team team)
+		{
+			var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+
+			var users = new List<User>();
+			var loadAnotherPage = true;
+
+			while (loadAnotherPage)
+			{
+				HttpResponseMessage response = await GetPageOfUsers(httpClient, users.Count);
+				string json = await response.Content.ReadAsStringAsync();
+				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json);
+
+				users.AddRange(userWrapper.Items.Select(hcUser => new User
+				{
+					Id = hcUser.Id,
+					Handle = hcUser.MentionName,
+					Name = hcUser.Name,
+					Team = team
+				}));
+
+				loadAnotherPage = userWrapper.Items.Count() == MaxUserResults;
+			}
+
+			return users;
+		}
+
+		private async Task<HttpResponseMessage> GetPageOfUsers(HttpClient httpClient, int startIndex)
+		{
+			string route = "/v2/user?"
+			               + $"start-index={startIndex}&"
+			               + $"max-results={MaxUserResults}&"
+			               + $"include-guests={IncludeGuestUsers}&"
+			               + $"include-deleted={IncludeDeletedUsers}";
+
+			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
 
 		public async Task<IEnumerable<Message>> GetMessagesAsync(Room room)
@@ -136,7 +169,13 @@ namespace Hipstr.Core.Services
 
 			return hcMessages.Select(hcMessage => new Message
 			{
-				PostedBy = _userConverter.HipChatUserToUser(hcMessage.From, room.Team),
+				PostedBy = new User
+				{
+					Id = hcMessage.From.Id,
+					Handle = hcMessage.From.MentionName,
+					Name = hcMessage.From.Name,
+					Team = room.Team
+				},
 				Date = hcMessage.Date,
 				Text = hcMessage.Message
 			}).ToList();

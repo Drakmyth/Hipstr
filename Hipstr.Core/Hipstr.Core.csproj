@@ -109,8 +109,6 @@
   <ItemGroup>
     <Compile Include="Comparers\UserNameComparer.cs" />
     <Compile Include="Comparers\RoomNameComparer.cs" />
-    <Compile Include="Converters\IUserConverter.cs" />
-    <Compile Include="Converters\UserConverter.cs" />
     <Compile Include="Models\FilterItem.cs" />
     <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
     <Compile Include="Models\HipChat\HipChatMessage.cs" />

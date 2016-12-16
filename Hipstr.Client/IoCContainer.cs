@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Hipstr.Core.Converters;
 using Hipstr.Core.Services;
 using System.Net.Http;
 
@@ -24,7 +23,6 @@ namespace Hipstr.Client
 		{
 			builder.RegisterType<ITeamService, TeamService>();
 			builder.RegisterType<IHipChatService, HipChatService>();
-			builder.RegisterType<IUserConverter, UserConverter>();
 			builder.RegisterType<IDataService, DataService>();
 			builder.RegisterType<HttpClient, HttpClient>();
 		}
