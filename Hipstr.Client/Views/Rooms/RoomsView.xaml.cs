@@ -18,7 +18,7 @@ namespace Hipstr.Client.Views.Rooms
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.RoomGroupScrollToHeaderRequest += OnRoomGroupScrollToHeaderRequest;
-			await ViewModel.UpdateRoomsAsync();
+			await ViewModel.LoadRoomsAsync();
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)

@@ -10,21 +10,46 @@ namespace Hipstr.Core.Services
 	public class DataService : IDataService
 	{
 		private const string TeamsFileName = "teams.json";
+		private const string RoomGroupsFileName = "roomGroups.json";
 
 		public async Task<IList<Team>> LoadTeamsAsync()
 		{
-			StorageFolder folder = ApplicationData.Current.LocalFolder;
-			StorageFile storageFile = await folder.CreateFileAsync(TeamsFileName, CreationCollisionOption.OpenIfExists);
-			string json = await FileIO.ReadTextAsync(storageFile);
-			return string.IsNullOrEmpty(json) ? new List<Team>() : JsonConvert.DeserializeObject<IList<Team>>(json);
+			return await LoadDataAsync<Team>(TeamsFileName);
 		}
 
 		public async Task SaveTeamsAsync(IEnumerable<Team> teams)
 		{
+			await SaveDataAsync(TeamsFileName, teams);
+		}
+
+		public async Task<IList<RoomGroup>> LoadRoomGroupsAsync()
+		{
+			return await LoadDataAsync<RoomGroup>(RoomGroupsFileName);
+		}
+
+		public async Task SaveRoomGroupsAsync(IEnumerable<RoomGroup> roomGroups)
+		{
+			await SaveDataAsync(RoomGroupsFileName, roomGroups);
+		}
+
+		private async Task<IList<T>> LoadDataAsync<T>(string filename)
+		{
+			StorageFile file = await GetStorageFileAsync(filename);
+			string json = await FileIO.ReadTextAsync(file);
+			return string.IsNullOrEmpty(json) ? new List<T>() : JsonConvert.DeserializeObject<IList<T>>(json);
+		}
+
+		private async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)
+		{
+			StorageFile file = await GetStorageFileAsync(filename);
+			string json = JsonConvert.SerializeObject(data);
+			await FileIO.WriteTextAsync(file, json);
+		}
+
+		private async Task<StorageFile> GetStorageFileAsync(string filename)
+		{
 			StorageFolder folder = ApplicationData.Current.LocalFolder;
-			StorageFile storageFile = await folder.CreateFileAsync(TeamsFileName, CreationCollisionOption.OpenIfExists);
-			string json = JsonConvert.SerializeObject(teams);
-			await FileIO.WriteTextAsync(storageFile, json);
+			return await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);
 		}
 	}
 }

@@ -43,8 +43,8 @@
 						<DataTemplate x:DataType="models:RoomGroup">
 							<TextBlock Text="{x:Bind Header}"
 							           Foreground="White"
-									   FontSize="24"
-									   Tapped="HeaderTextBlock_OnTapped"/>
+							           FontSize="24"
+							           Tapped="HeaderTextBlock_OnTapped" />
 						</DataTemplate>
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>
@@ -61,12 +61,16 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+		<ProgressRing Grid.Row="0"
+					  IsActive="{x:Bind ViewModel.LoadingRooms, Mode=OneWay}"
+					  Foreground="White" Width="50" Height="50" />
 		<CommandBar Grid.Row="1"
 		            Background="{StaticResource HipChatControl}"
 		            Foreground="White">
 			<AppBarButton Icon="Refresh"
 			              Label="Refresh"
-			              Foreground="White" />
+			              Foreground="White"
+			              Command="{x:Bind ViewModel.RefreshRoomsCommand}" />
 		</CommandBar>
 	</Grid>
 </Page>

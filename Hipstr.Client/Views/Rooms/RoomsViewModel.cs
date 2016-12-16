@@ -21,32 +21,77 @@ namespace Hipstr.Client.Views.Rooms
 		public ObservableCollection<RoomGroup> RoomGroups { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
+		public ICommand RefreshRoomsCommand { get; }
+
+		private bool _loadingRooms;
+
+		public bool LoadingRooms
+		{
+			get { return _loadingRooms; }
+			private set
+			{
+				_loadingRooms = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private readonly IHipChatService _hipChatService;
+		private readonly IDataService _dataService;
 
-		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>())
+		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IDataService>())
 		{
 		}
 
-		public RoomsViewModel(IHipChatService hipChatService)
+		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService)
 		{
 			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
+			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync);
 
+			LoadingRooms = false;
 			_hipChatService = hipChatService;
+			_dataService = dataService;
 		}
 
-		public async Task UpdateRoomsAsync()
+		public async Task LoadRoomsAsync()
 		{
-			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
-
-			IEnumerable<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
-				.GroupBy(room => DetermineGroupHeader(room.Name), room => room,
-					(group, groupedRooms) => new RoomGroup(group, groupedRooms));
+			LoadingRooms = true;
+			IEnumerable<RoomGroup> roomGroups = await _dataService.LoadRoomGroupsAsync();
+			if (!roomGroups.Any())
+			{
+				roomGroups = await RebuildRoomCache();
+			}
+			LoadingRooms = false;
 
 			RoomGroups.Clear();
 			RoomGroups.AddRange(roomGroups);
+		}
+
+		public async Task RefreshRoomsAsync()
+		{
+			RoomGroups.Clear();
+			LoadingRooms = true;
+			IEnumerable<RoomGroup> roomGroups = await RebuildRoomCache();
+			LoadingRooms = false;
+			RoomGroups.AddRange(roomGroups);
+		}
+
+		private async Task<IEnumerable<RoomGroup>> RebuildRoomCache()
+		{
+			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
+			IEnumerable<RoomGroup> roomGroups = OrderAndGroupRooms(rooms).ToList();
+			await _dataService.SaveRoomGroupsAsync(roomGroups);
+
+			return roomGroups;
+		}
+
+		private IEnumerable<RoomGroup> OrderAndGroupRooms(IEnumerable<Room> rooms)
+		{
+			IEnumerable<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
+				.GroupBy(room => DetermineGroupHeader(room.Name), room => room,
+					(group, groupedRooms) => new RoomGroup(group, groupedRooms));
+			return roomGroups;
 		}
 
 		private string DetermineGroupHeader(string name)

@@ -32,7 +32,6 @@ namespace Hipstr.Client.Views
 			_groupHeaders = new ObservableCollection<string>();
 			_parent = new Popup {Child = this};
 			ResizePopup();
-//			_parent.ChildTransitions = new TransitionCollection
 			_parent.IsLightDismissEnabled = false;
 
 			Loaded += OnLoaded;
