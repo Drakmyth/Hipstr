@@ -60,7 +60,7 @@ namespace Hipstr.Client.Views.Rooms
 			IEnumerable<RoomGroup> roomGroups = await _dataService.LoadRoomGroupsAsync();
 			if (!roomGroups.Any())
 			{
-				roomGroups = await RebuildRoomCache();
+				roomGroups = await RebuildRoomGroupCache();
 			}
 			LoadingRooms = false;
 
@@ -68,16 +68,16 @@ namespace Hipstr.Client.Views.Rooms
 			RoomGroups.AddRange(roomGroups);
 		}
 
-		public async Task RefreshRoomsAsync()
+		private async Task RefreshRoomsAsync()
 		{
 			RoomGroups.Clear();
 			LoadingRooms = true;
-			IEnumerable<RoomGroup> roomGroups = await RebuildRoomCache();
+			IEnumerable<RoomGroup> roomGroups = await RebuildRoomGroupCache();
 			LoadingRooms = false;
 			RoomGroups.AddRange(roomGroups);
 		}
 
-		private async Task<IEnumerable<RoomGroup>> RebuildRoomCache()
+		private async Task<IEnumerable<RoomGroup>> RebuildRoomGroupCache()
 		{
 			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
 			IEnumerable<RoomGroup> roomGroups = OrderAndGroupRooms(rooms).ToList();

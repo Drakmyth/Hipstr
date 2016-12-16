@@ -120,6 +120,7 @@
     <Compile Include="Models\HipChat\HipChatUser.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Room.cs" />
+    <Compile Include="Models\UserGroup.cs" />
     <Compile Include="Models\RoomGroup.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />

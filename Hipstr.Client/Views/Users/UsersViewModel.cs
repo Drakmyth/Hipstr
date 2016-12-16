@@ -3,9 +3,11 @@ using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -13,9 +15,10 @@ namespace Hipstr.Client.Views.Users
 {
 	public class UsersViewModel : ViewModelBase
 	{
-		private readonly IHipChatService _hipChatService;
-		private readonly IDataService _dataService;
+		public event EventHandler<UserGroup> UserGroupScrollToHeaderRequest;
 
+		public ObservableCollection<UserGroup> UserGroups { get; }
+		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshUsersCommand { get; }
 
 		private bool _loadingUsers;
@@ -30,7 +33,9 @@ namespace Hipstr.Client.Views.Users
 			}
 		}
 
-		public ObservableCollection<User> Users { get; set; }
+		private readonly IHipChatService _hipChatService;
+		private readonly IDataService _dataService;
+
 
 		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IDataService>())
 		{
@@ -42,39 +47,73 @@ namespace Hipstr.Client.Views.Users
 			_dataService = dataService;
 
 			LoadingUsers = false;
-			Users = new ObservableCollection<User>();
+			UserGroups = new ObservableCollection<UserGroup>();
+			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
 			RefreshUsersCommand = new RelayCommandAsync(RefreshUsersAsync, () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
 
 		public async Task LoadUsersAsync()
 		{
 			LoadingUsers = true;
-			IEnumerable<User> users = await _dataService.LoadUsersAsync();
-			if (!users.Any())
+			IEnumerable<UserGroup> userGroups = await _dataService.LoadUserGroupsAsync();
+			if (!userGroups.Any())
 			{
-				users = await RebuildUserCache();
+				userGroups = await RebuildUserGroupCache();
 			}
 			LoadingUsers = false;
 
-			Users.Clear();
-			Users.AddRange(users);
+			UserGroups.Clear();
+			UserGroups.AddRange(userGroups);
 		}
 
-		public async Task RefreshUsersAsync()
+		private async Task RefreshUsersAsync()
 		{
-			Users.Clear();
+			UserGroups.Clear();
 			LoadingUsers = true;
-			IEnumerable<User> users = await RebuildUserCache();
+			IEnumerable<UserGroup> userGroups = await RebuildUserGroupCache();
 			LoadingUsers = false;
-			Users.AddRange(users);
+			UserGroups.AddRange(userGroups);
 		}
 
-		private async Task<IEnumerable<User>> RebuildUserCache()
+		private async Task<IEnumerable<UserGroup>> RebuildUserGroupCache()
 		{
-			IEnumerable<User> users = (await _hipChatService.GetUsersAsync()).OrderBy(user => user.Name, UserNameComparer.Instance).ToList();
-			await _dataService.SaveUsersAsync(users);
+			IEnumerable<User> users = await _hipChatService.GetUsersAsync();
+			IEnumerable<UserGroup> userGroups = OrderAndGroupUsers(users).ToList();
+			await _dataService.SaveUserGroupsAsync(userGroups);
 
-			return users;
+			return userGroups;
+		}
+
+		private IEnumerable<UserGroup> OrderAndGroupUsers(IEnumerable<User> users)
+		{
+			IEnumerable<UserGroup> userGroups = users.OrderBy(user => user.Name, UserNameComparer.Instance)
+				.GroupBy(user => DetermineGroupHeader(user.Name), user => user,
+					(group, groupedUsers) => new UserGroup(group, groupedUsers));
+			return userGroups;
+		}
+
+		private string DetermineGroupHeader(string name)
+		{
+			string nameFirstChar = name[0].ToString();
+
+			var alphaRegex = new Regex("^[A-Za-z]$");
+			if (alphaRegex.IsMatch(nameFirstChar))
+			{
+				return nameFirstChar.ToUpper();
+			}
+
+			var numRegex = new Regex("^[0-9]$");
+			return numRegex.IsMatch(nameFirstChar) ? "#" : "?";
+		}
+
+		private async Task OnJumpToHeaderCommandAsync()
+		{
+			var dialog = new ListGroupJumpDialog();
+			ModalResult<string> headerText = await dialog.ShowAsync(UserGroups.Select(ug => ug.Header));
+			if (!headerText.Cancelled)
+			{
+				UserGroupScrollToHeaderRequest?.Invoke(this, UserGroups.Where(ug => ug.Header == headerText.Result).Single());
+			}
 		}
 	}
 }

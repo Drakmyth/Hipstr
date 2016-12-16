@@ -8,9 +8,9 @@ namespace Hipstr.Core.Services
 	{
 		Task<IList<Team>> LoadTeamsAsync();
 		Task<IList<RoomGroup>> LoadRoomGroupsAsync();
-		Task<IList<User>> LoadUsersAsync();
+		Task<IList<UserGroup>> LoadUserGroupsAsync();
 		Task SaveTeamsAsync(IEnumerable<Team> teams);
 		Task SaveRoomGroupsAsync(IEnumerable<RoomGroup> roomGroups);
-		Task SaveUsersAsync(IEnumerable<User> users);
+		Task SaveUserGroupsAsync(IEnumerable<UserGroup> userGroups);
 	}
 }

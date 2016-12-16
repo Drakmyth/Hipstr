@@ -11,6 +11,11 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<CollectionViewSource x:Name="GroupedUsersSource"
+			                      Source="{x:Bind ViewModel.UserGroups}"
+			                      IsSourceGrouped="True"
+			                      ItemsPath="Users"
+			                      d:Source="{Binding UserGroups, Source={d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}}" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -20,7 +25,21 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{x:Bind ViewModel.Users}">
+		<ListView x:Name="UserList"
+		          Grid.Row="0"
+		          ItemsSource="{Binding Source={StaticResource GroupedUsersSource}}">
+			<ListView.GroupStyle>
+				<GroupStyle>
+					<GroupStyle.HeaderTemplate>
+						<DataTemplate x:DataType="models:UserGroup">
+							<TextBlock Text="{x:Bind Header}"
+							           Foreground="White"
+							           FontSize="24"
+							           Tapped="HeaderTextBlock_OnTapped" />
+						</DataTemplate>
+					</GroupStyle.HeaderTemplate>
+				</GroupStyle>
+			</ListView.GroupStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:User">
 					<StackPanel>
