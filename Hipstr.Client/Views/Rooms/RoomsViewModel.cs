@@ -4,6 +4,7 @@ using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,8 +16,11 @@ namespace Hipstr.Client.Views.Rooms
 {
 	public class RoomsViewModel : ViewModelBase
 	{
+		public event EventHandler<RoomGroup> RoomGroupScrollToHeaderRequest;
+
 		public ObservableCollection<RoomGroup> RoomGroups { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
+		public ICommand JumpToHeaderCommand { get; }
 
 		private readonly IHipChatService _hipChatService;
 
@@ -28,6 +32,7 @@ namespace Hipstr.Client.Views.Rooms
 		{
 			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
+			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
 
 			_hipChatService = hipChatService;
 		}
@@ -56,6 +61,16 @@ namespace Hipstr.Client.Views.Rooms
 
 			var numRegex = new Regex("^[0-9]$");
 			return numRegex.IsMatch(nameFirstChar) ? "#" : "?";
+		}
+
+		private async Task OnJumpToHeaderCommandAsync()
+		{
+			var dialog = new ListGroupJumpDialog();
+			ModalResult<string> headerText = await dialog.ShowAsync(RoomGroups.Select(rg => rg.Header));
+			if (!headerText.Cancelled)
+			{
+				RoomGroupScrollToHeaderRequest?.Invoke(this, RoomGroups.Where(rg => rg.Header == headerText.Result).Single());
+			}
 		}
 	}
 }

@@ -42,7 +42,9 @@
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate x:DataType="models:RoomGroup">
 							<TextBlock Text="{x:Bind Header}"
-							           Foreground="White" />
+							           Foreground="White"
+									   FontSize="24"
+									   Tapped="HeaderTextBlock_OnTapped"/>
 						</DataTemplate>
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>
