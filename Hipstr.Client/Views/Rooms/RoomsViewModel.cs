@@ -37,21 +37,25 @@ namespace Hipstr.Client.Views.Rooms
 
 		private readonly IHipChatService _hipChatService;
 		private readonly IDataService _dataService;
+		private readonly IMainPageService _mainPageService;
 
-		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IDataService>())
+		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IDataService>(), IoCContainer.Resolve<IMainPageService>())
 		{
 		}
 
-		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService)
+		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService)
 		{
+			_hipChatService = hipChatService;
+			_dataService = dataService;
+			_mainPageService = mainPageService;
+
+			LoadingRooms = false;
+			_mainPageService.Title = "Rooms";
+
 			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
-
-			LoadingRooms = false;
-			_hipChatService = hipChatService;
-			_dataService = dataService;
 		}
 
 		// TODO: Commonize Refresh/Cache logic into base class or service

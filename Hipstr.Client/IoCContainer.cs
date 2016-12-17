@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Builder;
 using Hipstr.Core.Services;
 using System.Net.Http;
 
@@ -25,11 +26,12 @@ namespace Hipstr.Client
 			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<IDataService, DataService>();
 			builder.RegisterType<HttpClient, HttpClient>();
+			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
 		}
 
-		private static void RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
+		private static IRegistrationBuilder<InstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
 		{
-			builder.RegisterType<InstanceType>().As<Interface>();
+			return builder.RegisterType<InstanceType>().As<Interface>();
 		}
 
 		public static Interface Resolve<Interface>()

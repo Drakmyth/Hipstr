@@ -101,6 +101,7 @@
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="IoCContainer.cs" />
+    <Compile Include="MainPageService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
     <Compile Include="Views\ListGroupJumpDialog.xaml.cs">

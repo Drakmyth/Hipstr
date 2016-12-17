@@ -29,15 +29,19 @@ namespace Hipstr.Client.Views.Teams
 		}
 
 		private readonly ITeamService _teamService;
+		private readonly IMainPageService _mainPageService;
 
-		public TeamsViewModel() : this(IoCContainer.Resolve<ITeamService>())
+		public TeamsViewModel() : this(IoCContainer.Resolve<ITeamService>(), IoCContainer.Resolve<IMainPageService>())
 		{
 		}
 
-		public TeamsViewModel(ITeamService teamService)
+		public TeamsViewModel(ITeamService teamService, IMainPageService mainPageService)
 		{
 			_teamService = teamService;
+			_mainPageService = mainPageService;
+
 			Teams = new ObservableCollection<Team>();
+			_mainPageService.Title = "Teams";
 
 			AddTeamCommand = new RelayCommandAsync(OnAddTeamCommandAsync);
 			EditTeamCommand = new RelayCommandAsync<Team>(OnEditTeamCommandAsync, team => team != null);

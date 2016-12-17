@@ -39,13 +39,26 @@ namespace Hipstr.Client.Views.MainPage
 			}
 		}
 
-		public MainPageViewModel()
+		private readonly IMainPageService _mainPageService;
+
+		public MainPageViewModel() : this(IoCContainer.Resolve<IMainPageService>())
 		{
-			_title = "";
+		}
+
+		public MainPageViewModel(IMainPageService mainPageService)
+		{
+			_mainPageService = mainPageService;
+			_mainPageService.TitleChanged += OnTitleChanged;
+			Title = "";
 			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>();
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView>();
 			Filters = new ObservableCollection<FilterItem>();
+		}
+
+		private void OnTitleChanged(object sender, string title)
+		{
+			Title = title;
 		}
 	}
 }

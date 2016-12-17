@@ -24,21 +24,26 @@ namespace Hipstr.Client.Views.Messages
 			set
 			{
 				_room = value;
+				_mainPageService.Title = _room.Name;
 				OnPropertyChanged();
 			}
 		}
 
 		private readonly IHipChatService _hipChatService;
+		private readonly IMainPageService _mainPageService;
 
-		public MessagesViewModel() : this(IoCContainer.Resolve<IHipChatService>())
+		public MessagesViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IMainPageService>())
 		{
 		}
 
-		public MessagesViewModel(IHipChatService hipChatService)
+		public MessagesViewModel(IHipChatService hipChatService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
+			_mainPageService = mainPageService;
 
 			Messages = new ObservableCollection<Message>();
+			_mainPageService.Title = "Messages";
+
 			ReloadRoomCommand = new RelayCommandAsync(ReloadMessagesAsync);
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
 		}
