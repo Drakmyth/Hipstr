@@ -52,6 +52,8 @@ namespace Hipstr.Client.Views.Users
 			RefreshUsersCommand = new RelayCommandAsync(RefreshUsersAsync, () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
 
+		// TODO: Commonize Refresh/Cache logic into base class or service
+		// TODO: Commonize GroupBy/OrderBy logic into base class or service
 		public async Task LoadUsersAsync()
 		{
 			LoadingUsers = true;

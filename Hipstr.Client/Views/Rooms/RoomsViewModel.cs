@@ -54,6 +54,8 @@ namespace Hipstr.Client.Views.Rooms
 			_dataService = dataService;
 		}
 
+		// TODO: Commonize Refresh/Cache logic into base class or service
+		// TODO: Commonize GroupBy/OrderBy logic into base class or service
 		public async Task LoadRoomsAsync()
 		{
 			LoadingRooms = true;
