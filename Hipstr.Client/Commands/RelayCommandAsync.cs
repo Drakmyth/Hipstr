@@ -49,11 +49,25 @@ namespace Hipstr.Client.Commands
 
 		private readonly Func<T, Task> _execute;
 		private readonly Func<T, bool> _canExecute;
+		private readonly string _propertyName;
 
 		public RelayCommandAsync(Func<T, Task> execute, Func<T, bool> canExecute = null)
 		{
 			_execute = execute;
 			_canExecute = canExecute;
+		}
+
+		public RelayCommandAsync(Func<T, Task> execute, Func<T, bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, string propertyName) : this(execute, canExecute)
+		{
+			_propertyName = propertyName;
+			propertyChangedNotifier.PropertyChanged += OnPropertyChanged;
+		}
+
+		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName != _propertyName) return;
+
+			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
 
 		public bool CanExecute(object parameter)
