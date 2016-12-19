@@ -3,8 +3,6 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:converters="using:Hipstr.Client.Converters"
-      xmlns:models="using:Hipstr.Core.Models"
       mc:Ignorable="d">
 
 	<Page.Resources>
@@ -12,7 +10,6 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<Style x:Key="HamburgerButtonStyle" TargetType="Button">
 				<Setter Property="Background" Value="{StaticResource HipChatControl}" />
 				<Setter Property="Foreground" Value="White" />
@@ -97,8 +94,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}"
-	      d:DataContext="{d:DesignData Source=/SampleData/MainPageViewModelSampleData.xaml}">
+	<Grid Background="{StaticResource HipChatBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
@@ -120,21 +116,6 @@
 			           FontWeight="Bold"
 			           Foreground="White"
 			           Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
-			<ComboBox RelativePanel.AlignRightWithPanel="True"
-			          RelativePanel.AlignVerticalCenterWith="MenuButton"
-			          Margin="0 0 5 0"
-			          BorderThickness="0"
-			          Background="Transparent"
-			          Foreground="White"
-			          RequestedTheme="Dark"
-			          Visibility="{x:Bind ViewModel.ShowFilters, Converter={StaticResource BoolToVis}}"
-			          ItemsSource="{x:Bind ViewModel.Filters}">
-				<ComboBox.ItemTemplate>
-					<DataTemplate x:DataType="models:FilterItem">
-						<TextBlock Text="{x:Bind DisplayName}" Foreground="White" />
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
-			</ComboBox>
 		</RelativePanel>
 		<SplitView Name="MenuSplitView"
 		           Grid.Row="1"
