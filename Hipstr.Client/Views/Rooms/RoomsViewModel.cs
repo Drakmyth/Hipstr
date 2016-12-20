@@ -94,9 +94,20 @@ namespace Hipstr.Client.Views.Rooms
 
 		private IEnumerable<RoomGroup> OrderAndGroupRooms(IEnumerable<Room> rooms)
 		{
-			IEnumerable<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
+			IList<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
 				.GroupBy(room => DetermineGroupHeader(room.Name), room => room,
-					(group, groupedRooms) => new RoomGroup(group, groupedRooms));
+					(group, groupedRooms) => new RoomGroup(group, groupedRooms)).ToList();
+
+			char[] groupNames = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ?".ToCharArray();
+			for (var i = 0; i < groupNames.Length; i++)
+			{
+				string groupName = groupNames[i].ToString();
+				if (!roomGroups.Any(rg => rg.Header.Equals(groupName)))
+				{
+					roomGroups.Insert(i, new RoomGroup(groupName));
+				}
+			}
+
 			return roomGroups;
 		}
 
@@ -117,7 +128,7 @@ namespace Hipstr.Client.Views.Rooms
 		private async Task OnJumpToHeaderCommandAsync()
 		{
 			var dialog = new ListGroupJumpDialog();
-			ModalResult<string> headerText = await dialog.ShowAsync(RoomGroups.Select(rg => rg.Header));
+			ModalResult<string> headerText = await dialog.ShowAsync(RoomGroups.Select(rg => new JumpHeader(rg.Header, rg.Rooms.Any())));
 			if (!headerText.Cancelled)
 			{
 				RoomGroupScrollToHeaderRequest?.Invoke(this, RoomGroups.Where(rg => rg.Header == headerText.Result).Single());

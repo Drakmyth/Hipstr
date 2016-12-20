@@ -88,9 +88,20 @@ namespace Hipstr.Client.Views.Users
 
 		private IEnumerable<UserGroup> OrderAndGroupUsers(IEnumerable<User> users)
 		{
-			IEnumerable<UserGroup> userGroups = users.OrderBy(user => user.Name, UserNameComparer.Instance)
+			IList<UserGroup> userGroups = users.OrderBy(user => user.Name, UserNameComparer.Instance)
 				.GroupBy(user => DetermineGroupHeader(user.Name), user => user,
-					(group, groupedUsers) => new UserGroup(group, groupedUsers));
+					(group, groupedUsers) => new UserGroup(group, groupedUsers)).ToList();
+
+			char[] groupNames = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ?".ToCharArray();
+			for (var i = 0; i < groupNames.Length; i++)
+			{
+				string groupName = groupNames[i].ToString();
+				if (!userGroups.Any(rg => rg.Header.Equals(groupName)))
+				{
+					userGroups.Insert(i, new UserGroup(groupName));
+				}
+			}
+
 			return userGroups;
 		}
 
@@ -111,7 +122,7 @@ namespace Hipstr.Client.Views.Users
 		private async Task OnJumpToHeaderCommandAsync()
 		{
 			var dialog = new ListGroupJumpDialog();
-			ModalResult<string> headerText = await dialog.ShowAsync(UserGroups.Select(ug => ug.Header));
+			ModalResult<string> headerText = await dialog.ShowAsync(UserGroups.Select(ug => new JumpHeader(ug.Header, ug.Users.Any())));
 			if (!headerText.Cancelled)
 			{
 				UserGroupScrollToHeaderRequest?.Invoke(this, UserGroups.Where(ug => ug.Header == headerText.Result).Single());

@@ -1,6 +1,7 @@
 ﻿using Hipstr.Core.Utility.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Animation;
 
 namespace Hipstr.Client.Views
 {
@@ -20,7 +20,7 @@ namespace Hipstr.Client.Views
 	{
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
-		private readonly ObservableCollection<string> _groupHeaders;
+		private readonly ObservableCollection<JumpHeader> _groupHeaders;
 
 		private readonly Popup _parent;
 		private TaskCompletionSource<ModalResult<string>> _taskCompletionSource;
@@ -29,7 +29,7 @@ namespace Hipstr.Client.Views
 		public ListGroupJumpDialog()
 		{
 			InitializeComponent();
-			_groupHeaders = new ObservableCollection<string>();
+			_groupHeaders = new ObservableCollection<JumpHeader>();
 			_parent = new Popup {Child = this};
 			ResizePopup();
 			_parent.IsLightDismissEnabled = false;
@@ -75,7 +75,7 @@ namespace Hipstr.Client.Views
 			Margin = new Thickness(0, topMargin, 0, 0);
 		}
 
-		public IAsyncOperation<ModalResult<string>> ShowAsync(IEnumerable<string> headers)
+		public IAsyncOperation<ModalResult<string>> ShowAsync(IEnumerable<JumpHeader> headers)
 		{
 			_groupHeaders.Clear();
 			_groupHeaders.AddRange(headers);
@@ -104,8 +104,12 @@ namespace Hipstr.Client.Views
 
 		private void HeaderTextBlock_OnTapped(object sender, TappedRoutedEventArgs e)
 		{
+			var tapped = (TextBlock)sender;
+			JumpHeader header = _groupHeaders.Where(jh => jh.Header == tapped.Text).Single();
+
+			if (!header.Enabled) return;
+
 			Hide();
-			TextBlock tapped = (TextBlock)sender;
 			_taskCompletionSource.SetResult(new ModalResult<string>(tapped.Text));
 		}
 	}

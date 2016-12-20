@@ -8,10 +8,10 @@ namespace Hipstr.Core.Models
 		public string Header { get; }
 		public ObservableCollection<User> Users { get; }
 
-		public UserGroup(string header, IEnumerable<User> users)
+		public UserGroup(string header, IEnumerable<User> users = null)
 		{
 			Header = header;
-			Users = new ObservableCollection<User>(users);
+			Users = users == null ? new ObservableCollection<User>() : new ObservableCollection<User>(users);
 		}
 	}
 }

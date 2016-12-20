@@ -98,12 +98,14 @@
     <Compile Include="Commands\RelayCommandAsync.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
+    <Compile Include="Converters\BooleanToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="MainPageService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
+    <Compile Include="Views\JumpHeader.cs" />
     <Compile Include="Views\ListGroupJumpDialog.xaml.cs">
       <DependentUpon>ListGroupJumpDialog.xaml</DependentUpon>
     </Compile>
