@@ -28,7 +28,7 @@ namespace Hipstr.Client.Views.Teams
 		public AddTeamDialog()
 		{
 			InitializeComponent();
-			_parent = new Popup {Child = this};
+			_parent = new Popup { Child = this };
 			ResizePopup();
 			_parent.ChildTransitions = new TransitionCollection
 			{
