@@ -109,12 +109,16 @@
   <ItemGroup>
     <Compile Include="Comparers\UserNameComparer.cs" />
     <Compile Include="Comparers\RoomNameComparer.cs" />
+    <Compile Include="Models\UserProfile.cs" />
+    <Compile Include="Models\HipChat\HipChatClient.cs" />
+    <Compile Include="Models\HipChat\HipChatPresence.cs" />
     <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
     <Compile Include="Models\HipChat\HipChatMessage.cs" />
     <Compile Include="Models\HipChat\HipChatNotification.cs" />
     <Compile Include="Models\HipChat\HipChatNotificationSender.cs" />
     <Compile Include="Models\HipChat\HipChatRoom.cs" />
     <Compile Include="Models\HipChat\HipChatUser.cs" />
+    <Compile Include="Models\HipChat\HipChatUserProfile.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\UserGroup.cs" />

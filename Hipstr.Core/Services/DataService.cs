@@ -20,7 +20,14 @@ namespace Hipstr.Core.Services
 
 		public async Task<IList<RoomGroup>> LoadRoomGroupsAsync()
 		{
-			return await LoadDataAsync<RoomGroup>(RoomGroupsFileName);
+			try
+			{
+				return await LoadDataAsync<RoomGroup>(RoomGroupsFileName);
+			}
+			catch (JsonSerializationException)
+			{
+				return new List<RoomGroup>();
+			}
 		}
 
 		public async Task<IList<UserGroup>> LoadUserGroupsAsync()

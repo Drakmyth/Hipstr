@@ -1,10 +1,13 @@
-﻿<Page x:Class="Hipstr.Client.Views.Users.UsersView"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:models="using:Hipstr.Core.Models"
-      mc:Ignorable="d">
+﻿<Page Name="UsersViewPage"
+	  x:Class="Hipstr.Client.Views.Users.UsersView"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:models="using:Hipstr.Core.Models"
+	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	  mc:Ignorable="d">
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -12,30 +15,38 @@
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<CollectionViewSource x:Name="GroupedUsersSource"
-			                      Source="{x:Bind ViewModel.UserGroups}"
-			                      IsSourceGrouped="True"
-			                      ItemsPath="Users"
-			                      d:Source="{Binding UserGroups, Source={d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}}" />
+								  Source="{x:Bind ViewModel.UserGroups}"
+								  IsSourceGrouped="True"
+								  ItemsPath="Users" />
+			<!--                                  d:Source="{Binding UserGroups, Source={d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}}" />-->
 		</ResourceDictionary>
 	</Page.Resources>
 
 	<Grid Background="{StaticResource HipChatBackground}"
-	      d:DataContext="{d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}">
+		  d:DataContext="{d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<ListView x:Name="UserList"
-		          Grid.Row="0"
-		          ItemsSource="{Binding Source={StaticResource GroupedUsersSource}}">
+				  Grid.Row="0"
+				  ItemsSource="{Binding Source={StaticResource GroupedUsersSource}}">
+			<interactivity:Interaction.Behaviors>
+				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
+					<core:EventTriggerBehavior.Actions>
+						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToUserProfileViewCommand}"
+												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay}" />
+					</core:EventTriggerBehavior.Actions>
+				</core:EventTriggerBehavior>
+			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle>
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate x:DataType="models:UserGroup">
-							<TextBlock Text="{x:Bind Header}"
-							           Foreground="White"
-							           FontSize="24"
-							           Tapped="HeaderTextBlock_OnTapped" />
+							<TextBlock Name="HeaderTextBlock"
+									   Text="{x:Bind Header}"
+									   Foreground="White"
+									   FontSize="24" />
 						</DataTemplate>
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>
@@ -44,26 +55,26 @@
 				<DataTemplate x:DataType="models:User">
 					<StackPanel>
 						<TextBlock Text="{x:Bind Name}"
-						           Foreground="White" />
+								   Foreground="White" />
 						<TextBlock Text="{x:Bind Team.Name}"
-						           Foreground="LightGray"
-						           FontSize="10" />
+								   Foreground="LightGray"
+								   FontSize="10" />
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
 		<ProgressRing Grid.Row="0"
-		              IsActive="{x:Bind ViewModel.LoadingUsers, Mode=OneWay}"
-		              Foreground="White"
-		              Width="50"
-		              Height="50" />
+					  IsActive="{x:Bind ViewModel.LoadingUsers, Mode=OneWay}"
+					  Foreground="White"
+					  Width="50"
+					  Height="50" />
 		<CommandBar Grid.Row="1"
-		            Background="{StaticResource HipChatControl}"
-		            Foreground="White">
+					Background="{StaticResource HipChatControl}"
+					Foreground="White">
 			<AppBarButton Icon="Refresh"
-			              Label="Refresh"
-			              Foreground="White"
-			              Command="{x:Bind ViewModel.RefreshUsersCommand}" />
+						  Label="Refresh"
+						  Foreground="White"
+						  Command="{x:Bind ViewModel.RefreshUsersCommand}" />
 		</CommandBar>
 	</Grid>
 </Page>

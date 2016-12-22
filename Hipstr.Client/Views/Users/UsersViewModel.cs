@@ -18,6 +18,7 @@ namespace Hipstr.Client.Views.Users
 		public event EventHandler<UserGroup> UserGroupScrollToHeaderRequest;
 
 		public ObservableCollection<UserGroup> UserGroups { get; }
+		public ICommand NavigateToUserProfileViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshUsersCommand { get; }
 
@@ -48,6 +49,7 @@ namespace Hipstr.Client.Views.Users
 
 			LoadingUsers = false;
 			UserGroups = new ObservableCollection<UserGroup>();
+			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView>();
 			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
 			RefreshUsersCommand = new RelayCommandAsync(RefreshUsersAsync, () => !LoadingUsers, this, nameof(LoadingUsers));
 		}

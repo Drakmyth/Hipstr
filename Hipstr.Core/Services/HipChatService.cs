@@ -86,10 +86,10 @@ namespace Hipstr.Core.Services
 		private async Task<HttpResponseMessage> GetPageOfRooms(HttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/room?"
-			               + $"start-index={startIndex}&"
-			               + $"max-results={MaxRoomResults}&"
-			               + $"include-private={IncludePrivateRooms}&"
-			               + $"include-archived={IncludeArchivedRooms}";
+						   + $"start-index={startIndex}&"
+						   + $"max-results={MaxRoomResults}&"
+						   + $"include-private={IncludePrivateRooms}&"
+						   + $"include-archived={IncludeArchivedRooms}";
 
 			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
@@ -148,10 +148,10 @@ namespace Hipstr.Core.Services
 		private async Task<HttpResponseMessage> GetPageOfUsers(HttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/user?"
-			               + $"start-index={startIndex}&"
-			               + $"max-results={MaxUserResults}&"
-			               + $"include-guests={IncludeGuestUsers}&"
-			               + $"include-deleted={IncludeDeletedUsers}";
+						   + $"start-index={startIndex}&"
+						   + $"max-results={MaxUserResults}&"
+						   + $"include-guests={IncludeGuestUsers}&"
+						   + $"include-deleted={IncludeDeletedUsers}";
 
 			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
@@ -179,6 +179,31 @@ namespace Hipstr.Core.Services
 				Date = hcMessage.Date,
 				Text = hcMessage.Message
 			}).ToList();
+		}
+
+		public async Task<UserProfile> GetUserProfileAsync(User user)
+		{
+			var httpClient = new HttpClient();
+			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
+			HttpResponseMessage get = await httpClient.GetAsync(new Uri(RootUri, $"/v2/user/{user.Id}"));
+			string json = await get.Content.ReadAsStringAsync();
+
+			var hcUserProfile = JsonConvert.DeserializeObject<HipChatUserProfile>(json);
+
+			return new UserProfile
+			{
+				Id = hcUserProfile.Id,
+				Created = hcUserProfile.Created,
+				Email = hcUserProfile.Email,
+				IsDeleted = hcUserProfile.IsDeleted,
+				IsGroupAdmin = hcUserProfile.IsGroupAdmin,
+				IsGuest = hcUserProfile.IsGuest,
+				LastActive = DateTime.Parse(hcUserProfile.LastActive),
+				MentionName = hcUserProfile.MentionName,
+				Name = hcUserProfile.Name,
+				PhotoUrl = hcUserProfile.PhotoUrl,
+				Title = hcUserProfile.Title
+			};
 		}
 	}
 }

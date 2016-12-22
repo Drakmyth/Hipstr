@@ -1,0 +1,36 @@
+﻿<Page x:Class="Hipstr.Client.Views.Users.UserProfileView"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  mc:Ignorable="d">
+
+	<Page.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Styles/Colors.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Page.Resources>
+
+	<Grid Background="{StaticResource HipChatBackground}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<StackPanel>
+			<Image Source="{x:Bind ViewModel.ProfileImage, Mode=OneWay}" />
+			<TextBlock Text="{x:Bind ViewModel.UserProfile.Name, Mode=OneWay}" />
+			<TextBlock Text="{x:Bind ViewModel.UserProfile.MentionName, Mode=OneWay}" />
+			<TextBlock Text="{x:Bind ViewModel.UserProfile.Email, Mode=OneWay}" />
+		</StackPanel>
+		<CommandBar Grid.Row="1"
+					Background="{StaticResource HipChatControl}"
+					Foreground="White">
+			<AppBarButton Icon="Refresh"
+						  Label="Refresh"
+						  Foreground="White"
+						  Command="{x:Bind ViewModel.ReloadUserProfileCommand}" />
+		</CommandBar>
+	</Grid>
+</Page>

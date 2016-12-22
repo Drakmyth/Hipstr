@@ -9,5 +9,6 @@ namespace Hipstr.Core.Services
 		Task<IEnumerable<Room>> GetRoomsAsync();
 		Task<IEnumerable<User>> GetUsersAsync();
 		Task<IEnumerable<Message>> GetMessagesAsync(Room room);
+		Task<UserProfile> GetUserProfileAsync(User user);
 	}
 }
