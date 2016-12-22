@@ -67,11 +67,15 @@ namespace Hipstr.Client.Views.Users
 			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync);
 		}
 
-		private async Task ReloadUserProfileAsync()
+		public async Task ReloadUserProfileAsync()
 		{
 			UserProfile userProfile = await _hipChatService.GetUserProfileAsync(_user);
 			UserProfile = userProfile;
-			ProfileImage = new BitmapImage(new Uri(userProfile.PhotoUrl));
+			ProfileImage = new BitmapImage(new Uri(userProfile.PhotoUrl))
+			{
+				DecodePixelHeight = 180,
+				DecodePixelWidth = 180
+			};
 		}
 	}
 }

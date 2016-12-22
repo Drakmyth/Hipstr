@@ -22,8 +22,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}"
-		  d:DataContext="{d:DesignData Source=/SampleData/UsersViewModelSampleData.xaml}">
+	<Grid Background="{StaticResource HipChatBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -40,13 +39,13 @@
 				</core:EventTriggerBehavior>
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
-				<GroupStyle>
+				<GroupStyle HidesIfEmpty="True">
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate x:DataType="models:UserGroup">
-							<TextBlock Name="HeaderTextBlock"
-									   Text="{x:Bind Header}"
+							<TextBlock Text="{x:Bind Header}"
 									   Foreground="White"
-									   FontSize="24" />
+									   FontSize="24"
+									   Tapped="HeaderTextBlock_OnTapped" />
 						</DataTemplate>
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>

@@ -14,9 +14,10 @@ namespace Hipstr.Client.Views.Users
 			DataContext = new UserProfileViewModel();
 		}
 
-		protected override void OnNavigatedTo(NavigationEventArgs e)
+		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.User = (User)e.Parameter;
+			await ViewModel.ReloadUserProfileAsync();
 		}
 	}
 }

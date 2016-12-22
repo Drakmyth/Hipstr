@@ -19,8 +19,11 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<StackPanel>
-			<Image Source="{x:Bind ViewModel.ProfileImage, Mode=OneWay}" />
-			<TextBlock Text="{x:Bind ViewModel.UserProfile.Name, Mode=OneWay}" />
+			<Ellipse Width="180" Height="180">
+				<Ellipse.Fill>
+					<ImageBrush ImageSource="{x:Bind ViewModel.ProfileImage, Mode=OneWay}" />
+				</Ellipse.Fill>
+			</Ellipse>
 			<TextBlock Text="{x:Bind ViewModel.UserProfile.MentionName, Mode=OneWay}" />
 			<TextBlock Text="{x:Bind ViewModel.UserProfile.Email, Mode=OneWay}" />
 		</StackPanel>
