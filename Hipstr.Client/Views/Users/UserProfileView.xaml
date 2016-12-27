@@ -21,13 +21,43 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<StackPanel>
-			<Ellipse Width="180" Height="180" Margin="0 10">
+		<RelativePanel>
+			<Ellipse Name="Avatar"
+					 Width="180"
+					 Height="180"
+					 Margin="0 10"
+					 RelativePanel.AlignHorizontalCenterWithPanel="True">
 				<Ellipse.Fill>
 					<ImageBrush ImageSource="{x:Bind ViewModel.ProfileImage, Mode=OneWay}" />
 				</Ellipse.Fill>
 			</Ellipse>
-			<Grid>
+			<TextBlock Name="UserNameTextBlock"
+					   Text="{x:Bind ViewModel.UserProfile.Name, Mode=OneWay}"
+					   FontWeight="Bold"
+					   FontSize="18"
+					   RelativePanel.Below="Avatar"
+					   RelativePanel.AlignHorizontalCenterWithPanel="True" />
+			<StackPanel Name="MentionNameTextBlock"
+						Background="{StaticResource HipChatControl}"
+						CornerRadius="5"
+						Margin="0 2"
+						Orientation="Horizontal"
+						RelativePanel.Below="UserNameTextBlock"
+						RelativePanel.AlignHorizontalCenterWithPanel="True">
+				<TextBlock Text="@"
+						   FontSize="16"
+						   Margin="2 0 0 1" />
+				<TextBlock Text="{x:Bind ViewModel.UserProfile.MentionName, Mode=OneWay}"
+						   FontSize="16"
+						   Margin="0 0 2 1" />
+			</StackPanel>
+			<TextBlock Name="UserTitleTextBlock"
+					   Margin="0 0 0 25"
+					   Text="{x:Bind ViewModel.UserProfile.Title, Mode=OneWay}"
+					   RelativePanel.Below="MentionNameTextBlock"
+					   RelativePanel.AlignHorizontalCenterWithPanel="True" />
+			<Grid RelativePanel.Below="UserTitleTextBlock"
+				  Margin="10 0">
 				<Grid.RowDefinitions>
 					<RowDefinition />
 					<RowDefinition />
@@ -44,7 +74,7 @@
 				<TextBlock Text="Last Active:" Margin="5 0 10 0" Grid.Row="2" Grid.Column="0" />
 				<TextBlock Text="{x:Bind ViewModel.UserProfile.LastActive, Mode=OneWay}" Grid.Row="2" Grid.Column="1" />
 			</Grid>
-		</StackPanel>
+		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"
 					Foreground="White">
