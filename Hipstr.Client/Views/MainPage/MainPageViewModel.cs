@@ -36,9 +36,9 @@ namespace Hipstr.Client.Views.MainPage
 			_mainPageService.TitleChanged += OnTitleChanged;
 
 			Title = "";
-			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>();
-			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
-			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView>();
+			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView> {ClearBackStackOnNavigate = true};
+			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView> {ClearBackStackOnNavigate = true};
+			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView> {ClearBackStackOnNavigate = true};
 		}
 
 		private void OnTitleChanged(object sender, string title)

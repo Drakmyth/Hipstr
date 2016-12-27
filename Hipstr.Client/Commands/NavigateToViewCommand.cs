@@ -7,6 +7,13 @@ namespace Hipstr.Client.Commands
 	{
 		public event EventHandler CanExecuteChanged;
 
+		public bool ClearBackStackOnNavigate { get; set; }
+
+		public NavigateToViewCommand()
+		{
+			ClearBackStackOnNavigate = false;
+		}
+
 		public bool CanExecute(object parameter)
 		{
 			return true;
@@ -17,6 +24,10 @@ namespace Hipstr.Client.Commands
 			if (App.Frame.CurrentSourcePageType != typeof(T))
 			{
 				App.Frame.Navigate(typeof(T), parameter);
+				if (ClearBackStackOnNavigate)
+				{
+					App.Frame.BackStack.Clear();
+				}
 			}
 		}
 	}
