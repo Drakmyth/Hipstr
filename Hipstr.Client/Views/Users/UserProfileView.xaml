@@ -10,6 +10,9 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="TextBlock">
+				<Setter Property="Foreground" Value="White" />
+			</Style>
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -19,13 +22,28 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<StackPanel>
-			<Ellipse Width="180" Height="180">
+			<Ellipse Width="180" Height="180" Margin="0 10">
 				<Ellipse.Fill>
 					<ImageBrush ImageSource="{x:Bind ViewModel.ProfileImage, Mode=OneWay}" />
 				</Ellipse.Fill>
 			</Ellipse>
-			<TextBlock Text="{x:Bind ViewModel.UserProfile.MentionName, Mode=OneWay}" />
-			<TextBlock Text="{x:Bind ViewModel.UserProfile.Email, Mode=OneWay}" />
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition />
+					<RowDefinition />
+					<RowDefinition />
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="*" />
+				</Grid.ColumnDefinitions>
+				<TextBlock Text="Email:" Margin="5 0 10 0" Grid.Row="0" Grid.Column="0" />
+				<TextBlock Text="{x:Bind ViewModel.UserProfile.Email, Mode=OneWay}" Grid.Row="0" Grid.Column="1" />
+				<TextBlock Text="User Since:" Margin="5 0 10 0" Grid.Row="1" Grid.Column="0" />
+				<TextBlock Text="{x:Bind ViewModel.UserProfile.Created, Mode=OneWay}" Grid.Row="1" Grid.Column="1" />
+				<TextBlock Text="Last Active:" Margin="5 0 10 0" Grid.Row="2" Grid.Column="0" />
+				<TextBlock Text="{x:Bind ViewModel.UserProfile.LastActive, Mode=OneWay}" Grid.Row="2" Grid.Column="1" />
+			</Grid>
 		</StackPanel>
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"
