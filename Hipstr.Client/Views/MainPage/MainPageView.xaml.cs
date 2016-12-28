@@ -11,7 +11,7 @@ namespace Hipstr.Client.Views.MainPage
 		{
 			InitializeComponent();
 			MenuSplitView.Content = frame;
-			DataContext = new MainPageViewModel();
+			DataContext = IoCContainer.Resolve<MainPageViewModel>();
 		}
 
 		private void HamburgerButton_Click(object sender, RoutedEventArgs e)

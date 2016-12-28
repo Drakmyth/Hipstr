@@ -11,7 +11,7 @@ namespace Hipstr.Client.Views.Users
 		public UserProfileView()
 		{
 			InitializeComponent();
-			DataContext = new UserProfileViewModel();
+			DataContext = IoCContainer.Resolve<UserProfileViewModel>();
 		}
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)

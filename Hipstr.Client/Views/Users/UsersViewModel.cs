@@ -37,11 +37,6 @@ namespace Hipstr.Client.Views.Users
 		private readonly IHipChatService _hipChatService;
 		private readonly IDataService _dataService;
 
-
-		public UsersViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IDataService>())
-		{
-		}
-
 		public UsersViewModel(IHipChatService hipChatService, IDataService dataService)
 		{
 			_hipChatService = hipChatService;

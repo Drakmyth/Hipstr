@@ -26,10 +26,6 @@ namespace Hipstr.Client.Views.MainPage
 
 		private readonly IMainPageService _mainPageService;
 
-		public MainPageViewModel() : this(IoCContainer.Resolve<IMainPageService>())
-		{
-		}
-
 		public MainPageViewModel(IMainPageService mainPageService)
 		{
 			_mainPageService = mainPageService;

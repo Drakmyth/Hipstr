@@ -14,7 +14,7 @@ namespace Hipstr.Client.Views.Messages
 		public MessagesView()
 		{
 			InitializeComponent();
-			DataContext = new MessagesViewModel();
+			DataContext = IoCContainer.Resolve<MessagesViewModel>();
 			_autoScrollMessages = true;
 		}
 

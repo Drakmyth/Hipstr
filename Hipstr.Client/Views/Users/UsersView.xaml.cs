@@ -12,7 +12,7 @@ namespace Hipstr.Client.Views.Users
 		public UsersView()
 		{
 			InitializeComponent();
-			DataContext = new UsersViewModel();
+			DataContext = IoCContainer.Resolve<UsersViewModel>();
 		}
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)

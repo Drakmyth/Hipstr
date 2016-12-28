@@ -53,10 +53,6 @@ namespace Hipstr.Client.Views.Users
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
-		public UserProfileViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IMainPageService>())
-		{
-		}
-
 		// TODO: caching
 		public UserProfileViewModel(IHipChatService hipChatService, IMainPageService mainPageService)
 		{

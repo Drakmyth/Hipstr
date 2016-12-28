@@ -13,7 +13,7 @@ namespace Hipstr.Client.Views.Teams
 		public TeamsView()
 		{
 			InitializeComponent();
-			DataContext = new TeamsViewModel();
+			DataContext = IoCContainer.Resolve<TeamsViewModel>();
 		}
 
 		private void OnTeamRightTapped(object sender, HoldingRoutedEventArgs e)

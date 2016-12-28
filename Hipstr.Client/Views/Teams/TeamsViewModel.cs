@@ -31,10 +31,6 @@ namespace Hipstr.Client.Views.Teams
 		private readonly ITeamService _teamService;
 		private readonly IMainPageService _mainPageService;
 
-		public TeamsViewModel() : this(IoCContainer.Resolve<ITeamService>(), IoCContainer.Resolve<IMainPageService>())
-		{
-		}
-
 		public TeamsViewModel(ITeamService teamService, IMainPageService mainPageService)
 		{
 			_teamService = teamService;

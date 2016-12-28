@@ -32,10 +32,6 @@ namespace Hipstr.Client.Views.Messages
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
-		public MessagesViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IMainPageService>())
-		{
-		}
-
 		public MessagesViewModel(IHipChatService hipChatService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;

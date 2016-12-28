@@ -12,7 +12,7 @@ namespace Hipstr.Client.Views.Rooms
 		public RoomsView()
 		{
 			InitializeComponent();
-			DataContext = new RoomsViewModel();
+			DataContext = IoCContainer.Resolve<RoomsViewModel>();
 		}
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)

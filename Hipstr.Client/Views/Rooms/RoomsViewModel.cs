@@ -39,10 +39,6 @@ namespace Hipstr.Client.Views.Rooms
 		private readonly IDataService _dataService;
 		private readonly IMainPageService _mainPageService;
 
-		public RoomsViewModel() : this(IoCContainer.Resolve<IHipChatService>(), IoCContainer.Resolve<IDataService>(), IoCContainer.Resolve<IMainPageService>())
-		{
-		}
-
 		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
