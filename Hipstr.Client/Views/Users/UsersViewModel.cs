@@ -37,12 +37,14 @@ namespace Hipstr.Client.Views.Users
 		private readonly IHipChatService _hipChatService;
 		private readonly IDataService _dataService;
 
-		public UsersViewModel(IHipChatService hipChatService, IDataService dataService)
+		public UsersViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
 			_dataService = dataService;
 
 			LoadingUsers = false;
+			mainPageService.Title = "Users";
+
 			UserGroups = new ObservableCollection<UserGroup>();
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView>();
 			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);

@@ -37,16 +37,14 @@ namespace Hipstr.Client.Views.Rooms
 
 		private readonly IHipChatService _hipChatService;
 		private readonly IDataService _dataService;
-		private readonly IMainPageService _mainPageService;
 
 		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
 			_dataService = dataService;
-			_mainPageService = mainPageService;
 
 			LoadingRooms = false;
-			_mainPageService.Title = "Rooms";
+			mainPageService.Title = "Rooms";
 
 			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
