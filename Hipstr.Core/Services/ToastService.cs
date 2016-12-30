@@ -28,7 +28,7 @@ namespace Hipstr.Core.Services
 				}
 			};
 
-			ToastNotification notification = new ToastNotification(content.GetXml());
+			var notification = new ToastNotification(content.GetXml());
 			ToastNotificationManager.CreateToastNotifier().Show(notification);
 		}
 	}

@@ -15,7 +15,6 @@
 				<Setter Property="Foreground" Value="White" />
 			</Style>
 			<converters:NullToVisibilityConverter x:Key="NullToVis" />
-			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -85,7 +84,6 @@
 						  Foreground="White"
 						  Width="50"
 						  Height="50"
-						  Visibility="{x:Bind ViewModel.LoadingUserProfile, Mode=OneWay, Converter={StaticResource BoolToVis}}"
 						  RelativePanel.AlignHorizontalCenterWithPanel="True"
 						  RelativePanel.AlignVerticalCenterWithPanel="True"/>
 		</RelativePanel>

@@ -9,24 +9,24 @@
 	<Page.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml"/>
+				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Page.Resources>
 
 	<Grid Background="{StaticResource HipChatBackground}">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<ListView x:Name ="MessagesListView"
+		<ListView x:Name="MessagesListView"
 				  Grid.Row="0"
 				  ItemsSource="{x:Bind ViewModel.Messages}"
 				  SelectionMode="None"
 				  LayoutUpdated="MessagesListView_OnLayoutUpdated">
 			<ListView.ItemContainerStyle>
 				<Style TargetType="ListViewItem">
-					<Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 				</Style>
 			</ListView.ItemContainerStyle>
 			<ListView.ItemTemplate>
@@ -34,27 +34,32 @@
 					<StackPanel Margin="0 10">
 						<RelativePanel>
 							<TextBlock Text="{x:Bind PostedBy.Name}"
-								   Foreground="White"
-									   RelativePanel.AlignLeftWithPanel="True"/>
+									   Foreground="White"
+									   RelativePanel.AlignLeftWithPanel="True" />
 							<TextBlock Text="{x:Bind Date}"
-								   Foreground="White"
-								   RelativePanel.AlignRightWithPanel="True"/>
+									   Foreground="White"
+									   RelativePanel.AlignRightWithPanel="True" />
 						</RelativePanel>
 						<TextBlock Text="{x:Bind Text}"
 								   TextWrapping="Wrap"
 								   Foreground="White"
-								   Margin="15 5 0 5"/>
+								   Margin="15 5 0 5" />
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
+		<ProgressRing Grid.Row="0"
+					  IsActive="{x:Bind ViewModel.LoadingMessages, Mode=OneWay}"
+					  Foreground="White"
+					  Width="50"
+					  Height="50" />
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"
 					Foreground="White">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="White"
-						  Command="{x:Bind ViewModel.ReloadRoomCommand}"/>
+						  Command="{x:Bind ViewModel.ReloadRoomCommand}" />
 		</CommandBar>
 	</Grid>
 </Page>

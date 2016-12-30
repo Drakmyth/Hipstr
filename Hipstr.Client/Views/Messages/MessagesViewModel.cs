@@ -29,6 +29,18 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
+		private bool _loadingMessages;
+
+		public bool LoadingMessages
+		{
+			get { return _loadingMessages; }
+			set
+			{
+				_loadingMessages = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
@@ -39,6 +51,7 @@ namespace Hipstr.Client.Views.Messages
 
 			Messages = new ObservableCollection<Message>();
 			_mainPageService.Title = "Messages";
+			_loadingMessages = false;
 
 			ReloadRoomCommand = new RelayCommandAsync(ReloadMessagesAsync);
 			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
@@ -46,9 +59,17 @@ namespace Hipstr.Client.Views.Messages
 
 		public async Task ReloadMessagesAsync()
 		{
-			IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
-			Messages.Clear();
-			Messages.AddRange(messages);
+			try
+			{
+				LoadingMessages = true;
+				IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
+				Messages.Clear();
+				Messages.AddRange(messages);
+			}
+			finally
+			{
+				LoadingMessages = false;
+			}
 		}
 	}
 }
