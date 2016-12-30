@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 
 namespace Hipstr.Core.Models.HipChat
 {
+	[UsedImplicitly]
 	public class HipChatPresence
 	{
 		[JsonProperty("status")]

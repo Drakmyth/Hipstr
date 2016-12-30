@@ -7,7 +7,7 @@ namespace Hipstr.Client.Commands
 	{
 		public event EventHandler CanExecuteChanged;
 
-		public bool ClearBackStackOnNavigate { get; set; }
+		public bool ClearBackStackOnNavigate { private get; set; }
 
 		public NavigateToViewCommand()
 		{

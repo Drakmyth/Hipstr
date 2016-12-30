@@ -3,9 +3,11 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.ServiceModel;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 
 namespace Hipstr.Core.Services
 {
+	[UsedImplicitly]
 	public class HipstrHttpClient : IHttpClient
 	{
 		private readonly HttpClient _httpClient;

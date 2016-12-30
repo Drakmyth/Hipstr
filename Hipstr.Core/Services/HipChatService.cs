@@ -1,5 +1,6 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Models.HipChat;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -7,11 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace Hipstr.Core.Services
 {
+	[UsedImplicitly]
 	public class HipChatService : IHipChatService
 	{
 		// TODO: Notify user when API_KEY is about to expire
@@ -27,13 +28,11 @@ namespace Hipstr.Core.Services
 
 		private readonly ITeamService _teamService;
 		private readonly IHttpClient _httpClient;
-		private readonly IToastService _toastService;
 
-		public HipChatService(ITeamService teamService, IHttpClient httpClient, IToastService toastService)
+		public HipChatService(ITeamService teamService, IHttpClient httpClient)
 		{
 			_teamService = teamService;
 			_httpClient = httpClient;
-			_toastService = toastService;
 		}
 
 		public async Task<IEnumerable<Room>> GetRoomsAsync()

@@ -11,9 +11,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Rooms
 {
+	[UsedImplicitly]
 	public class RoomsViewModel : ViewModelBase
 	{
 		public event EventHandler<RoomGroup> RoomGroupScrollToHeaderRequest;

@@ -1,8 +1,10 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 using Windows.UI.Notifications;
+using JetBrains.Annotations;
 
 namespace Hipstr.Core.Services
 {
+	[UsedImplicitly]
 	public class ToastService : IToastService
 	{
 		public void ShowCommunicationErrorToast(string message)

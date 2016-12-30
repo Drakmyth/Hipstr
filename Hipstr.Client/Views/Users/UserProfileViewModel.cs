@@ -5,9 +5,11 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Imaging;
+using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Users
 {
+	[UsedImplicitly]
 	public class UserProfileViewModel : ViewModelBase
 	{
 		public ICommand ReloadUserProfileCommand { get; }
@@ -30,7 +32,7 @@ namespace Hipstr.Client.Views.Users
 		public UserProfile UserProfile
 		{
 			get { return _userProfile; }
-			set
+			private set
 			{
 				_userProfile = value;
 				OnPropertyChanged();
@@ -42,7 +44,7 @@ namespace Hipstr.Client.Views.Users
 		public BitmapImage ProfileImage
 		{
 			get { return _profileImage; }
-			set
+			private set
 			{
 				_profileImage = value;
 				OnPropertyChanged();
@@ -54,7 +56,7 @@ namespace Hipstr.Client.Views.Users
 		public bool LoadingUserProfile
 		{
 			get { return _loadingUserProfile; }
-			set
+			private set
 			{
 				_loadingUserProfile = value;
 				OnPropertyChanged();

@@ -3,9 +3,11 @@ using Hipstr.Client.Views.Rooms;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
 using System.Windows.Input;
+using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.MainPage
 {
+	[UsedImplicitly]
 	public class MainPageViewModel : ViewModelBase
 	{
 		public ICommand NavigateToTeamsViewCommand { get; }
@@ -17,19 +19,16 @@ namespace Hipstr.Client.Views.MainPage
 		public string Title
 		{
 			get { return _title; }
-			set
+			private set
 			{
 				_title = value;
 				OnPropertyChanged();
 			}
 		}
 
-		private readonly IMainPageService _mainPageService;
-
 		public MainPageViewModel(IMainPageService mainPageService)
 		{
-			_mainPageService = mainPageService;
-			_mainPageService.TitleChanged += OnTitleChanged;
+			mainPageService.TitleChanged += OnTitleChanged;
 
 			Title = "";
 			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView> {ClearBackStackOnNavigate = true};

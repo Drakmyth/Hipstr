@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using System;
+using JetBrains.Annotations;
 
 namespace Hipstr.Core.Models.HipChat
 {
+	[UsedImplicitly]
 	public class HipChatUserProfile
 	{
 		[JsonProperty("xmpp_jid")]

@@ -4,9 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage;
+using JetBrains.Annotations;
 
 namespace Hipstr.Core.Services
 {
+	[UsedImplicitly]
 	public class DataService : IDataService
 	{
 		private const string TeamsFileName = "teams.json";

@@ -39,8 +39,7 @@
 			         RelativePanel.AlignRightWithPanel="True"
 			         HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
 			         Text="{x:Bind _teamName, Mode=TwoWay}" />
-			<TextBox Name="ApiKeyTextBox"
-			         Header="API Key"
+			<TextBox Header="API Key"
 			         Margin="10 5"
 			         RelativePanel.Below="TeamNameTextBox"
 			         RelativePanel.AlignLeftWithPanel="True"

@@ -1,14 +1,9 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 
 namespace Hipstr.Client
 {
-	public interface IMainPageService
-	{
-		event EventHandler<string> TitleChanged;
-
-		string Title { get; set; }
-	}
-
+	[UsedImplicitly]
 	public class MainPageService : IMainPageService
 	{
 		public event EventHandler<string> TitleChanged;

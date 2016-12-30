@@ -10,9 +10,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Users
 {
+	[UsedImplicitly]
 	public class UsersViewModel : ViewModelBase
 	{
 		public event EventHandler<UserGroup> UserGroupScrollToHeaderRequest;

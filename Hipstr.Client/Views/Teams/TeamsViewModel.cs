@@ -6,9 +6,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Teams
 {
+	[UsedImplicitly]
 	public class TeamsViewModel : ViewModelBase
 	{
 		public ObservableCollection<Team> Teams { get; set; }
@@ -29,15 +31,13 @@ namespace Hipstr.Client.Views.Teams
 		}
 
 		private readonly ITeamService _teamService;
-		private readonly IMainPageService _mainPageService;
 
 		public TeamsViewModel(ITeamService teamService, IMainPageService mainPageService)
 		{
 			_teamService = teamService;
-			_mainPageService = mainPageService;
 
 			Teams = new ObservableCollection<Team>();
-			_mainPageService.Title = "Teams";
+			mainPageService.Title = "Teams";
 
 			AddTeamCommand = new RelayCommandAsync(OnAddTeamCommandAsync);
 			EditTeamCommand = new RelayCommandAsync<Team>(OnEditTeamCommandAsync, team => team != null);

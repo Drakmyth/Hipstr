@@ -6,13 +6,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Messages
 {
+	[UsedImplicitly]
 	public class MessagesViewModel : ViewModelBase
 	{
-		public ICommand ReloadRoomCommand { get; set; }
-		public ObservableCollection<Message> Messages { get; set; }
+		public ICommand ReloadRoomCommand { get; }
+		public ObservableCollection<Message> Messages { get; }
 
 		private Room _room;
 
@@ -32,7 +34,7 @@ namespace Hipstr.Client.Views.Messages
 		public bool LoadingMessages
 		{
 			get { return _loadingMessages; }
-			set
+			private set
 			{
 				_loadingMessages = value;
 				OnPropertyChanged();

@@ -1,5 +1,6 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Utility.Extensions;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Hipstr.Core.Services
 {
+	[UsedImplicitly]
 	public class TeamService : ITeamService
 	{
 		private readonly IList<Team> _teams;
@@ -30,11 +32,6 @@ namespace Hipstr.Core.Services
 			teamToEdit.Name = team.Name;
 			teamToEdit.ApiKey = team.ApiKey;
 			await _dataService.SaveTeamsAsync(_teams);
-		}
-
-		public bool TeamExists(string apiKey)
-		{
-			return _teams.Any(t => t.ApiKey == apiKey);
 		}
 
 		public async Task RemoveTeamAsync(Team team)

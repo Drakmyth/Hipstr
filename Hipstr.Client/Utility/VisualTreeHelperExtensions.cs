@@ -14,12 +14,12 @@ namespace Hipstr.Client.Utility
 			return start.GetDescendantsOfType<T>().FirstOrDefault();
 		}
 
-		public static IEnumerable<T> GetDescendantsOfType<T>(this DependencyObject start) where T : DependencyObject
+		private static IEnumerable<T> GetDescendantsOfType<T>(this DependencyObject start) where T : DependencyObject
 		{
 			return start.GetDescendants().OfType<T>();
 		}
 
-		public static IEnumerable<DependencyObject> GetDescendants(this DependencyObject start)
+		private static IEnumerable<DependencyObject> GetDescendants(this DependencyObject start)
 		{
 			var queue = new Queue<DependencyObject>();
 			int count = VisualTreeHelper.GetChildrenCount(start);
@@ -50,12 +50,12 @@ namespace Hipstr.Client.Utility
 			return start.GetAncestorsOfType<T>().FirstOrDefault();
 		}
 
-		public static IEnumerable<T> GetAncestorsOfType<T>(this DependencyObject start) where T : DependencyObject
+		private static IEnumerable<T> GetAncestorsOfType<T>(this DependencyObject start) where T : DependencyObject
 		{
 			return start.GetAncestors().OfType<T>();
 		}
 
-		public static IEnumerable<DependencyObject> GetAncestors(this DependencyObject start)
+		private static IEnumerable<DependencyObject> GetAncestors(this DependencyObject start)
 		{
 			DependencyObject parent = VisualTreeHelper.GetParent(start);
 

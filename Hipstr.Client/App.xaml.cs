@@ -23,7 +23,7 @@ namespace Hipstr.Client
 	{
 		public static Frame Frame { get; private set; }
 
-		private IToastService _toastService;
+		private readonly IToastService _toastService;
 
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
