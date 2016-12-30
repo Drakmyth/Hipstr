@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Builder;
+using Hipstr.Client.Services;
 using Hipstr.Client.Views.MainPage;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Client.Views.Rooms;

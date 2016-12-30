@@ -5,6 +5,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Imaging;
+using Hipstr.Client.Services;
 using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Users

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Hipstr.Client
+namespace Hipstr.Client.Services
 {
 	public interface IMainPageService
 	{

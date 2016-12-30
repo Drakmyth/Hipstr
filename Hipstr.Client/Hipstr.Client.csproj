@@ -102,9 +102,9 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
-    <Compile Include="IMainPageService.cs" />
+    <Compile Include="Services\IMainPageService.cs" />
     <Compile Include="IoCContainer.cs" />
-    <Compile Include="MainPageService.cs" />
+    <Compile Include="Services\MainPageService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
     <Compile Include="Views\JumpHeader.cs" />

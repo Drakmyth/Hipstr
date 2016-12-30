@@ -1,7 +1,7 @@
-﻿using JetBrains.Annotations;
-using System;
+﻿using System;
+using JetBrains.Annotations;
 
-namespace Hipstr.Client
+namespace Hipstr.Client.Services
 {
 	[UsedImplicitly]
 	public class MainPageService : IMainPageService

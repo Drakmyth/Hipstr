@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Hipstr.Client.Services;
 using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Users

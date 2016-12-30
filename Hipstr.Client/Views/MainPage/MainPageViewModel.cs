@@ -3,6 +3,7 @@ using Hipstr.Client.Views.Rooms;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
 using System.Windows.Input;
+using Hipstr.Client.Services;
 using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.MainPage
