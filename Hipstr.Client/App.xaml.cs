@@ -1,7 +1,9 @@
 ﻿using Hipstr.Client.Views.MainPage;
 using Hipstr.Client.Views.Teams;
+using Hipstr.Core.Services;
 using System;
 using System.Diagnostics;
+using System.ServiceModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation.Metadata;
@@ -21,6 +23,8 @@ namespace Hipstr.Client
 	{
 		public static Frame Frame { get; private set; }
 
+		private IToastService _toastService;
+
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
 		/// executed, and as such is the logical equivalent of main() or WinMain().
@@ -31,6 +35,9 @@ namespace Hipstr.Client
 
 			InitializeComponent();
 			Suspending += OnSuspending;
+			UnhandledException += OnUnhandledException;
+
+			_toastService = IoCContainer.Resolve<IToastService>();
 		}
 
 		/// <summary>
@@ -138,6 +145,15 @@ namespace Hipstr.Client
 			SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity
 			deferral.Complete();
+		}
+
+		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+		{
+			if (args.Exception is CommunicationException)
+			{
+				_toastService.ShowCommunicationErrorToast(args.Message);
+				args.Handled = true;
+			}
 		}
 	}
 }

@@ -49,6 +49,18 @@ namespace Hipstr.Client.Views.Users
 			}
 		}
 
+		private bool _loadingUserProfile;
+
+		public bool LoadingUserProfile
+		{
+			get { return _loadingUserProfile; }
+			set
+			{
+				_loadingUserProfile = value;
+				OnPropertyChanged();
+			}
+		}
+
 
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
@@ -60,19 +72,28 @@ namespace Hipstr.Client.Views.Users
 			_mainPageService = mainPageService;
 
 			_mainPageService.Title = "User Profile";
+			_loadingUserProfile = false;
 
-			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync);
+			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync, () => !LoadingUserProfile, this, nameof(LoadingUserProfile));
 		}
 
 		public async Task ReloadUserProfileAsync()
 		{
-			UserProfile userProfile = await _hipChatService.GetUserProfileAsync(_user);
-			UserProfile = userProfile;
-			ProfileImage = new BitmapImage(new Uri(userProfile.PhotoUrl))
+			try
 			{
-				DecodePixelHeight = 180,
-				DecodePixelWidth = 180
-			};
+				LoadingUserProfile = true;
+				UserProfile userProfile = await _hipChatService.GetUserProfileAsync(_user);
+				UserProfile = userProfile;
+				ProfileImage = new BitmapImage(new Uri(userProfile.PhotoUrl))
+				{
+					DecodePixelHeight = 180,
+					DecodePixelWidth = 180
+				};
+			}
+			finally
+			{
+				LoadingUserProfile = false;
+			}
 		}
 	}
 }

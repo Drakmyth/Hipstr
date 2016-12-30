@@ -6,7 +6,6 @@ using Hipstr.Client.Views.Rooms;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
 using Hipstr.Core.Services;
-using System.Net.Http;
 
 // ReSharper disable InconsistentNaming
 
@@ -30,10 +29,11 @@ namespace Hipstr.Client
 			builder.RegisterType<ITeamService, TeamService>();
 			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<IDataService, DataService>();
+			builder.RegisterType<IToastService, ToastService>();
 			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
 
 			// HttpClient doesn't use an interface, and I don't really want to write a wrapper
-			builder.RegisterType<HttpClient, HttpClient>();
+			builder.RegisterType<IHttpClient, HipstrHttpClient>();
 
 			// XAML binding breaks when using an interface as the DataContext, so we
 			// need to request implementations rather than interfaces for the view models

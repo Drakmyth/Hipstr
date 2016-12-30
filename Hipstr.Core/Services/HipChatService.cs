@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.ServiceModel;
 using System.Threading.Tasks;
 
 namespace Hipstr.Core.Services
@@ -25,10 +26,14 @@ namespace Hipstr.Core.Services
 		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
 		private readonly ITeamService _teamService;
+		private readonly IHttpClient _httpClient;
+		private readonly IToastService _toastService;
 
-		public HipChatService(ITeamService teamService)
+		public HipChatService(ITeamService teamService, IHttpClient httpClient, IToastService toastService)
 		{
 			_teamService = teamService;
+			_httpClient = httpClient;
+			_toastService = toastService;
 		}
 
 		public async Task<IEnumerable<Room>> GetRoomsAsync()
@@ -56,15 +61,14 @@ namespace Hipstr.Core.Services
 
 		private async Task<IEnumerable<Room>> GetRoomsForTeam(Team team)
 		{
-			var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 
 			var rooms = new List<Room>();
 			var loadAnotherPage = true;
 
 			while (loadAnotherPage)
 			{
-				HttpResponseMessage response = await GetPageOfRooms(httpClient, rooms.Count);
+				HttpResponseMessage response = await GetPageOfRooms(_httpClient, rooms.Count);
 				string json = await response.Content.ReadAsStringAsync();
 				var roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json);
 
@@ -83,7 +87,7 @@ namespace Hipstr.Core.Services
 			return rooms;
 		}
 
-		private async Task<HttpResponseMessage> GetPageOfRooms(HttpClient httpClient, int startIndex)
+		private async Task<HttpResponseMessage> GetPageOfRooms(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/room?"
 						   + $"start-index={startIndex}&"
@@ -119,15 +123,14 @@ namespace Hipstr.Core.Services
 
 		private async Task<IEnumerable<User>> GetUsersForTeam(Team team)
 		{
-			var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 
 			var users = new List<User>();
 			var loadAnotherPage = true;
 
 			while (loadAnotherPage)
 			{
-				HttpResponseMessage response = await GetPageOfUsers(httpClient, users.Count);
+				HttpResponseMessage response = await GetPageOfUsers(_httpClient, users.Count);
 				string json = await response.Content.ReadAsStringAsync();
 				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json);
 
@@ -145,7 +148,7 @@ namespace Hipstr.Core.Services
 			return users;
 		}
 
-		private async Task<HttpResponseMessage> GetPageOfUsers(HttpClient httpClient, int startIndex)
+		private async Task<HttpResponseMessage> GetPageOfUsers(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/user?"
 						   + $"start-index={startIndex}&"
@@ -158,9 +161,8 @@ namespace Hipstr.Core.Services
 
 		public async Task<IEnumerable<Message>> GetMessagesAsync(Room room)
 		{
-			var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
-			HttpResponseMessage get = await httpClient.GetAsync(new Uri(RootUri, $"/v2/room/{room.Id}/history"));
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
+			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/room/{room.Id}/history"));
 			string json = await get.Content.ReadAsStringAsync();
 
 			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
@@ -183,9 +185,10 @@ namespace Hipstr.Core.Services
 
 		public async Task<UserProfile> GetUserProfileAsync(User user)
 		{
-			var httpClient = new HttpClient();
-			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
-			HttpResponseMessage get = await httpClient.GetAsync(new Uri(RootUri, $"/v2/user/{user.Id}"));
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
+
+			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/user/{user.Id}"));
+
 			string json = await get.Content.ReadAsStringAsync();
 
 			var hcUserProfile = JsonConvert.DeserializeObject<HipChatUserProfile>(json);

@@ -3,6 +3,7 @@
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:converters="using:Hipstr.Client.Converters"
 	  mc:Ignorable="d">
 
 	<Page.Resources>
@@ -13,6 +14,8 @@
 			<Style TargetType="TextBlock">
 				<Setter Property="Foreground" Value="White" />
 			</Style>
+			<converters:NullToVisibilityConverter x:Key="NullToVis" />
+			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -26,13 +29,14 @@
 					 Width="180"
 					 Height="180"
 					 Margin="0 10"
-					 RelativePanel.AlignHorizontalCenterWithPanel="True">
+					 RelativePanel.AlignHorizontalCenterWithPanel="True"
+					 Visibility="{x:Bind ViewModel.UserProfile, Mode=OneWay, Converter={StaticResource NullToVis}}">
 				<Ellipse.Fill>
 					<ImageBrush ImageSource="{x:Bind ViewModel.ProfileImage, Mode=OneWay}" />
 				</Ellipse.Fill>
 			</Ellipse>
 			<TextBlock Name="UserNameTextBlock"
-					   Text="{x:Bind ViewModel.UserProfile.Name, Mode=OneWay}"
+					   Text="{x:Bind ViewModel.User.Name}"
 					   FontWeight="Bold"
 					   FontSize="18"
 					   RelativePanel.Below="Avatar"
@@ -43,7 +47,8 @@
 						Margin="0 2"
 						Orientation="Horizontal"
 						RelativePanel.Below="UserNameTextBlock"
-						RelativePanel.AlignHorizontalCenterWithPanel="True">
+						RelativePanel.AlignHorizontalCenterWithPanel="True"
+						Visibility="{x:Bind ViewModel.UserProfile, Mode=OneWay, Converter={StaticResource NullToVis}}">
 				<TextBlock Text="@"
 						   FontSize="16"
 						   Margin="2 0 0 1" />
@@ -55,9 +60,11 @@
 					   Margin="0 0 0 25"
 					   Text="{x:Bind ViewModel.UserProfile.Title, Mode=OneWay}"
 					   RelativePanel.Below="MentionNameTextBlock"
-					   RelativePanel.AlignHorizontalCenterWithPanel="True" />
+					   RelativePanel.AlignHorizontalCenterWithPanel="True"
+					   Visibility="{x:Bind ViewModel.UserProfile, Mode=OneWay, Converter={StaticResource NullToVis}}" />
 			<Grid RelativePanel.Below="UserTitleTextBlock"
-				  Margin="10 0">
+				  Margin="10 0"
+				  Visibility="{x:Bind ViewModel.UserProfile, Mode=OneWay, Converter={StaticResource NullToVis}}">
 				<Grid.RowDefinitions>
 					<RowDefinition />
 					<RowDefinition />
@@ -74,6 +81,13 @@
 				<TextBlock Text="Last Active:" Margin="5 0 10 0" Grid.Row="2" Grid.Column="0" />
 				<TextBlock Text="{x:Bind ViewModel.UserProfile.LastActive, Mode=OneWay}" Grid.Row="2" Grid.Column="1" />
 			</Grid>
+			<ProgressRing IsActive="{x:Bind ViewModel.LoadingUserProfile, Mode=OneWay}"
+						  Foreground="White"
+						  Width="50"
+						  Height="50"
+						  Visibility="{x:Bind ViewModel.LoadingUserProfile, Mode=OneWay, Converter={StaticResource BoolToVis}}"
+						  RelativePanel.AlignHorizontalCenterWithPanel="True"
+						  RelativePanel.AlignVerticalCenterWithPanel="True"/>
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"
