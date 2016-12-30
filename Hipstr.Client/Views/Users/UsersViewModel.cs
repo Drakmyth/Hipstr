@@ -55,25 +55,37 @@ namespace Hipstr.Client.Views.Users
 		// TODO: Commonize GroupBy/OrderBy logic into base class or service
 		public async Task LoadUsersAsync()
 		{
-			LoadingUsers = true;
-			IEnumerable<UserGroup> userGroups = await _dataService.LoadUserGroupsAsync();
-			if (!userGroups.Any())
+			try
 			{
-				userGroups = await RebuildUserGroupCache();
-			}
-			LoadingUsers = false;
+				LoadingUsers = true;
+				IEnumerable<UserGroup> userGroups = await _dataService.LoadUserGroupsAsync();
+				if (!userGroups.Any())
+				{
+					userGroups = await RebuildUserGroupCache();
+				}
 
-			UserGroups.Clear();
-			UserGroups.AddRange(userGroups);
+				UserGroups.Clear();
+				UserGroups.AddRange(userGroups);
+			}
+			finally
+			{
+				LoadingUsers = false;
+			}
 		}
 
 		private async Task RefreshUsersAsync()
 		{
-			UserGroups.Clear();
-			LoadingUsers = true;
-			IEnumerable<UserGroup> userGroups = await RebuildUserGroupCache();
-			LoadingUsers = false;
-			UserGroups.AddRange(userGroups);
+			try
+			{
+				UserGroups.Clear();
+				LoadingUsers = true;
+				IEnumerable<UserGroup> userGroups = await RebuildUserGroupCache();
+				UserGroups.AddRange(userGroups);
+			}
+			finally
+			{
+				LoadingUsers = false;
+			}
 		}
 
 		private async Task<IEnumerable<UserGroup>> RebuildUserGroupCache()

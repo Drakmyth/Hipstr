@@ -56,25 +56,36 @@ namespace Hipstr.Client.Views.Rooms
 		// TODO: Commonize GroupBy/OrderBy logic into base class or service
 		public async Task LoadRoomsAsync()
 		{
-			LoadingRooms = true;
-			IEnumerable<RoomGroup> roomGroups = await _dataService.LoadRoomGroupsAsync();
-			if (!roomGroups.Any())
+			try
 			{
-				roomGroups = await RebuildRoomGroupCache();
+				LoadingRooms = true;
+				IEnumerable<RoomGroup> roomGroups = await _dataService.LoadRoomGroupsAsync();
+				if (!roomGroups.Any())
+				{
+					roomGroups = await RebuildRoomGroupCache();
+				}
+				RoomGroups.Clear();
+				RoomGroups.AddRange(roomGroups);
 			}
-			LoadingRooms = false;
-
-			RoomGroups.Clear();
-			RoomGroups.AddRange(roomGroups);
+			finally
+			{
+				LoadingRooms = false;
+			}
 		}
 
 		private async Task RefreshRoomsAsync()
 		{
-			RoomGroups.Clear();
-			LoadingRooms = true;
-			IEnumerable<RoomGroup> roomGroups = await RebuildRoomGroupCache();
-			LoadingRooms = false;
-			RoomGroups.AddRange(roomGroups);
+			try
+			{
+				RoomGroups.Clear();
+				LoadingRooms = true;
+				IEnumerable<RoomGroup> roomGroups = await RebuildRoomGroupCache();
+				RoomGroups.AddRange(roomGroups);
+			}
+			finally
+			{
+				LoadingRooms = false;
+			}
 		}
 
 		private async Task<IEnumerable<RoomGroup>> RebuildRoomGroupCache()
