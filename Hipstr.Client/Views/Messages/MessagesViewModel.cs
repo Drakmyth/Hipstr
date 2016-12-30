@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Views.Rooms;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
@@ -13,7 +12,6 @@ namespace Hipstr.Client.Views.Messages
 	public class MessagesViewModel : ViewModelBase
 	{
 		public ICommand ReloadRoomCommand { get; set; }
-		public ICommand NavigateToRoomsViewCommand { get; set; }
 		public ObservableCollection<Message> Messages { get; set; }
 
 		private Room _room;
@@ -53,8 +51,7 @@ namespace Hipstr.Client.Views.Messages
 			_mainPageService.Title = "Messages";
 			_loadingMessages = false;
 
-			ReloadRoomCommand = new RelayCommandAsync(ReloadMessagesAsync);
-			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>();
+			ReloadRoomCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 		}
 
 		public async Task ReloadMessagesAsync()
