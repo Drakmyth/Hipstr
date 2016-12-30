@@ -8,8 +8,6 @@ using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
 using Hipstr.Core.Services;
 
-// ReSharper disable InconsistentNaming
-
 namespace Hipstr.Client
 {
 	public static class IoCContainer
@@ -46,14 +44,14 @@ namespace Hipstr.Client
 			builder.RegisterType<UserProfileViewModel, UserProfileViewModel>();
 		}
 
-		private static IRegistrationBuilder<InstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<Interface, InstanceType>(this ContainerBuilder builder) where InstanceType : Interface
+		private static IRegistrationBuilder<TInstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<TInterface, TInstanceType>(this ContainerBuilder builder) where TInstanceType : TInterface
 		{
-			return builder.RegisterType<InstanceType>().As<Interface>();
+			return builder.RegisterType<TInstanceType>().As<TInterface>();
 		}
 
-		public static Interface Resolve<Interface>()
+		public static TInterface Resolve<TInterface>()
 		{
-			return Container.Resolve<Interface>();
+			return Container.Resolve<TInterface>();
 		}
 	}
 }

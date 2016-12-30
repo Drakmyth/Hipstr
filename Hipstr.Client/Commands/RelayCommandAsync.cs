@@ -39,6 +39,7 @@ namespace Hipstr.Client.Commands
 
 		public async void Execute(object parameter)
 		{
+			// ReSharper disable once PossibleNullReferenceException
 			await _execute?.Invoke();
 		}
 	}
@@ -77,6 +78,7 @@ namespace Hipstr.Client.Commands
 
 		public async void Execute(object parameter)
 		{
+			// ReSharper disable once PossibleNullReferenceException
 			await _execute?.Invoke((T)parameter);
 		}
 	}
