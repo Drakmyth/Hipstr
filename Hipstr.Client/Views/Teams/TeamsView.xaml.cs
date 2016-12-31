@@ -1,6 +1,7 @@
 ﻿using Hipstr.Core.Models;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
 
@@ -18,9 +19,9 @@ namespace Hipstr.Client.Views.Teams
 
 		private void OnTeamRightTapped(object sender, HoldingRoutedEventArgs e)
 		{
-			ViewModel.TappedTeam = ((FrameworkElement)e.OriginalSource).DataContext as Team;
-			var listView = (ListView)sender;
-			DeleteFlyout.ShowAt(listView, e.GetPosition(listView));
+			var listItem = (FrameworkElement)sender;
+			ViewModel.TappedTeam = listItem.DataContext as Team;
+			FlyoutBase.ShowAttachedFlyout(listItem);
 		}
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
