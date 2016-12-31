@@ -52,21 +52,21 @@ namespace Hipstr.Core.Services
 			await SaveDataAsync(UserGroupsFileName, userGroups);
 		}
 
-		private async Task<IList<T>> LoadDataAsync<T>(string filename)
+		private static async Task<IList<T>> LoadDataAsync<T>(string filename)
 		{
 			StorageFile file = await GetStorageFileAsync(filename);
 			string json = await FileIO.ReadTextAsync(file);
 			return string.IsNullOrEmpty(json) ? new List<T>() : JsonConvert.DeserializeObject<IList<T>>(json);
 		}
 
-		private async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)
+		private static async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)
 		{
 			StorageFile file = await GetStorageFileAsync(filename);
 			string json = JsonConvert.SerializeObject(data);
 			await FileIO.WriteTextAsync(file, json);
 		}
 
-		private async Task<StorageFile> GetStorageFileAsync(string filename)
+		private static async Task<StorageFile> GetStorageFileAsync(string filename)
 		{
 			StorageFolder folder = ApplicationData.Current.LocalFolder;
 			return await folder.CreateFileAsync(filename, CreationCollisionOption.OpenIfExists);

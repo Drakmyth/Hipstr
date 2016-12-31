@@ -14,7 +14,7 @@ namespace Hipstr.Client.Views.Teams
 	[UsedImplicitly]
 	public class TeamsViewModel : ViewModelBase
 	{
-		public ObservableCollection<Team> Teams { get; set; }
+		public ObservableCollection<Team> Teams { get; }
 		public ICommand AddTeamCommand { get; }
 		public ICommand EditTeamCommand { get; }
 		public ICommand DeleteTeamCommand { get; }

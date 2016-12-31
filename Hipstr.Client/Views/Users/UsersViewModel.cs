@@ -100,7 +100,7 @@ namespace Hipstr.Client.Views.Users
 			return userGroups;
 		}
 
-		private IEnumerable<UserGroup> OrderAndGroupUsers(IEnumerable<User> users)
+		private static IEnumerable<UserGroup> OrderAndGroupUsers(IEnumerable<User> users)
 		{
 			IList<UserGroup> userGroups = users.OrderBy(user => user.Name, UserNameComparer.Instance)
 				.GroupBy(user => DetermineGroupHeader(user.Name), user => user,
@@ -119,7 +119,7 @@ namespace Hipstr.Client.Views.Users
 			return userGroups;
 		}
 
-		private string DetermineGroupHeader(string name)
+		private static string DetermineGroupHeader(string name)
 		{
 			string nameFirstChar = name[0].ToString();
 

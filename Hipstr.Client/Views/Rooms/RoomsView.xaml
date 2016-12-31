@@ -1,4 +1,5 @@
-﻿<Page x:Class="Hipstr.Client.Views.Rooms.RoomsView"
+﻿<Page Name="RoomsViewPage"
+	x:Class="Hipstr.Client.Views.Rooms.RoomsView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:models="using:Hipstr.Core.Models"
@@ -56,6 +57,27 @@
 						<TextBlock Text="{x:Bind Team.Name}"
 						           Foreground="LightGray"
 						           FontSize="10" />
+						<FlyoutBase.AttachedFlyout>
+							<MenuFlyout>
+								<MenuFlyout.MenuFlyoutPresenterStyle>
+									<Style TargetType="MenuFlyoutPresenter">
+										<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
+									</Style>
+								</MenuFlyout.MenuFlyoutPresenterStyle>
+								<MenuFlyout.Items>
+									<MenuFlyoutItem Text="Mark Favorite"
+													Background="{StaticResource HipChatControl}"
+													Foreground="White"
+													Command="{Binding ViewModel.MarkFavoriteCommand, Mode=OneTime, ElementName=RoomsViewPage}"
+													CommandParameter="{Binding ViewModel.TappedRoom, ElementName=RoomsViewPage}" />
+									<MenuFlyoutItem Text="Unmark Favorite"
+													Background="{StaticResource HipChatControl}"
+													Foreground="White"
+													Command="{Binding ViewModel.UnmarkFavoriteCommand, Mode=OneTime, ElementName=RoomsViewPage}"
+													CommandParameter="{Binding ViewModel.TappedRoom, ElementName=RoomsViewPage}" />
+								</MenuFlyout.Items>
+							</MenuFlyout>
+						</FlyoutBase.AttachedFlyout>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>

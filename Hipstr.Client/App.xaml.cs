@@ -106,31 +106,30 @@ namespace Hipstr.Client
 		/// </summary>
 		/// <param name="sender">The Frame which failed navigation</param>
 		/// <param name="e">Details about the navigation failure</param>
-		private void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
+		private static void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
 		{
 			throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
 		}
 
-		private void OnNavigated(object sender, NavigationEventArgs e)
+		private static void OnNavigated(object sender, NavigationEventArgs e)
 		{
 			// Each time a navigation event occurs, update the Back button's visibility
 			UpdateBackButtonVisibility();
 		}
 
-		private void UpdateBackButtonVisibility()
+		private static void UpdateBackButtonVisibility()
 		{
 			SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = Frame.CanGoBack ?
 				AppViewBackButtonVisibility.Visible :
 				AppViewBackButtonVisibility.Collapsed;
 		}
 
-		private void OnBackRequested(object sender, BackRequestedEventArgs e)
+		private static void OnBackRequested(object sender, BackRequestedEventArgs e)
 		{
-			if (Frame.CanGoBack)
-			{
-				e.Handled = true;
-				Frame.GoBack();
-			}
+			if (!Frame.CanGoBack) return;
+
+			e.Handled = true;
+			Frame.GoBack();
 		}
 
 		/// <summary>
@@ -140,7 +139,7 @@ namespace Hipstr.Client
 		/// </summary>
 		/// <param name="sender">The source of the suspend request.</param>
 		/// <param name="e">Details about the suspend request.</param>
-		private void OnSuspending(object sender, SuspendingEventArgs e)
+		private static void OnSuspending(object sender, SuspendingEventArgs e)
 		{
 			SuspendingDeferral deferral = e.SuspendingOperation.GetDeferral();
 			//TODO: Save application state and stop any background activity

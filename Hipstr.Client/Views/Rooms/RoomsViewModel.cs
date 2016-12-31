@@ -1,9 +1,11 @@
 ﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Services;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,8 +13,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Services;
-using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -25,15 +25,27 @@ namespace Hipstr.Client.Views.Rooms
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshRoomsCommand { get; }
+		public ICommand MarkFavoriteCommand { get; }
+		public ICommand UnmarkFavoriteCommand { get; }
 
 		private bool _loadingRooms;
-
 		public bool LoadingRooms
 		{
 			get { return _loadingRooms; }
 			private set
 			{
 				_loadingRooms = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private Room _tappedRoom;
+		public Room TappedRoom
+		{
+			get { return _tappedRoom; }
+			set
+			{
+				_tappedRoom = value;
 				OnPropertyChanged();
 			}
 		}
@@ -51,8 +63,10 @@ namespace Hipstr.Client.Views.Rooms
 
 			RoomGroups = new ObservableCollection<RoomGroup>();
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
-			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
+			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
+			MarkFavoriteCommand = new RelayCommandAsync<Room>(MarkFavoriteAsync, room => room != null);
+			UnmarkFavoriteCommand = new RelayCommandAsync<Room>(UnmarkFavoriteAsync, room => room != null);
 		}
 
 		// TODO: Commonize Refresh/Cache logic into base class or service
@@ -100,7 +114,7 @@ namespace Hipstr.Client.Views.Rooms
 			return roomGroups;
 		}
 
-		private IEnumerable<RoomGroup> OrderAndGroupRooms(IEnumerable<Room> rooms)
+		private static IEnumerable<RoomGroup> OrderAndGroupRooms(IEnumerable<Room> rooms)
 		{
 			IList<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
 				.GroupBy(room => DetermineGroupHeader(room.Name), room => room,
@@ -119,7 +133,7 @@ namespace Hipstr.Client.Views.Rooms
 			return roomGroups;
 		}
 
-		private string DetermineGroupHeader(string name)
+		private static string DetermineGroupHeader(string name)
 		{
 			string nameFirstChar = name[0].ToString();
 
@@ -133,7 +147,7 @@ namespace Hipstr.Client.Views.Rooms
 			return numRegex.IsMatch(nameFirstChar) ? "#" : "?";
 		}
 
-		private async Task OnJumpToHeaderCommandAsync()
+		private async Task JumpToHeaderAsync()
 		{
 			var dialog = new ListGroupJumpDialog();
 			ModalResult<string> headerText = await dialog.ShowAsync(RoomGroups.Select(rg => new JumpHeader(rg.Header, rg.Rooms.Any())));
@@ -141,6 +155,16 @@ namespace Hipstr.Client.Views.Rooms
 			{
 				RoomGroupScrollToHeaderRequest?.Invoke(this, RoomGroups.Where(rg => rg.Header == headerText.Result).Single());
 			}
+		}
+
+		private async Task MarkFavoriteAsync(Room room)
+		{
+
+		}
+
+		private async Task UnmarkFavoriteAsync(Room room)
+		{
+
 		}
 	}
 }

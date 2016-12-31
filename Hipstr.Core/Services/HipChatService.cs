@@ -86,7 +86,7 @@ namespace Hipstr.Core.Services
 			return rooms;
 		}
 
-		private async Task<HttpResponseMessage> GetPageOfRooms(IHttpClient httpClient, int startIndex)
+		private static async Task<HttpResponseMessage> GetPageOfRooms(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/room?"
 						   + $"start-index={startIndex}&"
@@ -147,7 +147,7 @@ namespace Hipstr.Core.Services
 			return users;
 		}
 
-		private async Task<HttpResponseMessage> GetPageOfUsers(IHttpClient httpClient, int startIndex)
+		private static async Task<HttpResponseMessage> GetPageOfUsers(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/user?"
 						   + $"start-index={startIndex}&"
