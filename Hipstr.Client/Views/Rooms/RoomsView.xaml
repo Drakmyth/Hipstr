@@ -16,8 +16,7 @@
 			<CollectionViewSource x:Name="GroupedRoomsSource"
 			                      Source="{x:Bind ViewModel.RoomGroups}"
 			                      IsSourceGrouped="True"
-			                      ItemsPath="Rooms"
-			                      d:Source="{Binding RoomGroups, Source={d:DesignData Source=/SampleData/RoomsViewModelSampleData.xaml}}" />
+			                      ItemsPath="Rooms"/>
 		</ResourceDictionary>
 	</Page.Resources>
 
