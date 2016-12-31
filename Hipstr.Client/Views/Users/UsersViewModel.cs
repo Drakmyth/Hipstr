@@ -50,7 +50,7 @@ namespace Hipstr.Client.Views.Users
 
 			UserGroups = new ObservableCollection<UserGroup>();
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView>();
-			JumpToHeaderCommand = new RelayCommandAsync(OnJumpToHeaderCommandAsync);
+			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshUsersCommand = new RelayCommandAsync(RefreshUsersAsync, () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
 
@@ -133,7 +133,7 @@ namespace Hipstr.Client.Views.Users
 			return numRegex.IsMatch(nameFirstChar) ? "#" : "?";
 		}
 
-		private async Task OnJumpToHeaderCommandAsync()
+		private async Task JumpToHeaderAsync()
 		{
 			var dialog = new ListGroupJumpDialog();
 			ModalResult<string> headerText = await dialog.ShowAsync(UserGroups.Select(ug => new JumpHeader(ug.Header, ug.Users.Any())));

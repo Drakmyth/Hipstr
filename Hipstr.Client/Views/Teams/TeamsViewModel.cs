@@ -40,12 +40,12 @@ namespace Hipstr.Client.Views.Teams
 			Teams = new ObservableCollection<Team>();
 			mainPageService.Title = "Teams";
 
-			AddTeamCommand = new RelayCommandAsync(OnAddTeamCommandAsync);
-			EditTeamCommand = new RelayCommandAsync<Team>(OnEditTeamCommandAsync, team => team != null);
-			DeleteTeamCommand = new RelayCommandAsync<Team>(OnDeleteTeamCommandAsync, team => team != null);
+			AddTeamCommand = new RelayCommandAsync(AddTeamAsync);
+			EditTeamCommand = new RelayCommandAsync<Team>(EditTeamAsync, team => team != null);
+			DeleteTeamCommand = new RelayCommandAsync<Team>(DeleteTeamAsync, team => team != null);
 		}
 
-		private async Task OnAddTeamCommandAsync()
+		private async Task AddTeamAsync()
 		{
 			var dialog = new AddTeamDialog();
 			ModalResult<Team> team = await dialog.ShowAsync();
@@ -61,7 +61,7 @@ namespace Hipstr.Client.Views.Teams
 			}
 		}
 
-		private async Task OnEditTeamCommandAsync(Team selectedTeam)
+		private async Task EditTeamAsync(Team selectedTeam)
 		{
 			var dialog = new EditTeamDialog();
 			ModalResult<Team> team = await dialog.ShowAsync(selectedTeam);
@@ -75,7 +75,7 @@ namespace Hipstr.Client.Views.Teams
 			}
 		}
 
-		private async Task OnDeleteTeamCommandAsync(Team team)
+		private async Task DeleteTeamAsync(Team team)
 		{
 			await _teamService.RemoveTeamAsync(team);
 			await RefreshTeamListAsync();
