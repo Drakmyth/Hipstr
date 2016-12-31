@@ -29,10 +29,9 @@ namespace Hipstr.Client
 			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<IDataService, DataService>();
 			builder.RegisterType<IToastService, ToastService>();
-			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
-
-			// HttpClient doesn't use an interface, and I don't really want to write a wrapper
+			builder.RegisterType<IFavoritesService, FavoritesService>();
 			builder.RegisterType<IHttpClient, HipstrHttpClient>();
+			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
 
 			// XAML binding breaks when using an interface as the DataContext, so we
 			// need to request implementations rather than interfaces for the view models

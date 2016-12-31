@@ -51,7 +51,7 @@
 			</ListView.GroupStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:Room">
-					<StackPanel>
+					<StackPanel Holding="OnRoomRightTapped">
 						<TextBlock Text="{x:Bind Name}"
 						           Foreground="White" />
 						<TextBlock Text="{x:Bind Team.Name}"

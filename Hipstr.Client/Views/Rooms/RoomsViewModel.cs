@@ -52,11 +52,13 @@ namespace Hipstr.Client.Views.Rooms
 
 		private readonly IHipChatService _hipChatService;
 		private readonly IDataService _dataService;
+		private readonly IFavoritesService _favoritesService;
 
-		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService)
+		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService, IFavoritesService favoritesService)
 		{
 			_hipChatService = hipChatService;
 			_dataService = dataService;
+			_favoritesService = favoritesService;
 
 			LoadingRooms = false;
 			mainPageService.Title = "Rooms";
@@ -65,8 +67,8 @@ namespace Hipstr.Client.Views.Rooms
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
-			MarkFavoriteCommand = new RelayCommandAsync<Room>(MarkFavoriteAsync, room => room != null);
-			UnmarkFavoriteCommand = new RelayCommandAsync<Room>(UnmarkFavoriteAsync, room => room != null);
+			MarkFavoriteCommand = new RelayCommand<Room>(MarkFavoriteAsync, room => room != null);
+			UnmarkFavoriteCommand = new RelayCommand<Room>(UnmarkFavoriteAsync, room => room != null);
 		}
 
 		// TODO: Commonize Refresh/Cache logic into base class or service
@@ -157,14 +159,14 @@ namespace Hipstr.Client.Views.Rooms
 			}
 		}
 
-		private async Task MarkFavoriteAsync(Room room)
+		private void MarkFavoriteAsync(Room room)
 		{
-
+			_favoritesService.MarkFavorite(room);
 		}
 
-		private async Task UnmarkFavoriteAsync(Room room)
+		private void UnmarkFavoriteAsync(Room room)
 		{
-
+			_favoritesService.UnmarkFavorite(room);
 		}
 	}
 }
