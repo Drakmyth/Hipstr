@@ -36,6 +36,11 @@
 						<TextBlock Text="{x:Bind Name}" Foreground="White" />
 						<FlyoutBase.AttachedFlyout>
 							<MenuFlyout>
+								<MenuFlyout.MenuFlyoutPresenterStyle>
+									<Style TargetType="MenuFlyoutPresenter">
+										<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
+									</Style>
+								</MenuFlyout.MenuFlyoutPresenterStyle>
 								<MenuFlyout.Items>
 									<MenuFlyoutItem Text="Edit"
 													Background="{StaticResource HipChatControl}"
