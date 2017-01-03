@@ -1,4 +1,5 @@
 ﻿using Hipstr.Core.Models;
+using Hipstr.Core.Services;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
@@ -18,7 +19,7 @@ namespace Hipstr.Client.Views.Users
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.UserGroupScrollToHeaderRequest += OnUserGroupScrollToHeaderRequest;
-			await ViewModel.LoadUsersAsync();
+			await ViewModel.RefreshUsersAsync(HipChatCacheBehavior.LoadFromCache);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -26,7 +27,7 @@ namespace Hipstr.Client.Views.Users
 			ViewModel.UserGroupScrollToHeaderRequest -= OnUserGroupScrollToHeaderRequest;
 		}
 
-		private void OnUserGroupScrollToHeaderRequest(object sender, UserGroup userGroup)
+		private void OnUserGroupScrollToHeaderRequest(object sender, ObservableGroupedUsersCollection userGroup)
 		{
 			UserList.ScrollIntoView(userGroup, ScrollIntoViewAlignment.Leading);
 		}

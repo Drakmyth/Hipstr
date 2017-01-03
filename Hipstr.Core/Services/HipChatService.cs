@@ -96,30 +96,33 @@ namespace Hipstr.Core.Services
 			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
 
-		public async Task<IReadOnlyList<User>> GetUsersAsync()
+		public async Task<IReadOnlyList<User>> GetUsersForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
 		{
-			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
+			IReadOnlyList<User> users;
 
-			var taskTeamMapping = new Dictionary<Task<IReadOnlyList<User>>, Team>();
-			foreach (Team team in teams)
+			switch (cacheBehavior)
 			{
-				Task<IReadOnlyList<User>> get = GetUsersForTeam(team);
-				taskTeamMapping.Add(get, team);
-			}
-
-			// TODO: Parallel processing of teams
-			await Task.WhenAll(taskTeamMapping.Keys);
-
-			var users = new List<User>();
-			foreach (Task<IReadOnlyList<User>> task in taskTeamMapping.Keys)
-			{
-				users.AddRange(task.Result);
+				case HipChatCacheBehavior.LoadFromCache:
+					users = await _dataService.LoadUsersForTeamAsync(team);
+					break;
+				case HipChatCacheBehavior.RefreshCache:
+					users = await GetUsersAndSaveToCacheAsync(team);
+					break;
+				default:
+					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
 			}
 
 			return users;
 		}
 
-		private async Task<IReadOnlyList<User>> GetUsersForTeam(Team team)
+		private async Task<IReadOnlyList<User>> GetUsersAndSaveToCacheAsync(Team team)
+		{
+			IReadOnlyList<User> users = await GetUsersForTeamFromServerAsync(team);
+			await _dataService.SaveUsersForTeamAsync(users, team);
+			return users;
+		}
+
+		private async Task<IReadOnlyList<User>> GetUsersForTeamFromServerAsync(Team team)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 

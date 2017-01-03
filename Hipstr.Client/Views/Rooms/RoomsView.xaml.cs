@@ -1,5 +1,4 @@
 ﻿using Hipstr.Core.Models;
-using Hipstr.Core.Models.Collections;
 using Hipstr.Core.Services;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -30,7 +29,7 @@ namespace Hipstr.Client.Views.Rooms
 			ViewModel.RoomGroupScrollToHeaderRequest -= OnRoomGroupScrollToHeaderRequest;
 		}
 
-		private void OnRoomGroupScrollToHeaderRequest(object sender, ObservableGroupedCollection<Room> observableGroupedCollection)
+		private void OnRoomGroupScrollToHeaderRequest(object sender, ObservableGroupedRoomsCollection observableGroupedCollection)
 		{
 			RoomList.ScrollIntoView(observableGroupedCollection, ScrollIntoViewAlignment.Leading);
 		}

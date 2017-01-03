@@ -1,26 +1,28 @@
 ﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Services;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Services;
-using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Users
 {
 	[UsedImplicitly]
 	public class UsersViewModel : ViewModelBase
 	{
-		public event EventHandler<UserGroup> UserGroupScrollToHeaderRequest;
+		public event EventHandler<ObservableGroupedUsersCollection> UserGroupScrollToHeaderRequest;
 
-		public ObservableCollection<UserGroup> UserGroups { get; }
+		public ObservableCollection<User> Users { get; }
+		public ObservableCollection<ObservableGroupedUsersCollection> GroupedUsers { get; }
 		public ICommand NavigateToUserProfileViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshUsersCommand { get; }
@@ -38,37 +40,56 @@ namespace Hipstr.Client.Views.Users
 		}
 
 		private readonly IHipChatService _hipChatService;
-		private readonly IDataService _dataService;
+		private readonly ITeamService _teamService;
 
-		public UsersViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService)
+		public UsersViewModel(IHipChatService hipChatService, ITeamService teamService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
-			_dataService = dataService;
+			_teamService = teamService;
 
 			LoadingUsers = false;
 			mainPageService.Title = "Users";
 
-			UserGroups = new ObservableCollection<UserGroup>();
+			Users = new ObservableCollection<User>();
+			GroupedUsers = new ObservableCollection<ObservableGroupedUsersCollection>();
+			Users.CollectionChanged += UsersOnCollectionChanged;
+
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
-			RefreshUsersCommand = new RelayCommandAsync(RefreshUsersAsync, () => !LoadingUsers, this, nameof(LoadingUsers));
+			RefreshUsersCommand = new RelayCommandAsync(() => RefreshUsersAsync(), () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
 
-		// TODO: Commonize Refresh/Cache logic into base class or service
-		// TODO: Commonize GroupBy/OrderBy logic into base class or service
-		public async Task LoadUsersAsync()
+		private void UsersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+		{
+			GroupedUsers.Clear();
+			GroupedUsers.AddRange(OrderAndGroupUsers(Users));
+		}
+
+		public async Task RefreshUsersAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
 		{
 			try
 			{
 				LoadingUsers = true;
-				IEnumerable<UserGroup> userGroups = await _dataService.LoadUserGroupsAsync();
-				if (!userGroups.Any())
+				IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
+				Users.Clear();
+				foreach (Team team in teams)
 				{
-					userGroups = await RebuildUserGroupCache();
+					IEnumerable<User> users = await _hipChatService.GetUsersForTeamAsync(team, cacheBehavior);
+
+					// Because AddRange is an extension method that just calls Add for each element in the input collection,
+					// it will cause the CollectionChanged event to be fired for each element in the input collection. This is
+					// REALLY REALLY slow because we reorder and regroup the list whenever that event gets fired. Until the
+					// built-in ObservableList supports AddRange properly (only throwing the event once), we can either subclass
+					// Observable list and do it ourselves, or just not OrderAndGroup until we add the last element. For now,
+					// we'll do the latter. Note that the former is probably more correct, but subclassing native implementations
+					// is ugh...
+					// TODO: Stop modifying event subscriptions once we have a better way of handling this
+					User lastUser = users.Last();
+					Users.CollectionChanged -= UsersOnCollectionChanged;
+					Users.AddRange(users);
+					Users.CollectionChanged += UsersOnCollectionChanged;
+					Users.Add(lastUser);
 				}
-
-				UserGroups.Clear();
-				UserGroups.AddRange(userGroups);
 			}
 			finally
 			{
@@ -76,35 +97,12 @@ namespace Hipstr.Client.Views.Users
 			}
 		}
 
-		private async Task RefreshUsersAsync()
+		// TODO: Commonize GroupBy/OrderBy logic into base class or service
+		private static IEnumerable<ObservableGroupedUsersCollection> OrderAndGroupUsers(IEnumerable<User> users)
 		{
-			try
-			{
-				UserGroups.Clear();
-				LoadingUsers = true;
-				IEnumerable<UserGroup> userGroups = await RebuildUserGroupCache();
-				UserGroups.AddRange(userGroups);
-			}
-			finally
-			{
-				LoadingUsers = false;
-			}
-		}
-
-		private async Task<IEnumerable<UserGroup>> RebuildUserGroupCache()
-		{
-			IEnumerable<User> users = await _hipChatService.GetUsersAsync();
-			IEnumerable<UserGroup> userGroups = OrderAndGroupUsers(users).ToList();
-			await _dataService.SaveUserGroupsAsync(userGroups);
-
-			return userGroups;
-		}
-
-		private static IEnumerable<UserGroup> OrderAndGroupUsers(IEnumerable<User> users)
-		{
-			IList<UserGroup> userGroups = users.OrderBy(user => user.Name, UserNameComparer.Instance)
+			IList<ObservableGroupedUsersCollection> userGroups = users.OrderBy(user => user.Name, UserNameComparer.Instance)
 				.GroupBy(user => DetermineGroupHeader(user.Name), user => user,
-					(group, groupedUsers) => new UserGroup(group, groupedUsers)).ToList();
+					(group, groupedUsers) => new ObservableGroupedUsersCollection(group, groupedUsers)).ToList();
 
 			char[] groupNames = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ?".ToCharArray();
 			for (var i = 0; i < groupNames.Length; i++)
@@ -112,7 +110,7 @@ namespace Hipstr.Client.Views.Users
 				string groupName = groupNames[i].ToString();
 				if (!userGroups.Any(rg => rg.Header.Equals(groupName)))
 				{
-					userGroups.Insert(i, new UserGroup(groupName));
+					userGroups.Insert(i, new ObservableGroupedUsersCollection(groupName));
 				}
 			}
 
@@ -136,10 +134,10 @@ namespace Hipstr.Client.Views.Users
 		private async Task JumpToHeaderAsync()
 		{
 			var dialog = new ListGroupJumpDialog();
-			ModalResult<string> headerText = await dialog.ShowAsync(UserGroups.Select(ug => new JumpHeader(ug.Header, ug.Users.Any())));
+			ModalResult<string> headerText = await dialog.ShowAsync(GroupedUsers.Select(ug => new JumpHeader(ug.Header, ug.Any())));
 			if (!headerText.Cancelled)
 			{
-				UserGroupScrollToHeaderRequest?.Invoke(this, UserGroups.Where(ug => ug.Header == headerText.Result).Single());
+				UserGroupScrollToHeaderRequest?.Invoke(this, GroupedUsers.Where(ug => ug.Header == headerText.Result).Single());
 			}
 		}
 	}

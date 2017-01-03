@@ -3,7 +3,6 @@ using Hipstr.Client.Services;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
-using Hipstr.Core.Models.Collections;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
@@ -21,10 +20,10 @@ namespace Hipstr.Client.Views.Rooms
 	[UsedImplicitly]
 	public class RoomsViewModel : ViewModelBase
 	{
-		public event EventHandler<ObservableGroupedCollection<Room>> RoomGroupScrollToHeaderRequest;
+		public event EventHandler<ObservableGroupedRoomsCollection> RoomGroupScrollToHeaderRequest;
 
 		public ObservableCollection<Room> Rooms { get; }
-		public ObservableCollection<ObservableGroupedCollection<Room>> GroupedRooms { get; }
+		public ObservableCollection<ObservableGroupedRoomsCollection> GroupedRooms { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshRoomsCommand { get; }
@@ -69,7 +68,7 @@ namespace Hipstr.Client.Views.Rooms
 			mainPageService.Title = "Rooms";
 
 			Rooms = new ObservableCollection<Room>();
-			GroupedRooms = new ObservableCollection<ObservableGroupedCollection<Room>>();
+			GroupedRooms = new ObservableCollection<ObservableGroupedRoomsCollection>();
 
 			Rooms.CollectionChanged += RoomsOnCollectionChanged;
 
@@ -96,7 +95,20 @@ namespace Hipstr.Client.Views.Rooms
 				foreach (Team team in teams)
 				{
 					IEnumerable<Room> rooms = await _hipChatService.GetRoomsForTeamAsync(team, cacheBehavior);
+
+					// Because AddRange is an extension method that just calls Add for each element in the input collection,
+					// it will cause the CollectionChanged event to be fired for each element in the input collection. This is
+					// REALLY REALLY slow because we reorder and regroup the list whenever that event gets fired. Until the
+					// built-in ObservableList supports AddRange properly (only throwing the event once), we can either subclass
+					// Observable list and do it ourselves, or just not OrderAndGroup until we add the last element. For now,
+					// we'll do the latter. Note that the former is probably more correct, but subclassing native implementations
+					// is ugh...
+					// TODO: Stop modifying event subscriptions once we have a better way of handling this
+					Room lastRoom = rooms.Last();
+					Rooms.CollectionChanged -= RoomsOnCollectionChanged;
 					Rooms.AddRange(rooms);
+					Rooms.CollectionChanged += RoomsOnCollectionChanged;
+					Rooms.Add(lastRoom);
 				}
 			}
 			finally
@@ -106,11 +118,11 @@ namespace Hipstr.Client.Views.Rooms
 		}
 
 		// TODO: Commonize GroupBy/OrderBy logic into base class or service
-		private static IEnumerable<ObservableGroupedCollection<Room>> OrderAndGroupRooms(IEnumerable<Room> rooms)
+		private static IEnumerable<ObservableGroupedRoomsCollection> OrderAndGroupRooms(IEnumerable<Room> rooms)
 		{
-			IList<ObservableGroupedCollection<Room>> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
+			IList<ObservableGroupedRoomsCollection> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
 				.GroupBy(room => DetermineGroupHeader(room.Name), room => room,
-					(group, groupedRooms) => new ObservableGroupedCollection<Room>(group, groupedRooms)).ToList();
+					(group, groupedRooms) => new ObservableGroupedRoomsCollection(group, groupedRooms)).ToList();
 
 			char[] groupNames = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ?".ToCharArray();
 			for (var i = 0; i < groupNames.Length; i++)
@@ -118,7 +130,7 @@ namespace Hipstr.Client.Views.Rooms
 				string groupName = groupNames[i].ToString();
 				if (!roomGroups.Any(rg => rg.Header.Equals(groupName)))
 				{
-					roomGroups.Insert(i, new ObservableGroupedCollection<Room>(groupName));
+					roomGroups.Insert(i, new ObservableGroupedRoomsCollection(groupName));
 				}
 			}
 
