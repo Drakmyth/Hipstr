@@ -11,18 +11,14 @@ namespace Hipstr.Core.Services
 	[UsedImplicitly]
 	public class DataService : IDataService
 	{
-		private const string TeamsFileName = "teams.json";
-		private const string RoomGroupsFileName = "roomGroups.json";
-		private const string UserGroupsFileName = "userGroups.json";
-
 		public async Task SaveTeamsAsync(IEnumerable<Team> teams)
 		{
-			await SaveDataAsync(TeamsFileName, teams);
+			await SaveDataAsync("teams.json", teams);
 		}
 
 		public async Task<IReadOnlyList<Team>> LoadTeamsAsync()
 		{
-			return await LoadDataAsync<Team>(TeamsFileName);
+			return await LoadDataAsync<Team>("teams.json");
 		}
 
 		public async Task SaveRoomsForTeamAsync(IEnumerable<Room> rooms, Team team)
