@@ -1,5 +1,4 @@
-﻿using Hipstr.Core.Models;
-using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -10,8 +9,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Animation;
+using Hipstr.Client.Views;
+using Hipstr.Core.Models;
 
-namespace Hipstr.Client.Views.Teams
+namespace Hipstr.Client.Dialogs
 {
 	public sealed partial class EditTeamDialog : UserControl
 	{

@@ -125,10 +125,10 @@
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Rooms\RoomsViewModel.cs" />
-    <Compile Include="Views\Teams\EditTeamDialog.xaml.cs">
+    <Compile Include="Dialogs\EditTeamDialog.xaml.cs">
       <DependentUpon>EditTeamDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Teams\AddTeamDialog.xaml.cs">
+    <Compile Include="Dialogs\AddTeamDialog.xaml.cs">
       <DependentUpon>AddTeamDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Users\UserProfileView.xaml.cs">
@@ -185,11 +185,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Teams\EditTeamDialog.xaml">
+    <Page Include="Dialogs\EditTeamDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Teams\AddTeamDialog.xaml">
+    <Page Include="Dialogs\AddTeamDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -47,7 +47,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task AddTeamAsync()
 		{
-			var dialog = new AddTeamDialog();
+			var dialog = new Dialogs.AddTeamDialog();
 			ModalResult<Team> team = await dialog.ShowAsync();
 			if (!team.Cancelled)
 			{
@@ -63,7 +63,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task EditTeamAsync(Team selectedTeam)
 		{
-			var dialog = new EditTeamDialog();
+			var dialog = new Dialogs.EditTeamDialog();
 			ModalResult<Team> team = await dialog.ShowAsync(selectedTeam);
 			if (!team.Cancelled)
 			{
