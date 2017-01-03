@@ -108,7 +108,7 @@
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
     <Compile Include="Views\JumpHeader.cs" />
-    <Compile Include="Views\ListGroupJumpDialog.xaml.cs">
+    <Compile Include="Dialogs\ListGroupJumpDialog.xaml.cs">
       <DependentUpon>ListGroupJumpDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
@@ -169,7 +169,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ListGroupJumpDialog.xaml">
+    <Page Include="Dialogs\ListGroupJumpDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

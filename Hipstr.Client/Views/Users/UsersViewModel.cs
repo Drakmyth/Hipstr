@@ -133,7 +133,7 @@ namespace Hipstr.Client.Views.Users
 
 		private async Task JumpToHeaderAsync()
 		{
-			var dialog = new ListGroupJumpDialog();
+			var dialog = new Dialogs.ListGroupJumpDialog();
 			ModalResult<string> headerText = await dialog.ShowAsync(GroupedUsers.Select(ug => new JumpHeader(ug.Header, ug.Any())));
 			if (!headerText.Cancelled)
 			{

@@ -153,7 +153,7 @@ namespace Hipstr.Client.Views.Rooms
 
 		private async Task JumpToHeaderAsync()
 		{
-			var dialog = new ListGroupJumpDialog();
+			var dialog = new Dialogs.ListGroupJumpDialog();
 			ModalResult<string> headerText = await dialog.ShowAsync(GroupedRooms.Select(rg => new JumpHeader(rg.Header, rg.Any())));
 			if (!headerText.Cancelled)
 			{

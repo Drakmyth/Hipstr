@@ -1,5 +1,4 @@
-﻿using Hipstr.Core.Utility.Extensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -13,8 +12,10 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
+using Hipstr.Client.Views;
+using Hipstr.Core.Utility.Extensions;
 
-namespace Hipstr.Client.Views
+namespace Hipstr.Client.Dialogs
 {
 	public sealed partial class ListGroupJumpDialog : UserControl
 	{
