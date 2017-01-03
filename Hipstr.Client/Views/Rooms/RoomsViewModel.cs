@@ -22,7 +22,7 @@ namespace Hipstr.Client.Views.Rooms
 	{
 		public event EventHandler<ObservableGroupedRoomsCollection> RoomGroupScrollToHeaderRequest;
 
-		public ObservableCollection<Room> Rooms { get; }
+		private readonly ObservableCollection<Room> _rooms;
 		public ObservableCollection<ObservableGroupedRoomsCollection> GroupedRooms { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
@@ -67,10 +67,10 @@ namespace Hipstr.Client.Views.Rooms
 			LoadingRooms = false;
 			mainPageService.Title = "Rooms";
 
-			Rooms = new ObservableCollection<Room>();
+			_rooms = new ObservableCollection<Room>();
 			GroupedRooms = new ObservableCollection<ObservableGroupedRoomsCollection>();
 
-			Rooms.CollectionChanged += RoomsOnCollectionChanged;
+			_rooms.CollectionChanged += RoomsOnCollectionChanged;
 
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
@@ -82,7 +82,7 @@ namespace Hipstr.Client.Views.Rooms
 		private void RoomsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
 		{
 			GroupedRooms.Clear();
-			GroupedRooms.AddRange(OrderAndGroupRooms(Rooms));
+			GroupedRooms.AddRange(OrderAndGroupRooms(_rooms));
 		}
 
 		public async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
@@ -91,7 +91,7 @@ namespace Hipstr.Client.Views.Rooms
 			{
 				LoadingRooms = true;
 				IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
-				Rooms.Clear();
+				_rooms.Clear();
 				foreach (Team team in teams)
 				{
 					IEnumerable<Room> rooms = await _hipChatService.GetRoomsForTeamAsync(team, cacheBehavior);
@@ -105,10 +105,10 @@ namespace Hipstr.Client.Views.Rooms
 					// is ugh...
 					// TODO: Stop modifying event subscriptions once we have a better way of handling this
 					Room lastRoom = rooms.Last();
-					Rooms.CollectionChanged -= RoomsOnCollectionChanged;
-					Rooms.AddRange(rooms);
-					Rooms.CollectionChanged += RoomsOnCollectionChanged;
-					Rooms.Add(lastRoom);
+					_rooms.CollectionChanged -= RoomsOnCollectionChanged;
+					_rooms.AddRange(rooms);
+					_rooms.CollectionChanged += RoomsOnCollectionChanged;
+					_rooms.Add(lastRoom);
 				}
 			}
 			finally

@@ -21,7 +21,7 @@ namespace Hipstr.Client.Views.Users
 	{
 		public event EventHandler<ObservableGroupedUsersCollection> UserGroupScrollToHeaderRequest;
 
-		public ObservableCollection<User> Users { get; }
+		private readonly ObservableCollection<User> _users;
 		public ObservableCollection<ObservableGroupedUsersCollection> GroupedUsers { get; }
 		public ICommand NavigateToUserProfileViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
@@ -50,9 +50,9 @@ namespace Hipstr.Client.Views.Users
 			LoadingUsers = false;
 			mainPageService.Title = "Users";
 
-			Users = new ObservableCollection<User>();
+			_users = new ObservableCollection<User>();
 			GroupedUsers = new ObservableCollection<ObservableGroupedUsersCollection>();
-			Users.CollectionChanged += UsersOnCollectionChanged;
+			_users.CollectionChanged += UsersOnCollectionChanged;
 
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
@@ -62,7 +62,7 @@ namespace Hipstr.Client.Views.Users
 		private void UsersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
 		{
 			GroupedUsers.Clear();
-			GroupedUsers.AddRange(OrderAndGroupUsers(Users));
+			GroupedUsers.AddRange(OrderAndGroupUsers(_users));
 		}
 
 		public async Task RefreshUsersAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
@@ -71,7 +71,7 @@ namespace Hipstr.Client.Views.Users
 			{
 				LoadingUsers = true;
 				IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
-				Users.Clear();
+				_users.Clear();
 				foreach (Team team in teams)
 				{
 					IEnumerable<User> users = await _hipChatService.GetUsersForTeamAsync(team, cacheBehavior);
@@ -85,10 +85,10 @@ namespace Hipstr.Client.Views.Users
 					// is ugh...
 					// TODO: Stop modifying event subscriptions once we have a better way of handling this
 					User lastUser = users.Last();
-					Users.CollectionChanged -= UsersOnCollectionChanged;
-					Users.AddRange(users);
-					Users.CollectionChanged += UsersOnCollectionChanged;
-					Users.Add(lastUser);
+					_users.CollectionChanged -= UsersOnCollectionChanged;
+					_users.AddRange(users);
+					_users.CollectionChanged += UsersOnCollectionChanged;
+					_users.Add(lastUser);
 				}
 			}
 			finally
