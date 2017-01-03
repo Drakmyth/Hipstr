@@ -39,21 +39,27 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
 		{
-			IReadOnlyList<Room> rooms;
-
 			switch (cacheBehavior)
 			{
 				case HipChatCacheBehavior.LoadFromCache:
-					rooms = await _dataService.LoadRoomsForTeamAsync(team);
-					break;
+					IReadOnlyList<Room> rooms = await _dataService.LoadRoomsForTeamAsync(team);
+					if (!rooms.Any())
+					{
+						// room collection data wasn't cached, so we'll fetch it
+						return await GetRoomsAndSaveToCacheAsync(team);
+					}
+					return rooms;
 				case HipChatCacheBehavior.RefreshCache:
-					rooms = await GetRoomsForTeamFromServerAsync(team);
-					await _dataService.SaveRoomsForTeamAsync(rooms, team);
-					break;
+					return await GetRoomsAndSaveToCacheAsync(team);
 				default:
 					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
 			}
+		}
 
+		private async Task<IReadOnlyList<Room>> GetRoomsAndSaveToCacheAsync(Team team)
+		{
+			IReadOnlyList<Room> rooms = await GetRoomsForTeamFromServerAsync(team);
+			await _dataService.SaveRoomsForTeamAsync(rooms, team);
 			return rooms;
 		}
 
@@ -98,21 +104,21 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<User>> GetUsersForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
 		{
-			IReadOnlyList<User> users;
-
 			switch (cacheBehavior)
 			{
 				case HipChatCacheBehavior.LoadFromCache:
-					users = await _dataService.LoadUsersForTeamAsync(team);
-					break;
+					IReadOnlyList<User> users = await _dataService.LoadUsersForTeamAsync(team);
+					if (!users.Any())
+					{
+						// user collection data wasn't cached, so we'll fetch it
+						return await GetUsersAndSaveToCacheAsync(team);
+					}
+					return users;
 				case HipChatCacheBehavior.RefreshCache:
-					users = await GetUsersAndSaveToCacheAsync(team);
-					break;
+					return await GetUsersAndSaveToCacheAsync(team);
 				default:
 					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
 			}
-
-			return users;
 		}
 
 		private async Task<IReadOnlyList<User>> GetUsersAndSaveToCacheAsync(Team team)
@@ -184,7 +190,21 @@ namespace Hipstr.Core.Services
 			}).ToList();
 		}
 
-		public async Task<UserProfile> GetUserProfileAsync(User user)
+		public async Task<UserProfile> GetUserProfileAsync(User user, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
+		{
+			switch (cacheBehavior)
+			{
+				case HipChatCacheBehavior.LoadFromCache:
+					// TODO: Do we want to support caching of user profiles?
+					return await GetUserProfileFromServerAsync(user);
+				case HipChatCacheBehavior.RefreshCache:
+					return await GetUserProfileFromServerAsync(user);
+				default:
+					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+			}
+		}
+
+		private async Task<UserProfile> GetUserProfileFromServerAsync(User user)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
 
