@@ -24,36 +24,37 @@
 		</Grid.RowDefinitions>
 
 		<RelativePanel Background="{StaticResource HipChatBackground}"
-		               Grid.Row="0">
+					   Grid.Row="0">
 			<TextBlock Name="PageTitle"
-			           Margin="10 10 10 5"
-			           FontSize="32"
-			           Foreground="White">
+					   Margin="10 10 10 5"
+					   FontSize="32"
+					   Foreground="White">
 				Edit Team
 			</TextBlock>
 			<TextBox Name="TeamNameTextBox"
-			         Header="Team Name"
-			         Margin="10 5"
-			         RelativePanel.Below="PageTitle"
-			         RelativePanel.AlignLeftWithPanel="True"
-			         RelativePanel.AlignRightWithPanel="True"
-			         HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-			         Text="{x:Bind _teamName, Mode=TwoWay}" />
+					 Header="Team Name"
+					 Margin="10 5"
+					 RelativePanel.Below="PageTitle"
+					 RelativePanel.AlignLeftWithPanel="True"
+					 RelativePanel.AlignRightWithPanel="True"
+					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
+					 Text="{x:Bind _teamName, Mode=TwoWay}" />
 			<TextBox Header="API Key"
-			         Margin="10 5"
-			         RelativePanel.Below="TeamNameTextBox"
-			         RelativePanel.AlignLeftWithPanel="True"
-			         RelativePanel.AlignRightWithPanel="True"
-			         HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-			         Text="{x:Bind _apiKey, Mode=TwoWay}" />
+					 Margin="10 5"
+					 RelativePanel.Below="TeamNameTextBox"
+					 RelativePanel.AlignLeftWithPanel="True"
+					 RelativePanel.AlignRightWithPanel="True"
+					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
+					 Text="{x:Bind _apiKey, Mode=OneWay}"
+					 IsEnabled="False" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
-		            Background="{StaticResource HipChatControl}"
-		            Foreground="White">
+					Background="{StaticResource HipChatControl}"
+					Foreground="White">
 			<AppBarButton x:Name="CancelDialogButton" Icon="Cancel" Label="Cancel" Foreground="White"
-			              Click="CancelDialogButton_OnClick" />
+						  Click="CancelDialogButton_OnClick" />
 			<AppBarButton x:Name="AcceptDialogButton" Icon="Accept" Label="Accept" Foreground="White"
-			              Click="AcceptDialogButton_OnClick" />
+						  Click="AcceptDialogButton_OnClick" />
 		</CommandBar>
 	</Grid>
 </UserControl>

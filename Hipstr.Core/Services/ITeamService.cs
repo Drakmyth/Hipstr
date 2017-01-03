@@ -7,7 +7,7 @@ namespace Hipstr.Core.Services
 	public interface ITeamService
 	{
 		Task AddTeamAsync(Team team);
-		Task EditTeamAsync(string oldApiKey, Team team);
+		Task EditTeamAsync(Team team);
 		Task RemoveTeamAsync(Team team);
 		Task<IEnumerable<Team>> GetTeamsAsync();
 	}

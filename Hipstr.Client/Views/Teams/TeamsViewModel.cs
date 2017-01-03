@@ -1,13 +1,13 @@
 ﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Services;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using JetBrains.Annotations;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Services;
-using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Teams
 {
@@ -68,9 +68,9 @@ namespace Hipstr.Client.Views.Teams
 			if (!team.Cancelled)
 			{
 				string teamName = team.Result.Name;
-				string apiKey = team.Result.ApiKey;
+				string apiKey = selectedTeam.ApiKey;
 
-				await _teamService.EditTeamAsync(selectedTeam.ApiKey, new Team(teamName, apiKey));
+				await _teamService.EditTeamAsync(new Team(teamName, apiKey));
 				await RefreshTeamListAsync();
 			}
 		}
