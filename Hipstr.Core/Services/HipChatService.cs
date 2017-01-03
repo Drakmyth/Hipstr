@@ -35,30 +35,7 @@ namespace Hipstr.Core.Services
 			_httpClient = httpClient;
 		}
 
-		public async Task<IEnumerable<Room>> GetRoomsAsync()
-		{
-			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
-
-			var taskTeamMapping = new Dictionary<Task<IEnumerable<Room>>, Team>();
-			foreach (Team team in teams)
-			{
-				Task<IEnumerable<Room>> get = GetRoomsForTeam(team);
-				taskTeamMapping.Add(get, team);
-			}
-
-			// TODO: Parallel processing of teams
-			await Task.WhenAll(taskTeamMapping.Keys);
-
-			var rooms = new List<Room>();
-			foreach (Task<IEnumerable<Room>> task in taskTeamMapping.Keys)
-			{
-				rooms.AddRange(task.Result);
-			}
-
-			return rooms;
-		}
-
-		private async Task<IEnumerable<Room>> GetRoomsForTeam(Team team)
+		public async Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 
@@ -97,14 +74,14 @@ namespace Hipstr.Core.Services
 			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
 
-		public async Task<IEnumerable<User>> GetUsersAsync()
+		public async Task<IReadOnlyList<User>> GetUsersAsync()
 		{
 			IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
 
-			var taskTeamMapping = new Dictionary<Task<IEnumerable<User>>, Team>();
+			var taskTeamMapping = new Dictionary<Task<IReadOnlyList<User>>, Team>();
 			foreach (Team team in teams)
 			{
-				Task<IEnumerable<User>> get = GetUsersForTeam(team);
+				Task<IReadOnlyList<User>> get = GetUsersForTeam(team);
 				taskTeamMapping.Add(get, team);
 			}
 
@@ -112,7 +89,7 @@ namespace Hipstr.Core.Services
 			await Task.WhenAll(taskTeamMapping.Keys);
 
 			var users = new List<User>();
-			foreach (Task<IEnumerable<User>> task in taskTeamMapping.Keys)
+			foreach (Task<IReadOnlyList<User>> task in taskTeamMapping.Keys)
 			{
 				users.AddRange(task.Result);
 			}
@@ -120,7 +97,7 @@ namespace Hipstr.Core.Services
 			return users;
 		}
 
-		private async Task<IEnumerable<User>> GetUsersForTeam(Team team)
+		private async Task<IReadOnlyList<User>> GetUsersForTeam(Team team)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 
@@ -158,7 +135,7 @@ namespace Hipstr.Core.Services
 			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
 
-		public async Task<IEnumerable<Message>> GetMessagesAsync(Room room)
+		public async Task<IReadOnlyList<Message>> GetMessagesAsync(Room room)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
 			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/room/{room.Id}/history"));

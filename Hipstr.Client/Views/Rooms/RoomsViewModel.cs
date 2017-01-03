@@ -29,6 +29,7 @@ namespace Hipstr.Client.Views.Rooms
 		public ICommand UnmarkFavoriteCommand { get; }
 
 		private bool _loadingRooms;
+
 		public bool LoadingRooms
 		{
 			get { return _loadingRooms; }
@@ -40,6 +41,7 @@ namespace Hipstr.Client.Views.Rooms
 		}
 
 		private Room _tappedRoom;
+
 		public Room TappedRoom
 		{
 			get { return _tappedRoom; }
@@ -78,12 +80,17 @@ namespace Hipstr.Client.Views.Rooms
 			try
 			{
 				LoadingRooms = true;
-				IEnumerable<RoomGroup> roomGroups = await _dataService.LoadRoomGroupsAsync();
-				if (!roomGroups.Any())
-				{
-					roomGroups = await RebuildRoomGroupCache();
-				}
+				IEnumerable<Team> teams = await _dataService.LoadTeamsAsync();
 				RoomGroups.Clear();
+				foreach (Team team in teams)
+				{
+					IEnumerable<Room> rooms = await _dataService.LoadRoomsForTeamAsync(team);
+					if (!rooms.Any())
+					{
+						rooms = await RebuildRoomCache(team);
+					}
+				}
+
 				RoomGroups.AddRange(roomGroups);
 			}
 			finally
@@ -107,11 +114,12 @@ namespace Hipstr.Client.Views.Rooms
 			}
 		}
 
-		private async Task<IEnumerable<RoomGroup>> RebuildRoomGroupCache()
+		private async Task<IEnumerable<RoomGroup>> RebuildRoomCache(Team team)
 		{
-			IEnumerable<Room> rooms = await _hipChatService.GetRoomsAsync();
-			IEnumerable<RoomGroup> roomGroups = OrderAndGroupRooms(rooms).ToList();
-			await _dataService.SaveRoomGroupsAsync(roomGroups);
+			IReadOnlyList<Room> rooms = await _hipChatService.GetRoomsForTeamAsync(team);
+
+			await _dataService.SaveRoomsForTeamAsync(rooms, team);
+			IEnumerable<RoomGroup> roomGroups = OrderAndGroupRooms(rooms);
 
 			return roomGroups;
 		}

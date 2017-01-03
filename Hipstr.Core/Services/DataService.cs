@@ -1,10 +1,10 @@
 ﻿using Hipstr.Core.Models;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Windows.Storage;
-using JetBrains.Annotations;
 
 namespace Hipstr.Core.Services
 {
@@ -15,48 +15,46 @@ namespace Hipstr.Core.Services
 		private const string RoomGroupsFileName = "roomGroups.json";
 		private const string UserGroupsFileName = "userGroups.json";
 
-		public async Task<IList<Team>> LoadTeamsAsync()
-		{
-			return await LoadDataAsync<Team>(TeamsFileName);
-		}
-
-		public async Task<IList<RoomGroup>> LoadRoomGroupsAsync()
-		{
-			try
-			{
-				return await LoadDataAsync<RoomGroup>(RoomGroupsFileName);
-			}
-			catch (JsonSerializationException)
-			{
-				return new List<RoomGroup>();
-			}
-		}
-
-		public async Task<IList<UserGroup>> LoadUserGroupsAsync()
-		{
-			return await LoadDataAsync<UserGroup>(UserGroupsFileName);
-		}
-
 		public async Task SaveTeamsAsync(IEnumerable<Team> teams)
 		{
 			await SaveDataAsync(TeamsFileName, teams);
 		}
 
-		public async Task SaveRoomGroupsAsync(IEnumerable<RoomGroup> roomGroups)
+		public async Task<IReadOnlyList<Team>> LoadTeamsAsync()
 		{
-			await SaveDataAsync(RoomGroupsFileName, roomGroups);
+			return await LoadDataAsync<Team>(TeamsFileName);
 		}
 
-		public async Task SaveUserGroupsAsync(IEnumerable<UserGroup> userGroups)
+		public async Task SaveRoomsForTeamAsync(IEnumerable<Room> rooms, Team team)
 		{
-			await SaveDataAsync(UserGroupsFileName, userGroups);
+			await SaveDataAsync($"Rooms-{team.ApiKey}.json", rooms);
 		}
 
-		private static async Task<IList<T>> LoadDataAsync<T>(string filename)
+		public async Task<IReadOnlyList<Room>> LoadRoomsForTeamAsync(Team team)
 		{
-			StorageFile file = await GetStorageFileAsync(filename);
-			string json = await FileIO.ReadTextAsync(file);
-			return string.IsNullOrEmpty(json) ? new List<T>() : JsonConvert.DeserializeObject<IList<T>>(json);
+			IReadOnlyList<Room> rooms = await LoadDataAsync<Room>($"Rooms-{team.ApiKey}.json");
+			foreach (Room room in rooms)
+			{
+				room.Team = team;
+			}
+
+			return rooms;
+		}
+
+		public async Task SaveUsersForTeamAsync(IEnumerable<User> users, Team team)
+		{
+			await SaveDataAsync($"Users-{team.ApiKey}.json", users);
+		}
+
+		public async Task<IReadOnlyList<User>> LoadUsersForTeamAsync(Team team)
+		{
+			IReadOnlyList<User> users = await LoadDataAsync<User>($"Users-{team.ApiKey}.json");
+			foreach (User user in users)
+			{
+				user.Team = team;
+			}
+
+			return users;
 		}
 
 		private static async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)
@@ -64,6 +62,13 @@ namespace Hipstr.Core.Services
 			StorageFile file = await GetStorageFileAsync(filename);
 			string json = JsonConvert.SerializeObject(data);
 			await FileIO.WriteTextAsync(file, json);
+		}
+
+		private static async Task<IReadOnlyList<T>> LoadDataAsync<T>(string filename)
+		{
+			StorageFile file = await GetStorageFileAsync(filename);
+			string json = await FileIO.ReadTextAsync(file);
+			return string.IsNullOrEmpty(json) ? new List<T>().AsReadOnly() : JsonConvert.DeserializeObject<IReadOnlyList<T>>(json);
 		}
 
 		private static async Task<StorageFile> GetStorageFileAsync(string filename)

@@ -6,9 +6,9 @@ namespace Hipstr.Core.Services
 {
 	public interface IHipChatService
 	{
-		Task<IEnumerable<Room>> GetRoomsAsync();
-		Task<IEnumerable<User>> GetUsersAsync();
-		Task<IEnumerable<Message>> GetMessagesAsync(Room room);
+		Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team);
+		Task<IReadOnlyList<User>> GetUsersAsync();
+		Task<IReadOnlyList<Message>> GetMessagesAsync(Room room);
 		Task<UserProfile> GetUserProfileAsync(User user);
 	}
 }

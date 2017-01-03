@@ -6,11 +6,11 @@ namespace Hipstr.Core.Services
 {
 	public interface IDataService
 	{
-		Task<IList<Team>> LoadTeamsAsync();
-		Task<IList<RoomGroup>> LoadRoomGroupsAsync();
-		Task<IList<UserGroup>> LoadUserGroupsAsync();
 		Task SaveTeamsAsync(IEnumerable<Team> teams);
-		Task SaveRoomGroupsAsync(IEnumerable<RoomGroup> roomGroups);
-		Task SaveUserGroupsAsync(IEnumerable<UserGroup> userGroups);
+		Task<IReadOnlyList<Team>> LoadTeamsAsync();
+		Task SaveRoomsForTeamAsync(IEnumerable<Room> rooms, Team team);
+		Task<IReadOnlyList<Room>> LoadRoomsForTeamAsync(Team team);
+		Task SaveUsersForTeamAsync(IEnumerable<User> users, Team team);
+		Task<IReadOnlyList<User>> LoadUsersForTeamAsync(Team team);
 	}
 }
