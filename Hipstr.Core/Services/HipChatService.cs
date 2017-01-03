@@ -26,13 +26,11 @@ namespace Hipstr.Core.Services
 
 		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
-		private readonly ITeamService _teamService;
 		private readonly IDataService _dataService;
 		private readonly IHttpClient _httpClient;
 
-		public HipChatService(ITeamService teamService, IDataService dataService, IHttpClient httpClient)
+		public HipChatService(IDataService dataService, IHttpClient httpClient)
 		{
-			_teamService = teamService;
 			_dataService = dataService;
 			_httpClient = httpClient;
 		}

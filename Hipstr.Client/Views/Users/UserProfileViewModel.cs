@@ -68,7 +68,6 @@ namespace Hipstr.Client.Views.Users
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
-		// TODO: caching
 		public UserProfileViewModel(IHipChatService hipChatService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
