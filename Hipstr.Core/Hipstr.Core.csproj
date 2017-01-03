@@ -109,6 +109,8 @@
   <ItemGroup>
     <Compile Include="Comparers\UserNameComparer.cs" />
     <Compile Include="Comparers\RoomNameComparer.cs" />
+    <Compile Include="Models\Collections\ObservableGroupedRoomsCollection.cs" />
+    <Compile Include="Models\Collections\ObservableGroupedUsersCollection.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Models\HipChat\HipChatClient.cs" />
     <Compile Include="Models\HipChat\HipChatPresence.cs" />
@@ -122,12 +124,13 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Room.cs" />
     <Compile Include="Models\UserGroup.cs" />
-    <Compile Include="Models\RoomGroup.cs" />
+    <Compile Include="Models\Collections\ObservableGroupedCollection.cs" />
     <Compile Include="Models\Team.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\FavoritesService.cs" />
+    <Compile Include="Services\HipChatCacheBehavior.cs" />
     <Compile Include="Services\HipChatService.cs" />
     <Compile Include="Services\HipstrHttpClient.cs" />
     <Compile Include="Services\IDataService.cs" />

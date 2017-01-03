@@ -27,15 +27,37 @@ namespace Hipstr.Core.Services
 		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
 		private readonly ITeamService _teamService;
+		private readonly IDataService _dataService;
 		private readonly IHttpClient _httpClient;
 
-		public HipChatService(ITeamService teamService, IHttpClient httpClient)
+		public HipChatService(ITeamService teamService, IDataService dataService, IHttpClient httpClient)
 		{
 			_teamService = teamService;
+			_dataService = dataService;
 			_httpClient = httpClient;
 		}
 
-		public async Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team)
+		public async Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
+		{
+			IReadOnlyList<Room> rooms;
+
+			switch (cacheBehavior)
+			{
+				case HipChatCacheBehavior.LoadFromCache:
+					rooms = await _dataService.LoadRoomsForTeamAsync(team);
+					break;
+				case HipChatCacheBehavior.RefreshCache:
+					rooms = await GetRoomsForTeamFromServerAsync(team);
+					await _dataService.SaveRoomsForTeamAsync(rooms, team);
+					break;
+				default:
+					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+			}
+
+			return rooms;
+		}
+
+		private async Task<IReadOnlyList<Room>> GetRoomsForTeamFromServerAsync(Team team)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 

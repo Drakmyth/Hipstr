@@ -3,12 +3,14 @@ using Hipstr.Client.Services;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
+using Hipstr.Core.Models.Collections;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -19,9 +21,10 @@ namespace Hipstr.Client.Views.Rooms
 	[UsedImplicitly]
 	public class RoomsViewModel : ViewModelBase
 	{
-		public event EventHandler<RoomGroup> RoomGroupScrollToHeaderRequest;
+		public event EventHandler<ObservableGroupedCollection<Room>> RoomGroupScrollToHeaderRequest;
 
-		public ObservableCollection<RoomGroup> RoomGroups { get; }
+		public ObservableCollection<Room> Rooms { get; }
+		public ObservableCollection<ObservableGroupedCollection<Room>> GroupedRooms { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshRoomsCommand { get; }
@@ -53,45 +56,48 @@ namespace Hipstr.Client.Views.Rooms
 		}
 
 		private readonly IHipChatService _hipChatService;
-		private readonly IDataService _dataService;
+		private readonly ITeamService _teamService;
 		private readonly IFavoritesService _favoritesService;
 
-		public RoomsViewModel(IHipChatService hipChatService, IDataService dataService, IMainPageService mainPageService, IFavoritesService favoritesService)
+		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService, IMainPageService mainPageService, IFavoritesService favoritesService)
 		{
 			_hipChatService = hipChatService;
-			_dataService = dataService;
+			_teamService = teamService;
 			_favoritesService = favoritesService;
 
 			LoadingRooms = false;
 			mainPageService.Title = "Rooms";
 
-			RoomGroups = new ObservableCollection<RoomGroup>();
+			Rooms = new ObservableCollection<Room>();
+			GroupedRooms = new ObservableCollection<ObservableGroupedCollection<Room>>();
+
+			Rooms.CollectionChanged += RoomsOnCollectionChanged;
+
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
-			RefreshRoomsCommand = new RelayCommandAsync(RefreshRoomsAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
+			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
 			MarkFavoriteCommand = new RelayCommand<Room>(MarkFavoriteAsync, room => room != null);
 			UnmarkFavoriteCommand = new RelayCommand<Room>(UnmarkFavoriteAsync, room => room != null);
 		}
 
-		// TODO: Commonize Refresh/Cache logic into base class or service
-		// TODO: Commonize GroupBy/OrderBy logic into base class or service
-		public async Task LoadRoomsAsync()
+		private void RoomsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+		{
+			GroupedRooms.Clear();
+			GroupedRooms.AddRange(OrderAndGroupRooms(Rooms));
+		}
+
+		public async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
 		{
 			try
 			{
 				LoadingRooms = true;
-				IEnumerable<Team> teams = await _dataService.LoadTeamsAsync();
-				RoomGroups.Clear();
+				IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
+				Rooms.Clear();
 				foreach (Team team in teams)
 				{
-					IEnumerable<Room> rooms = await _dataService.LoadRoomsForTeamAsync(team);
-					if (!rooms.Any())
-					{
-						rooms = await RebuildRoomCache(team);
-					}
+					IEnumerable<Room> rooms = await _hipChatService.GetRoomsForTeamAsync(team, cacheBehavior);
+					Rooms.AddRange(rooms);
 				}
-
-				RoomGroups.AddRange(roomGroups);
 			}
 			finally
 			{
@@ -99,36 +105,12 @@ namespace Hipstr.Client.Views.Rooms
 			}
 		}
 
-		private async Task RefreshRoomsAsync()
+		// TODO: Commonize GroupBy/OrderBy logic into base class or service
+		private static IEnumerable<ObservableGroupedCollection<Room>> OrderAndGroupRooms(IEnumerable<Room> rooms)
 		{
-			try
-			{
-				RoomGroups.Clear();
-				LoadingRooms = true;
-				IEnumerable<RoomGroup> roomGroups = await RebuildRoomGroupCache();
-				RoomGroups.AddRange(roomGroups);
-			}
-			finally
-			{
-				LoadingRooms = false;
-			}
-		}
-
-		private async Task<IEnumerable<RoomGroup>> RebuildRoomCache(Team team)
-		{
-			IReadOnlyList<Room> rooms = await _hipChatService.GetRoomsForTeamAsync(team);
-
-			await _dataService.SaveRoomsForTeamAsync(rooms, team);
-			IEnumerable<RoomGroup> roomGroups = OrderAndGroupRooms(rooms);
-
-			return roomGroups;
-		}
-
-		private static IEnumerable<RoomGroup> OrderAndGroupRooms(IEnumerable<Room> rooms)
-		{
-			IList<RoomGroup> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
+			IList<ObservableGroupedCollection<Room>> roomGroups = rooms.OrderBy(room => room.Name, RoomNameComparer.Instance)
 				.GroupBy(room => DetermineGroupHeader(room.Name), room => room,
-					(group, groupedRooms) => new RoomGroup(group, groupedRooms)).ToList();
+					(group, groupedRooms) => new ObservableGroupedCollection<Room>(group, groupedRooms)).ToList();
 
 			char[] groupNames = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ?".ToCharArray();
 			for (var i = 0; i < groupNames.Length; i++)
@@ -136,7 +118,7 @@ namespace Hipstr.Client.Views.Rooms
 				string groupName = groupNames[i].ToString();
 				if (!roomGroups.Any(rg => rg.Header.Equals(groupName)))
 				{
-					roomGroups.Insert(i, new RoomGroup(groupName));
+					roomGroups.Insert(i, new ObservableGroupedCollection<Room>(groupName));
 				}
 			}
 
@@ -160,10 +142,10 @@ namespace Hipstr.Client.Views.Rooms
 		private async Task JumpToHeaderAsync()
 		{
 			var dialog = new ListGroupJumpDialog();
-			ModalResult<string> headerText = await dialog.ShowAsync(RoomGroups.Select(rg => new JumpHeader(rg.Header, rg.Rooms.Any())));
+			ModalResult<string> headerText = await dialog.ShowAsync(GroupedRooms.Select(rg => new JumpHeader(rg.Header, rg.Any())));
 			if (!headerText.Cancelled)
 			{
-				RoomGroupScrollToHeaderRequest?.Invoke(this, RoomGroups.Where(rg => rg.Header == headerText.Result).Single());
+				RoomGroupScrollToHeaderRequest?.Invoke(this, GroupedRooms.Where(rg => rg.Header == headerText.Result).Single());
 			}
 		}
 

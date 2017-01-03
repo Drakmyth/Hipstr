@@ -1,4 +1,6 @@
 ﻿using Hipstr.Core.Models;
+using Hipstr.Core.Models.Collections;
+using Hipstr.Core.Services;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -20,7 +22,7 @@ namespace Hipstr.Client.Views.Rooms
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.RoomGroupScrollToHeaderRequest += OnRoomGroupScrollToHeaderRequest;
-			await ViewModel.LoadRoomsAsync();
+			await ViewModel.RefreshRoomsAsync(HipChatCacheBehavior.LoadFromCache);
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -28,9 +30,9 @@ namespace Hipstr.Client.Views.Rooms
 			ViewModel.RoomGroupScrollToHeaderRequest -= OnRoomGroupScrollToHeaderRequest;
 		}
 
-		private void OnRoomGroupScrollToHeaderRequest(object sender, RoomGroup roomGroup)
+		private void OnRoomGroupScrollToHeaderRequest(object sender, ObservableGroupedCollection<Room> observableGroupedCollection)
 		{
-			RoomList.ScrollIntoView(roomGroup, ScrollIntoViewAlignment.Leading);
+			RoomList.ScrollIntoView(observableGroupedCollection, ScrollIntoViewAlignment.Leading);
 		}
 
 		private void HeaderTextBlock_OnTapped(object sender, TappedRoutedEventArgs e)
