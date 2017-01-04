@@ -17,6 +17,11 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 {
 	public sealed partial class AddTeamDialogView : UserControl
 	{
+		private const string VisualStateTeamNameNormal = "TeamNameNormal";
+		private const string VisualStateTeamNameErrored = "TeamNameErrored";
+		private const string VisualStateApiKeyNormal = "ApiKeyNormal";
+		private const string VisualStateApiKeyErrored = "ApiKeyErrored";
+
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
 		private readonly Popup _parent;
@@ -80,6 +85,8 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			{
 				ApiKeyTextBox.Focus(FocusState.Keyboard);
 			}
+
+			VisualStateManager.GoToState(this, VisualStateTeamNameNormal, false);
 		}
 
 		private void ApiKeyTextBox_OnKeyUp(object sender, KeyRoutedEventArgs keyRoutedEventArgs)
@@ -88,6 +95,8 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			{
 				AcceptDialogButton.Focus(FocusState.Keyboard);
 			}
+
+			VisualStateManager.GoToState(this, VisualStateApiKeyNormal, false);
 		}
 
 		private void OnBackRequested(object sender, BackRequestedEventArgs e)
@@ -125,8 +134,8 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 
 		private void OnValidation(object sender, AddTeamDialogValidationEventArgs e)
 		{
-			string teamNameState = e.TeamNameValidationResult.IsValid ? "TeamNameNormal" : "TeamNameErrored";
-			string apiKeyState = e.ApiKeyValidationResult.IsValid ? "ApiKeyNormal" : "ApiKeyErrored";
+			string teamNameState = e.TeamNameValidationResult.IsValid ? VisualStateTeamNameNormal : VisualStateTeamNameErrored;
+			string apiKeyState = e.ApiKeyValidationResult.IsValid ? VisualStateApiKeyNormal : VisualStateApiKeyErrored;
 
 			TeamNameErrorTextBlock.Text = e.TeamNameValidationResult.Reason;
 			ApiKeyErrorTextBlock.Text = e.ApiKeyValidationResult.Reason;

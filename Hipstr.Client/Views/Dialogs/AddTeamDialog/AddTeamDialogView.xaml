@@ -95,6 +95,12 @@
 						   Foreground="Red"
 						   Margin="10 0" />
 			</Border>
+			<ProgressRing Width="50"
+						  Height="50"
+						  RelativePanel.AlignHorizontalCenterWithPanel="True"
+						  RelativePanel.AlignVerticalCenterWithPanel="True"
+						  Foreground="White"
+						  IsActive="{x:Bind ViewModel.IsValidating, Mode=OneWay}" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"

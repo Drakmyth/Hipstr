@@ -41,6 +41,18 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			}
 		}
 
+		private bool _isValidating;
+
+		public bool IsValidating
+		{
+			get { return _isValidating; }
+			set
+			{
+				_isValidating = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private readonly ITeamService _teamService;
 		private readonly IHipChatService _hipChatService;
 
@@ -52,13 +64,17 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			_teamName = string.Empty;
 			_apiKey = string.Empty;
 
-			ValidateDataCommand = new RelayCommandAsync(ValidateDataAsync);
+			_isValidating = false;
+
+			ValidateDataCommand = new RelayCommandAsync(ValidateDataAsync, () => !IsValidating, this, nameof(IsValidating));
 		}
 
 		private async Task ValidateDataAsync()
 		{
+			IsValidating = true;
 			ValidationResult teamNameValidation = ValidateTeamName(_teamName);
 			ValidationResult apiKeyValidation = await ValidateApiKeyAsync(_apiKey);
+			IsValidating = false;
 
 			Validation?.Invoke(this, new AddTeamDialogValidationEventArgs(teamNameValidation, apiKeyValidation));
 		}
@@ -70,6 +86,11 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 
 		private async Task<ValidationResult> ValidateApiKeyAsync(string apiKey)
 		{
+			if (string.IsNullOrWhiteSpace(apiKey))
+			{
+				return ValidationResult.Invalid("API Key is required");
+			}
+
 			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
 			if (teams.Where(team => team.ApiKey == apiKey).Any())
 			{
