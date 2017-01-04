@@ -28,9 +28,8 @@
 			<TextBlock Name="PageTitle"
 					   Margin="10 10 10 5"
 					   FontSize="32"
-					   Foreground="White">
-				Edit Team
-			</TextBlock>
+					   Foreground="White"
+					   Text="Edit Team"/>
 			<TextBox Name="TeamNameTextBox"
 					 Header="Team Name"
 					 Margin="10 5"
