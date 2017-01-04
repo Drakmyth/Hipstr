@@ -1,5 +1,7 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Client.Services;
+using Hipstr.Client.Views.Dialogs;
+using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
@@ -14,8 +16,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Views.Dialogs;
-using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -29,8 +29,6 @@ namespace Hipstr.Client.Views.Rooms
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshRoomsCommand { get; }
-		public ICommand MarkFavoriteCommand { get; }
-		public ICommand UnmarkFavoriteCommand { get; }
 
 		private bool _loadingRooms;
 
@@ -44,27 +42,13 @@ namespace Hipstr.Client.Views.Rooms
 			}
 		}
 
-		private Room _tappedRoom;
-
-		public Room TappedRoom
-		{
-			get { return _tappedRoom; }
-			set
-			{
-				_tappedRoom = value;
-				OnPropertyChanged();
-			}
-		}
-
 		private readonly IHipChatService _hipChatService;
 		private readonly ITeamService _teamService;
-		private readonly IFavoritesService _favoritesService;
 
-		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService, IMainPageService mainPageService, IFavoritesService favoritesService)
+		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService, IMainPageService mainPageService)
 		{
 			_hipChatService = hipChatService;
 			_teamService = teamService;
-			_favoritesService = favoritesService;
 
 			LoadingRooms = false;
 			mainPageService.Title = "Rooms";
@@ -77,8 +61,6 @@ namespace Hipstr.Client.Views.Rooms
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
-			MarkFavoriteCommand = new RelayCommand<Room>(MarkFavoriteAsync, room => room != null);
-			UnmarkFavoriteCommand = new RelayCommand<Room>(UnmarkFavoriteAsync, room => room != null);
 		}
 
 		private void RoomsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
@@ -161,16 +143,6 @@ namespace Hipstr.Client.Views.Rooms
 			{
 				RoomGroupScrollToHeaderRequest?.Invoke(this, GroupedRooms.Where(rg => rg.Header == headerText.Result).Single());
 			}
-		}
-
-		private void MarkFavoriteAsync(Room room)
-		{
-			_favoritesService.MarkFavorite(room);
-		}
-
-		private void UnmarkFavoriteAsync(Room room)
-		{
-			_favoritesService.UnmarkFavorite(room);
 		}
 	}
 }

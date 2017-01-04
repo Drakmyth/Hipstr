@@ -128,8 +128,8 @@
 					        Style="{StaticResource MenuItemButtonStyle}"
 					        Click="MenuButton_Click">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Favorite" Foreground="White" />
-							<TextBlock Text="Favorites" Margin="15 0 0 0" Foreground="White" />
+							<SymbolIcon Symbol="Clock" Foreground="White" />
+							<TextBlock Text="Recent" Margin="15 0 0 0" Foreground="White" />
 						</StackPanel>
 					</Button>
 					<Rectangle Height="1" Fill="Black" />

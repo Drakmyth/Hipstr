@@ -31,7 +31,6 @@ namespace Hipstr.Client
 			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<IDataService, DataService>();
 			builder.RegisterType<IToastService, ToastService>();
-			builder.RegisterType<IFavoritesService, FavoritesService>();
 			builder.RegisterType<IHttpClient, HipstrHttpClient>();
 			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
 

@@ -50,33 +50,12 @@
 			</ListView.GroupStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:Room">
-					<StackPanel Holding="OnRoomRightTapped">
+					<StackPanel>
 						<TextBlock Text="{x:Bind Name}"
 						           Foreground="White" />
 						<TextBlock Text="{x:Bind Team.Name}"
 						           Foreground="LightGray"
 						           FontSize="10" />
-						<FlyoutBase.AttachedFlyout>
-							<MenuFlyout>
-								<MenuFlyout.MenuFlyoutPresenterStyle>
-									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
-									</Style>
-								</MenuFlyout.MenuFlyoutPresenterStyle>
-								<MenuFlyout.Items>
-									<MenuFlyoutItem Text="Mark Favorite"
-													Background="{StaticResource HipChatControl}"
-													Foreground="White"
-													Command="{Binding ViewModel.MarkFavoriteCommand, Mode=OneTime, ElementName=RoomsViewPage}"
-													CommandParameter="{Binding ViewModel.TappedRoom, ElementName=RoomsViewPage}" />
-									<MenuFlyoutItem Text="Unmark Favorite"
-													Background="{StaticResource HipChatControl}"
-													Foreground="White"
-													Command="{Binding ViewModel.UnmarkFavoriteCommand, Mode=OneTime, ElementName=RoomsViewPage}"
-													CommandParameter="{Binding ViewModel.TappedRoom, ElementName=RoomsViewPage}" />
-								</MenuFlyout.Items>
-							</MenuFlyout>
-						</FlyoutBase.AttachedFlyout>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>
