@@ -76,33 +76,39 @@
 			<TextBox Name="TeamNameTextBox"
 					 Header="Team Name"
 					 RelativePanel.Below="PageTitle"
-					 Text="{x:Bind TeamName, Mode=TwoWay}"
+					 Text="{x:Bind ViewModel.TeamName, Mode=TwoWay}"
 					 KeyUp="TeamNameTextBox_OnKeyUp" />
 			<Border Name="TeamNameErrorTextBlock"
 					RelativePanel.Below="TeamNameTextBox">
 				<TextBlock Foreground="Red"
 						   Margin="10 0"
-						   Text="{x:Bind TeamNameValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
+						   Text="{x:Bind ViewModel.TeamNameValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
 			</Border>
 			<TextBox Name="ApiKeyTextBox"
 					 Header="API Key"
 					 RelativePanel.Below="TeamNameErrorTextBlock"
-					 Text="{x:Bind ApiKey, Mode=TwoWay}"
+					 Text="{x:Bind ViewModel.ApiKey, Mode=TwoWay}"
 					 KeyUp="ApiKeyTextBox_OnKeyUp" />
 			<Border Name="ApiKeyErrorTextBlock"
 					RelativePanel.Below="ApiKeyTextBox">
 				<TextBlock Foreground="Red"
 						   Margin="10 0"
-						   Text="{x:Bind ApiKeyValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
+						   Text="{x:Bind ViewModel.ApiKeyValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
 			</Border>
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"
 					Foreground="White">
-			<AppBarButton x:Name="CancelDialogButton" Icon="Cancel" Label="Cancel" Foreground="White"
+			<AppBarButton x:Name="CancelDialogButton"
+						  Icon="Cancel"
+						  Label="Cancel"
+						  Foreground="White"
 						  Click="CancelDialogButton_OnClick" />
-			<AppBarButton x:Name="AcceptDialogButton" Icon="Accept" Label="Accept" Foreground="White"
-						  Click="AcceptDialogButton_OnClick" />
+			<AppBarButton x:Name="AcceptDialogButton"
+						  Icon="Accept"
+						  Label="Accept"
+						  Foreground="White"
+						  Command="{x:Bind ViewModel.ValidateDataCommand}" />
 		</CommandBar>
 	</Grid>
 </UserControl>

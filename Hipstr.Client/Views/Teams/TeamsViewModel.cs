@@ -52,7 +52,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task AddTeamAsync()
 		{
-			var dialog = new AddTeamDialogView(_teamService, _hipChatService);
+			var dialog = new AddTeamDialogView();
 			DialogResult<Team> team = await dialog.ShowAsync();
 			if (!team.Cancelled)
 			{

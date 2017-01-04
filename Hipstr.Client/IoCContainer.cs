@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Builder;
 using Hipstr.Client.Services;
+using Hipstr.Client.Views.Dialogs.AddTeamDialog;
 using Hipstr.Client.Views.MainPage;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Client.Views.Rooms;
@@ -41,6 +42,7 @@ namespace Hipstr.Client
 			builder.RegisterType<MessagesViewModel, MessagesViewModel>();
 			builder.RegisterType<UsersViewModel, UsersViewModel>();
 			builder.RegisterType<UserProfileViewModel, UserProfileViewModel>();
+			builder.RegisterType<AddTeamDialogViewModel, AddTeamDialogViewModel>();
 		}
 
 		private static IRegistrationBuilder<TInstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<TInterface, TInstanceType>(this ContainerBuilder builder) where TInstanceType : TInterface
