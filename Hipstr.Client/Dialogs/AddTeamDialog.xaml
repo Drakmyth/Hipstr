@@ -17,28 +17,29 @@
 			<DataTemplate x:Key="TextboxHeaderTemplate">
 				<TextBlock Text="{Binding}" Foreground="White" />
 			</DataTemplate>
+			<converters:ValidationResultToStringConverter x:Key="ValidationToStr" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 
 	<Grid HorizontalAlignment="Stretch">
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="ApiKeyStates">
-				<VisualState x:Name="ApiKeyNormal"/>
+				<VisualState x:Name="ApiKeyNormal" />
 				<VisualState x:Name="ApiKeyErrored">
 					<VisualState.Setters>
-						<Setter Target="ApiKeyTextBox.Background" Value="LavenderBlush"/>
-						<Setter Target="ApiKeyTextBox.BorderBrush" Value="Red"/>
-						<Setter Target="ApiKeyErrorTextBlock.Visibility" Value="Visible"/>
+						<Setter Target="ApiKeyTextBox.Background" Value="LavenderBlush" />
+						<Setter Target="ApiKeyTextBox.BorderBrush" Value="Red" />
+						<Setter Target="ApiKeyErrorTextBlock.Visibility" Value="Visible" />
 					</VisualState.Setters>
 				</VisualState>
 			</VisualStateGroup>
 			<VisualStateGroup x:Name="TeamNameStates">
-				<VisualState x:Name="TeamNameNormal"/>
+				<VisualState x:Name="TeamNameNormal" />
 				<VisualState x:Name="TeamNameErrored">
 					<VisualState.Setters>
-						<Setter Target="TeamNameTextBox.Background" Value="LavenderBlush"/>
-						<Setter Target="TeamNameTextBox.BorderBrush" Value="Red"/>
-						<Setter Target="TeamNameErrorTextBlock.Visibility" Value="Visible"/>
+						<Setter Target="TeamNameTextBox.Background" Value="LavenderBlush" />
+						<Setter Target="TeamNameTextBox.BorderBrush" Value="Red" />
+						<Setter Target="TeamNameErrorTextBlock.Visibility" Value="Visible" />
 					</VisualState.Setters>
 				</VisualState>
 			</VisualStateGroup>
@@ -63,21 +64,21 @@
 					 RelativePanel.AlignLeftWithPanel="True"
 					 RelativePanel.AlignRightWithPanel="True"
 					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-					 Text="{x:Bind _teamName, Mode=TwoWay}"
+					 Text="{x:Bind TeamName, Mode=TwoWay}"
 					 KeyUp="TeamNameTextBox_OnKeyUp" />
 			<Border Name="TeamNameErrorTextBlock"
-					Background="{StaticResource HipChatControl}"
+					Background="AntiqueWhite"
 					CornerRadius="0 0 10 10"
 					BorderThickness="0"
-					Margin="10 0"
+					Margin="12 0"
 					Padding="2"
 					RelativePanel.Below="TeamNameTextBox"
 					RelativePanel.AlignLeftWithPanel="True"
 					RelativePanel.AlignRightWithPanel="True"
 					Visibility="Collapsed">
-				<TextBlock Foreground="White"
-						   HorizontalAlignment="Center"
-						   Text="Invalid Team Name provided" />
+				<TextBlock Foreground="Red"
+						   Margin="10 0"
+						   Text="{x:Bind TeamNameValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
 			</Border>
 			<TextBox Name="ApiKeyTextBox"
 					 Header="API Key"
@@ -87,10 +88,10 @@
 					 RelativePanel.AlignLeftWithPanel="True"
 					 RelativePanel.AlignRightWithPanel="True"
 					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-					 Text="{x:Bind _apiKey, Mode=TwoWay}"
-					 KeyUp="ApiKeyTextBox_OnKeyUp"/>
+					 Text="{x:Bind ApiKey, Mode=TwoWay}"
+					 KeyUp="ApiKeyTextBox_OnKeyUp" />
 			<Border Name="ApiKeyErrorTextBlock"
-					Background="{StaticResource HipChatControl}"
+					Background="AntiqueWhite"
 					CornerRadius="0 0 10 10"
 					BorderThickness="0"
 					Margin="10 0"
@@ -99,9 +100,9 @@
 					RelativePanel.AlignLeftWithPanel="True"
 					RelativePanel.AlignRightWithPanel="True"
 					Visibility="Collapsed">
-				<TextBlock Foreground="White"
-						   HorizontalAlignment="Center"
-						   Text="Invalid API Key provided" />
+				<TextBlock Foreground="Red"
+						   Margin="10 0"
+						   Text="{x:Bind ApiKeyValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
 			</Border>
 		</RelativePanel>
 		<CommandBar Grid.Row="1"

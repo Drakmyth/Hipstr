@@ -1,7 +1,10 @@
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -17,10 +20,33 @@ using Windows.UI.Xaml.Media.Animation;
 
 namespace Hipstr.Client.Dialogs
 {
-	public sealed partial class AddTeamDialog : UserControl
+	public sealed partial class AddTeamDialog : UserControl, INotifyPropertyChanged
 	{
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		private string _teamName;
+
+		private string TeamName
+		{
+			get { return _teamName; }
+			set
+			{
+				_teamName = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private string _apiKey;
+
+		private string ApiKey
+		{
+			get { return _apiKey; }
+			set
+			{
+				_apiKey = value;
+				OnPropertyChanged();
+			}
+		}
 
 		private readonly ITeamService _teamService;
 		private readonly IHipChatService _hipChatService;
@@ -29,7 +55,30 @@ namespace Hipstr.Client.Dialogs
 
 		private readonly Popup _parent;
 		private TaskCompletionSource<DialogResult<Team>> _taskCompletionSource;
-		private bool _apiKeyIsErrored;
+
+		private ValidationResult _teamNameValidation;
+
+		private ValidationResult TeamNameValidation
+		{
+			get { return _teamNameValidation; }
+			set
+			{
+				_teamNameValidation = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private ValidationResult _apiKeyValidation;
+
+		private ValidationResult ApiKeyValidation
+		{
+			get { return _apiKeyValidation; }
+			set
+			{
+				_apiKeyValidation = value;
+				OnPropertyChanged();
+			}
+		}
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
 		public AddTeamDialog(ITeamService teamService, IHipChatService hipChatService)
@@ -49,7 +98,9 @@ namespace Hipstr.Client.Dialogs
 				}
 			};
 			_parent.IsLightDismissEnabled = false;
-			_apiKeyIsErrored = false;
+
+			_teamNameValidation = ValidationResult.Valid();
+			_apiKeyValidation = ValidationResult.Valid();
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
@@ -132,31 +183,60 @@ namespace Hipstr.Client.Dialogs
 			OnCancelled();
 		}
 
-		private async void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
+		private static ValidationResult ValidateTeamName(string teamName)
+		{
+			return string.IsNullOrWhiteSpace(teamName) ? ValidationResult.Invalid("Team Name is required") : ValidationResult.Valid();
+		}
+
+		private async Task<ValidationResult> ValidateApiKeyAsync(string apiKey)
 		{
 			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
-			if (teams.Where(team => team.ApiKey == _apiKey).Any())
+			if (teams.Where(team => team.ApiKey == apiKey).Any())
 			{
-				VisualStateManager.GoToState(this, "ApiKeyErrored", false);
-				// TODO: Handle duplicate Api Key
-				_apiKeyIsErrored = true;
+				return ValidationResult.Invalid("Provided API Key already registered");
 			}
 
 			try
 			{
-				await _hipChatService.GetApiKeyInfoAsync(_apiKey);
+				await _hipChatService.GetApiKeyInfoAsync(apiKey);
 			}
 			catch
 			{
-				VisualStateManager.GoToState(this, "ApiKeyErrored", false);
-				// TODO: Handle invalid Api Key
-				_apiKeyIsErrored = true;
+				return ValidationResult.Invalid("Error validating provided API Key with HipChat server");
 			}
 
-			if (_apiKeyIsErrored) return;
+			return ValidationResult.Valid();
+		}
+
+		private void UpdateVisualStates()
+		{
+			string teamNameState = TeamNameValidation.IsValid ? "TeamNameNormal" : "TeamNameErrored";
+			string apiKeyState = ApiKeyValidation.IsValid ? "ApiKeyNormal" : "ApiKeyErrored";
+
+			VisualStateManager.GoToState(this, teamNameState, false);
+			VisualStateManager.GoToState(this, apiKeyState, false);
+		}
+
+		private async void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			ValidationResult teamNameValidation = ValidateTeamName(_teamName);
+			ValidationResult apiKeyValidation = await ValidateApiKeyAsync(_apiKey);
+
+			TeamNameValidation = teamNameValidation;
+			ApiKeyValidation = apiKeyValidation;
+
+			UpdateVisualStates();
+
+			if (!teamNameValidation.IsValid || !apiKeyValidation.IsValid) return;
 
 			Hide();
-			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(_teamName, _apiKey)));
+			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(TeamName, ApiKey)));
+		}
+
+		[NotifyPropertyChangedInvocator]
+		private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
