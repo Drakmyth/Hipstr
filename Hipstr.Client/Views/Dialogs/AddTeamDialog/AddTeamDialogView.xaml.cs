@@ -1,3 +1,4 @@
+using Hipstr.Client.Events;
 using Hipstr.Core.Models;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
@@ -38,6 +39,8 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 				}
 			};
 			_parent.IsLightDismissEnabled = false;
+
+			ViewModel.Validation += OnValidation;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
@@ -120,13 +123,21 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			OnCancelled();
 		}
 
-		private void UpdateVisualStates()
+		private void OnValidation(object sender, AddTeamDialogValidationEventArgs e)
 		{
-			string teamNameState = ViewModel.TeamNameValidation.IsValid ? "TeamNameNormal" : "TeamNameErrored";
-			string apiKeyState = ViewModel.ApiKeyValidation.IsValid ? "ApiKeyNormal" : "ApiKeyErrored";
+			string teamNameState = e.TeamNameValidationResult.IsValid ? "TeamNameNormal" : "TeamNameErrored";
+			string apiKeyState = e.ApiKeyValidationResult.IsValid ? "ApiKeyNormal" : "ApiKeyErrored";
+
+			TeamNameErrorTextBlock.Text = e.TeamNameValidationResult.Reason;
+			ApiKeyErrorTextBlock.Text = e.ApiKeyValidationResult.Reason;
 
 			VisualStateManager.GoToState(this, teamNameState, false);
 			VisualStateManager.GoToState(this, apiKeyState, false);
+
+			if (!e.TeamNameValidationResult.IsValid || !e.ApiKeyValidationResult.IsValid) return;
+
+			Hide();
+			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(ViewModel.TeamName, ViewModel.ApiKey)));
 		}
 	}
 }

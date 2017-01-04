@@ -1,6 +1,9 @@
 ﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Events;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,8 +11,10 @@ using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 {
+	[UsedImplicitly]
 	public class AddTeamDialogViewModel : ViewModelBase
 	{
+		public event EventHandler<AddTeamDialogValidationEventArgs> Validation;
 		public ICommand ValidateDataCommand { get; }
 
 		private string _teamName;
@@ -36,30 +41,6 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			}
 		}
 
-		private ValidationResult _teamNameValidation;
-
-		public ValidationResult TeamNameValidation
-		{
-			get { return _teamNameValidation; }
-			private set
-			{
-				_teamNameValidation = value;
-				OnPropertyChanged();
-			}
-		}
-
-		private ValidationResult _apiKeyValidation;
-
-		public ValidationResult ApiKeyValidation
-		{
-			get { return _apiKeyValidation; }
-			private set
-			{
-				_apiKeyValidation = value;
-				OnPropertyChanged();
-			}
-		}
-
 		private readonly ITeamService _teamService;
 		private readonly IHipChatService _hipChatService;
 
@@ -68,8 +49,8 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			_teamService = teamService;
 			_hipChatService = hipChatService;
 
-			_teamNameValidation = ValidationResult.Valid();
-			_apiKeyValidation = ValidationResult.Valid();
+			_teamName = string.Empty;
+			_apiKey = string.Empty;
 
 			ValidateDataCommand = new RelayCommandAsync(ValidateDataAsync);
 		}
@@ -79,15 +60,7 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 			ValidationResult teamNameValidation = ValidateTeamName(_teamName);
 			ValidationResult apiKeyValidation = await ValidateApiKeyAsync(_apiKey);
 
-			TeamNameValidation = teamNameValidation;
-			ApiKeyValidation = apiKeyValidation;
-
-			UpdateVisualStates();
-
-			if (!teamNameValidation.IsValid || !apiKeyValidation.IsValid) return;
-
-			Hide();
-			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(TeamName, ApiKey)));
+			Validation?.Invoke(this, new AddTeamDialogValidationEventArgs(teamNameValidation, apiKeyValidation));
 		}
 
 		private static ValidationResult ValidateTeamName(string teamName)
