@@ -1,5 +1,7 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Client.Services;
+using Hipstr.Client.Views.Dialogs;
+using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
@@ -13,7 +15,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Dialogs;
 
 namespace Hipstr.Client.Views.Users
 {
@@ -134,7 +135,7 @@ namespace Hipstr.Client.Views.Users
 
 		private async Task JumpToHeaderAsync()
 		{
-			var dialog = new Dialogs.ListGroupJumpDialog();
+			var dialog = new ListGroupJumpDialogView();
 			DialogResult<string> headerText = await dialog.ShowAsync(GroupedUsers.Select(ug => new JumpHeader(ug.Header, ug.Any())));
 			if (!headerText.Cancelled)
 			{

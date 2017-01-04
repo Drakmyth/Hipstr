@@ -1,6 +1,6 @@
-﻿using Hipstr.Client.Dialogs;
-using System;
+﻿using System;
 using Windows.UI.Xaml.Data;
+using Hipstr.Client.Views.Dialogs;
 
 namespace Hipstr.Client.Converters
 {

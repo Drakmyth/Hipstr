@@ -14,7 +14,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Dialogs;
+using Hipstr.Client.Views.Dialogs;
+using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -154,7 +155,7 @@ namespace Hipstr.Client.Views.Rooms
 
 		private async Task JumpToHeaderAsync()
 		{
-			var dialog = new Dialogs.ListGroupJumpDialog();
+			var dialog = new ListGroupJumpDialogView();
 			DialogResult<string> headerText = await dialog.ShowAsync(GroupedRooms.Select(rg => new JumpHeader(rg.Header, rg.Any())));
 			if (!headerText.Cancelled)
 			{

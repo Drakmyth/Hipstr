@@ -1,4 +1,4 @@
-﻿namespace Hipstr.Client.Dialogs
+﻿namespace Hipstr.Client.Views.Dialogs.ListGroupJumpDialog
 {
 	public class JumpHeader
 	{

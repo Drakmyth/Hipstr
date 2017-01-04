@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Foundation;
@@ -8,35 +11,27 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media.Animation;
-using Hipstr.Client.Views;
-using Hipstr.Core.Models;
+using Windows.UI.Xaml.Input;
+using Hipstr.Core.Utility.Extensions;
 
-namespace Hipstr.Client.Dialogs
+namespace Hipstr.Client.Views.Dialogs.ListGroupJumpDialog
 {
-	public sealed partial class EditTeamDialog : UserControl
+	public sealed partial class ListGroupJumpDialogView : UserControl
 	{
-		private string _teamName;
-		private string _apiKey;
-
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
+		private readonly ObservableCollection<JumpHeader> _groupHeaders;
+
 		private readonly Popup _parent;
-		private TaskCompletionSource<DialogResult<Team>> _taskCompletionSource;
+		private TaskCompletionSource<DialogResult<string>> _taskCompletionSource;
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
-		public EditTeamDialog()
+		public ListGroupJumpDialogView()
 		{
 			InitializeComponent();
+			_groupHeaders = new ObservableCollection<JumpHeader>();
 			_parent = new Popup {Child = this};
 			ResizePopup();
-			_parent.ChildTransitions = new TransitionCollection
-			{
-				new PopupThemeTransition
-				{
-					FromVerticalOffset = Height * 3
-				}
-			};
 			_parent.IsLightDismissEnabled = false;
 
 			Loaded += OnLoaded;
@@ -80,18 +75,18 @@ namespace Hipstr.Client.Dialogs
 			Margin = new Thickness(0, topMargin, 0, 0);
 		}
 
-		public IAsyncOperation<DialogResult<Team>> ShowAsync(Team team)
+		public IAsyncOperation<DialogResult<string>> ShowAsync(IEnumerable<JumpHeader> headers)
 		{
-			_teamName = team.Name;
-			_apiKey = team.ApiKey;
+			_groupHeaders.Clear();
+			_groupHeaders.AddRange(headers);
 
 			_parent.IsOpen = true;
 			return AsyncInfo.Run(WaitForInput);
 		}
 
-		private Task<DialogResult<Team>> WaitForInput(CancellationToken token)
+		private Task<DialogResult<string>> WaitForInput(CancellationToken token)
 		{
-			_taskCompletionSource = new TaskCompletionSource<DialogResult<Team>>();
+			_taskCompletionSource = new TaskCompletionSource<DialogResult<string>>();
 			token.Register(OnCancelled);
 			return _taskCompletionSource.Task;
 		}
@@ -99,7 +94,7 @@ namespace Hipstr.Client.Dialogs
 		private void OnCancelled()
 		{
 			Hide();
-			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
+			_taskCompletionSource.SetResult(DialogResult<string>.CancelledResult());
 		}
 
 		private void Hide()
@@ -107,16 +102,15 @@ namespace Hipstr.Client.Dialogs
 			_parent.IsOpen = false;
 		}
 
-		private void CancelDialogButton_OnClick(object sender, RoutedEventArgs e)
+		private void HeaderTextBlock_OnTapped(object sender, TappedRoutedEventArgs e)
 		{
-			Hide();
-			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
-		}
+			var tapped = (TextBlock)sender;
+			JumpHeader header = _groupHeaders.Where(jh => jh.Header == tapped.Text).Single();
 
-		private void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
-		{
+			if (!header.Enabled) return;
+
 			Hide();
-			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(_teamName, _apiKey)));
+			_taskCompletionSource.SetResult(new DialogResult<string>(tapped.Text));
 		}
 	}
 }

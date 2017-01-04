@@ -1,4 +1,4 @@
-﻿namespace Hipstr.Client.Dialogs
+﻿namespace Hipstr.Client.Views.Dialogs
 {
 	public class DialogResult<T> where T : class
 	{

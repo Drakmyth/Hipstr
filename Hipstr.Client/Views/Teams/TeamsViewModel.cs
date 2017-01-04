@@ -1,6 +1,8 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Dialogs;
 using Hipstr.Client.Services;
+using Hipstr.Client.Views.Dialogs;
+using Hipstr.Client.Views.Dialogs.AddTeamDialog;
+using Hipstr.Client.Views.Dialogs.EditTeamDialog;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
@@ -50,7 +52,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task AddTeamAsync()
 		{
-			var dialog = new AddTeamDialog(_teamService, _hipChatService);
+			var dialog = new AddTeamDialogView(_teamService, _hipChatService);
 			DialogResult<Team> team = await dialog.ShowAsync();
 			if (!team.Cancelled)
 			{
@@ -64,7 +66,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task EditTeamAsync(Team selectedTeam)
 		{
-			var dialog = new EditTeamDialog();
+			var dialog = new EditTeamDialogView();
 			DialogResult<Team> team = await dialog.ShowAsync(selectedTeam);
 			if (!team.Cancelled)
 			{

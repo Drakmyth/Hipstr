@@ -1,6 +1,3 @@
-using Hipstr.Core.Models;
-using Hipstr.Core.Services;
-using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,10 +14,13 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using Hipstr.Core.Models;
+using Hipstr.Core.Services;
+using JetBrains.Annotations;
 
-namespace Hipstr.Client.Dialogs
+namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 {
-	public sealed partial class AddTeamDialog : UserControl, INotifyPropertyChanged
+	public sealed partial class AddTeamDialogView : UserControl, INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -81,7 +81,7 @@ namespace Hipstr.Client.Dialogs
 		}
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
-		public AddTeamDialog(ITeamService teamService, IHipChatService hipChatService)
+		public AddTeamDialogView(ITeamService teamService, IHipChatService hipChatService)
 		{
 			InitializeComponent();
 

@@ -103,15 +103,15 @@
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
-    <Compile Include="Dialogs\ValidationResult.cs" />
+    <Compile Include="Views\Dialogs\ValidationResult.cs" />
     <Compile Include="Services\IMainPageService.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Services\MainPageService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
-    <Compile Include="Dialogs\JumpHeader.cs" />
-    <Compile Include="Dialogs\ListGroupJumpDialog.xaml.cs">
-      <DependentUpon>ListGroupJumpDialog.xaml</DependentUpon>
+    <Compile Include="Views\Dialogs\ListGroupJumpDialog\JumpHeader.cs" />
+    <Compile Include="Views\Dialogs\ListGroupJumpDialog\ListGroupJumpDialogView.xaml.cs">
+      <DependentUpon>ListGroupJumpDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
@@ -122,16 +122,16 @@
     <Compile Include="Views\Messages\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogResult.cs" />
+    <Compile Include="Views\Dialogs\DialogResult.cs" />
     <Compile Include="Views\Rooms\RoomsView.xaml.cs">
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Rooms\RoomsViewModel.cs" />
-    <Compile Include="Dialogs\EditTeamDialog.xaml.cs">
-      <DependentUpon>EditTeamDialog.xaml</DependentUpon>
+    <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogView.xaml.cs">
+      <DependentUpon>EditTeamDialogView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\AddTeamDialog.xaml.cs">
-      <DependentUpon>AddTeamDialog.xaml</DependentUpon>
+    <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogView.xaml.cs">
+      <DependentUpon>AddTeamDialogView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Users\UserProfileView.xaml.cs">
       <DependentUpon>UserProfileView.xaml</DependentUpon>
@@ -171,7 +171,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\ListGroupJumpDialog.xaml">
+    <Page Include="Views\Dialogs\ListGroupJumpDialog\ListGroupJumpDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -187,11 +187,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\EditTeamDialog.xaml">
+    <Page Include="Views\Dialogs\EditTeamDialog\EditTeamDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Dialogs\AddTeamDialog.xaml">
+    <Page Include="Views\Dialogs\AddTeamDialog\AddTeamDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,6 +219,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
