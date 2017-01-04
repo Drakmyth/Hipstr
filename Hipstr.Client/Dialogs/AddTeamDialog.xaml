@@ -14,9 +14,26 @@
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<DataTemplate x:Key="TextboxHeaderTemplate">
+			<DataTemplate x:Key="AddTeamTextBoxHeaderTemplate">
 				<TextBlock Text="{Binding}" Foreground="White" />
 			</DataTemplate>
+			<Style TargetType="TextBox">
+				<Setter Property="Margin" Value="10 5 10 0" />
+				<Setter Property="Background" Value="White" />
+				<Setter Property="RelativePanel.AlignLeftWithPanel" Value="True" />
+				<Setter Property="RelativePanel.AlignRightWithPanel" Value="True" />
+				<Setter Property="HeaderTemplate" Value="{StaticResource AddTeamTextBoxHeaderTemplate}" />
+			</Style>
+			<Style TargetType="Border">
+				<Setter Property="Background" Value="AntiqueWhite" />
+				<Setter Property="CornerRadius" Value="0 0 10 10" />
+				<Setter Property="BorderThickness" Value="0" />
+				<Setter Property="Margin" Value="12 0" />
+				<Setter Property="Padding" Value="2" />
+				<Setter Property="RelativePanel.AlignLeftWithPanel" Value="True" />
+				<Setter Property="RelativePanel.AlignRightWithPanel" Value="True" />
+				<Setter Property="Visibility" Value="Collapsed" />
+			</Style>
 			<converters:ValidationResultToStringConverter x:Key="ValidationToStr" />
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -58,48 +75,22 @@
 					   Text="Add Team" />
 			<TextBox Name="TeamNameTextBox"
 					 Header="Team Name"
-					 Margin="10 5 10 0"
-					 Background="White"
 					 RelativePanel.Below="PageTitle"
-					 RelativePanel.AlignLeftWithPanel="True"
-					 RelativePanel.AlignRightWithPanel="True"
-					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
 					 Text="{x:Bind TeamName, Mode=TwoWay}"
 					 KeyUp="TeamNameTextBox_OnKeyUp" />
 			<Border Name="TeamNameErrorTextBlock"
-					Background="AntiqueWhite"
-					CornerRadius="0 0 10 10"
-					BorderThickness="0"
-					Margin="12 0"
-					Padding="2"
-					RelativePanel.Below="TeamNameTextBox"
-					RelativePanel.AlignLeftWithPanel="True"
-					RelativePanel.AlignRightWithPanel="True"
-					Visibility="Collapsed">
+					RelativePanel.Below="TeamNameTextBox">
 				<TextBlock Foreground="Red"
 						   Margin="10 0"
 						   Text="{x:Bind TeamNameValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />
 			</Border>
 			<TextBox Name="ApiKeyTextBox"
 					 Header="API Key"
-					 Margin="10 5 10 0"
-					 Background="White"
 					 RelativePanel.Below="TeamNameErrorTextBlock"
-					 RelativePanel.AlignLeftWithPanel="True"
-					 RelativePanel.AlignRightWithPanel="True"
-					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
 					 Text="{x:Bind ApiKey, Mode=TwoWay}"
 					 KeyUp="ApiKeyTextBox_OnKeyUp" />
 			<Border Name="ApiKeyErrorTextBlock"
-					Background="AntiqueWhite"
-					CornerRadius="0 0 10 10"
-					BorderThickness="0"
-					Margin="10 0"
-					Padding="2"
-					RelativePanel.Below="ApiKeyTextBox"
-					RelativePanel.AlignLeftWithPanel="True"
-					RelativePanel.AlignRightWithPanel="True"
-					Visibility="Collapsed">
+					RelativePanel.Below="ApiKeyTextBox">
 				<TextBlock Foreground="Red"
 						   Margin="10 0"
 						   Text="{x:Bind ApiKeyValidation, Mode=OneWay, Converter={StaticResource ValidationToStr}}" />

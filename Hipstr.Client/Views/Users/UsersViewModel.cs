@@ -81,7 +81,7 @@ namespace Hipstr.Client.Views.Users
 					// it will cause the CollectionChanged event to be fired for each element in the input collection. This is
 					// REALLY REALLY slow because we reorder and regroup the list whenever that event gets fired. Until the
 					// built-in ObservableList supports AddRange properly (only throwing the event once), we can either subclass
-					// Observable list and do it ourselves, or just not OrderAndGroup until we add the last element. For now,
+					// ObservableList and do it ourselves, or just not OrderAndGroup until we add the last element. For now,
 					// we'll do the latter. Note that the former is probably more correct, but subclassing native implementations
 					// is ugh...
 					// TODO: Stop modifying event subscriptions once we have a better way of handling this
