@@ -4,20 +4,34 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	mc:Ignorable="d">
+	mc:Ignorable="d"
+	Loaded="OnLoaded"
+	Unloaded="OnUnloaded">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
+				<ResourceDictionary Source="/Styles/Dialogs.xaml" />
 			</ResourceDictionary.MergedDictionaries>
-			<DataTemplate x:Key="TextboxHeaderTemplate">
-				<TextBlock Text="{Binding}" Foreground="White" />
-			</DataTemplate>
+			<Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}" />
+			<Style TargetType="Border" BasedOn="{StaticResource DialogErrorBorderStyle}" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid HorizontalAlignment="Stretch">
+	<Grid HorizontalAlignment="Stretch" PointerPressed="Grid_OnPointerPressed">
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="TeamNameStates">
+				<VisualState x:Name="TeamNameNormal" />
+				<VisualState x:Name="TeamNameErrored">
+					<VisualState.Setters>
+						<Setter Target="TeamNameTextBox.Background" Value="LavenderBlush" />
+						<Setter Target="TeamNameTextBox.BorderBrush" Value="Red" />
+						<Setter Target="TeamNameErrorBorder.Visibility" Value="Visible" />
+					</VisualState.Setters>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -29,31 +43,39 @@
 					   Margin="10 10 10 5"
 					   FontSize="32"
 					   Foreground="White"
-					   Text="Edit Team"/>
+					   Text="Edit Team" />
 			<TextBox Name="TeamNameTextBox"
 					 Header="Team Name"
-					 Margin="10 5"
 					 RelativePanel.Below="PageTitle"
-					 RelativePanel.AlignLeftWithPanel="True"
-					 RelativePanel.AlignRightWithPanel="True"
-					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-					 Text="{x:Bind _teamName, Mode=TwoWay}" />
+					 Text="{x:Bind ViewModel.TeamName, Mode=TwoWay}"
+					 KeyUp="TeamNameTextBox_OnKeyUp" />
+			<Border Name="TeamNameErrorBorder" RelativePanel.Below="TeamNameTextBox">
+				<TextBlock Name="TeamNameErrorTextBlock" Style="{StaticResource DialogErrorTextBlockStyle}" />
+			</Border>
 			<TextBox Header="API Key"
-					 Margin="10 5"
-					 RelativePanel.Below="TeamNameTextBox"
-					 RelativePanel.AlignLeftWithPanel="True"
-					 RelativePanel.AlignRightWithPanel="True"
-					 HeaderTemplate="{StaticResource TextboxHeaderTemplate}"
-					 Text="{x:Bind _apiKey, Mode=OneWay}"
+					 RelativePanel.Below="TeamNameErrorBorder"
+					 Text="{x:Bind ViewModel.ApiKey, Mode=TwoWay}"
 					 IsEnabled="False" />
+			<ProgressRing Width="50"
+						  Height="50"
+						  RelativePanel.AlignHorizontalCenterWithPanel="True"
+						  RelativePanel.AlignVerticalCenterWithPanel="True"
+						  Foreground="White"
+						  IsActive="{x:Bind ViewModel.IsValidating, Mode=OneWay}" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{StaticResource HipChatControl}"
 					Foreground="White">
-			<AppBarButton x:Name="CancelDialogButton" Icon="Cancel" Label="Cancel" Foreground="White"
-						  Click="CancelDialogButton_OnClick" />
-			<AppBarButton x:Name="AcceptDialogButton" Icon="Accept" Label="Accept" Foreground="White"
-						  Click="AcceptDialogButton_OnClick" />
+			<AppBarButton Name="CancelDialogButton"
+						  Icon="Cancel"
+						  Label="Cancel"
+						  Foreground="White"
+						  Command="{x:Bind CancelDialogCommand}" />
+			<AppBarButton Name="AcceptDialogButton"
+						  Icon="Accept"
+						  Label="Accept"
+						  Foreground="White"
+						  Command="{x:Bind ViewModel.ValidateDataCommand}" />
 		</CommandBar>
 	</Grid>
 </UserControl>

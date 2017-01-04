@@ -6,7 +6,7 @@ namespace Hipstr.Client.Views.Users
 {
 	public sealed partial class UserProfileView : Page
 	{
-		public UserProfileViewModel ViewModel => DataContext as UserProfileViewModel;
+		public UserProfileViewModel ViewModel => (UserProfileViewModel)DataContext;
 
 		public UserProfileView()
 		{

@@ -5,7 +5,7 @@ namespace Hipstr.Client.Views.MainPage
 {
 	public sealed partial class MainPageView : Page
 	{
-		public MainPageViewModel ViewModel => DataContext as MainPageViewModel;
+		public MainPageViewModel ViewModel => (MainPageViewModel)DataContext;
 
 		public MainPageView(UIElement frame)
 		{

@@ -35,19 +35,17 @@ namespace Hipstr.Client.Views.Teams
 		}
 
 		private readonly ITeamService _teamService;
-		private readonly IHipChatService _hipChatService;
 
-		public TeamsViewModel(ITeamService teamService, IHipChatService hipChatService, IMainPageService mainPageService)
+		public TeamsViewModel(ITeamService teamService, IMainPageService mainPageService)
 		{
 			_teamService = teamService;
-			_hipChatService = hipChatService; // TODO: Handle AddTeamDialog creation properly so this doesn't need to be injected here.
 
 			Teams = new ObservableCollection<Team>();
 			mainPageService.Title = "Teams";
 
 			AddTeamCommand = new RelayCommandAsync(AddTeamAsync);
-			EditTeamCommand = new RelayCommandAsync<Team>(EditTeamAsync, team => team != null);
-			DeleteTeamCommand = new RelayCommandAsync<Team>(DeleteTeamAsync, team => team != null);
+			EditTeamCommand = new RelayCommandAsync<Team>(EditTeamAsync, team => team != null, this, nameof(TappedTeam));
+			DeleteTeamCommand = new RelayCommandAsync<Team>(DeleteTeamAsync, team => team != null, this, nameof(TappedTeam));
 		}
 
 		private async Task AddTeamAsync()

@@ -8,7 +8,7 @@ namespace Hipstr.Client.Views.Users
 {
 	public sealed partial class UsersView : Page
 	{
-		public UsersViewModel ViewModel => DataContext as UsersViewModel;
+		public UsersViewModel ViewModel => (UsersViewModel)DataContext;
 
 		public UsersView()
 		{

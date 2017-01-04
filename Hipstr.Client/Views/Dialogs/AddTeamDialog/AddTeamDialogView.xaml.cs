@@ -23,7 +23,7 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 		private readonly ParentPopupManager _popUp;
 		private TaskCompletionSource<DialogResult<Team>> _taskCompletionSource;
 
-		public AddTeamDialogViewModel ViewModel => DataContext as AddTeamDialogViewModel;
+		public AddTeamDialogViewModel ViewModel => (AddTeamDialogViewModel)DataContext;
 
 		private ICommand CancelDialogCommand { get; }
 

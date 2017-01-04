@@ -10,7 +10,7 @@ namespace Hipstr.Client.Views.Rooms
 {
 	public sealed partial class RoomsView : Page
 	{
-		public RoomsViewModel ViewModel => DataContext as RoomsViewModel;
+		public RoomsViewModel ViewModel => (RoomsViewModel)DataContext;
 
 		public RoomsView()
 		{

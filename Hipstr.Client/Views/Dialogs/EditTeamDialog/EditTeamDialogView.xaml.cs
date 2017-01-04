@@ -1,121 +1,111 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
-using System.Threading;
+﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Events;
+using Hipstr.Core.Models;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.Foundation;
-using Windows.Foundation.Metadata;
+using Windows.System;
 using Windows.UI.Core;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Media.Animation;
-using Hipstr.Core.Models;
+using Windows.UI.Xaml.Input;
 
 namespace Hipstr.Client.Views.Dialogs.EditTeamDialog
 {
 	public sealed partial class EditTeamDialogView : UserControl
 	{
-		private string _teamName;
-		private string _apiKey;
+		private const string VisualStateTeamNameNormal = "TeamNameNormal";
+		private const string VisualStateTeamNameErrored = "TeamNameErrored";
 
-		private static ApplicationView Window => ApplicationView.GetForCurrentView();
-
-		private readonly Popup _parent;
+		private readonly ParentPopupManager _popUp;
 		private TaskCompletionSource<DialogResult<Team>> _taskCompletionSource;
 
-		// TODO: Commonize Dialog logic into a control baseclass or service
+		public EditTeamDialogViewModel ViewModel => (EditTeamDialogViewModel)DataContext;
+
+		private ICommand CancelDialogCommand { get; }
+
 		public EditTeamDialogView()
 		{
 			InitializeComponent();
-			_parent = new Popup {Child = this};
-			ResizePopup();
-			_parent.ChildTransitions = new TransitionCollection
-			{
-				new PopupThemeTransition
-				{
-					FromVerticalOffset = Height * 3
-				}
-			};
-			_parent.IsLightDismissEnabled = false;
+			DataContext = IoCContainer.Resolve<EditTeamDialogViewModel>();
 
-			Loaded += OnLoaded;
-			Unloaded += OnUnloaded;
+			_popUp = new ParentPopupManager(this);
+			CancelDialogCommand = new RelayCommand(CancelDialog);
+
+			ViewModel.Validation += OnValidation;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
-			Window.VisibleBoundsChanged += OnVisibleBoundsChanged;
+			_popUp.BindToWindow();
 			SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
 		}
 
 		private void OnUnloaded(object sender, RoutedEventArgs e)
 		{
-			Window.VisibleBoundsChanged -= OnVisibleBoundsChanged;
+			_popUp.UnbindFromWindow();
 			SystemNavigationManager.GetForCurrentView().BackRequested -= OnBackRequested;
 		}
 
-		private void OnVisibleBoundsChanged(ApplicationView sender, object args)
+		private void TeamNameTextBox_OnKeyUp(object sender, KeyRoutedEventArgs keyRoutedEventArgs)
 		{
-			ResizePopup();
+			if (keyRoutedEventArgs.Key == VirtualKey.Enter)
+			{
+				AcceptDialogButton.Focus(FocusState.Keyboard);
+			}
+
+			VisualStateManager.GoToState(this, VisualStateTeamNameNormal, false);
 		}
 
 		private void OnBackRequested(object sender, BackRequestedEventArgs e)
 		{
-			Hide();
+			CancelDialog();
 			e.Handled = true;
 		}
 
-		private void ResizePopup()
+		private void OnValidation(object sender, EditTeamDialogValidationEventArgs e)
 		{
-			Width = Window.VisibleBounds.Width;
+			string teamNameState = e.TeamNameValidationResult.IsValid ? VisualStateTeamNameNormal : VisualStateTeamNameErrored;
 
-			double topMargin = 0;
-			if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-			{
-				topMargin = StatusBar.GetForCurrentView().OccludedRect.Height;
-			}
+			TeamNameErrorTextBlock.Text = e.TeamNameValidationResult.Reason;
 
-			Height = Window.VisibleBounds.Height;
-			Margin = new Thickness(0, topMargin, 0, 0);
+			VisualStateManager.GoToState(this, teamNameState, false);
+
+			if (!e.TeamNameValidationResult.IsValid) return;
+
+			CloseDialog();
 		}
 
 		public IAsyncOperation<DialogResult<Team>> ShowAsync(Team team)
 		{
-			_teamName = team.Name;
-			_apiKey = team.ApiKey;
+			ViewModel.TeamName = team.Name;
+			ViewModel.ApiKey = team.ApiKey;
 
-			_parent.IsOpen = true;
-			return AsyncInfo.Run(WaitForInput);
+			_popUp.Show();
+			return AsyncInfo.Run(token =>
+			{
+				_taskCompletionSource = new TaskCompletionSource<DialogResult<Team>>();
+				token.Register(CancelDialog);
+				return _taskCompletionSource.Task;
+			});
 		}
 
-		private Task<DialogResult<Team>> WaitForInput(CancellationToken token)
+		private void CloseDialog()
 		{
-			_taskCompletionSource = new TaskCompletionSource<DialogResult<Team>>();
-			token.Register(OnCancelled);
-			return _taskCompletionSource.Task;
+			_popUp.Hide();
+			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(ViewModel.TeamName, ViewModel.ApiKey)));
 		}
 
-		private void OnCancelled()
+		private void CancelDialog()
 		{
-			Hide();
+			_popUp.Hide();
 			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
 		}
 
-		private void Hide()
+		private void Grid_OnPointerPressed(object sender, PointerRoutedEventArgs e)
 		{
-			_parent.IsOpen = false;
-		}
-
-		private void CancelDialogButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			Hide();
-			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
-		}
-
-		private void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
-		{
-			Hide();
-			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(_teamName, _apiKey)));
+			AcceptDialogButton.Focus(FocusState.Programmatic);
 		}
 	}
 }

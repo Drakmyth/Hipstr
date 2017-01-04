@@ -8,7 +8,7 @@ namespace Hipstr.Client.Views.Messages
 {
 	public sealed partial class MessagesView : Page
 	{
-		public MessagesViewModel ViewModel => DataContext as MessagesViewModel;
+		public MessagesViewModel ViewModel => (MessagesViewModel)DataContext;
 		private bool _autoScrollMessages;
 
 		public MessagesView()
