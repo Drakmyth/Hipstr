@@ -39,7 +39,7 @@ namespace Hipstr.Core.Services
 			await _dataService.SaveTeamsAsync(_teams);
 		}
 
-		public async Task<IEnumerable<Team>> GetTeamsAsync()
+		public async Task<IReadOnlyList<Team>> GetTeamsAsync()
 		{
 			_teams.Clear();
 			_teams.AddRange(await _dataService.LoadTeamsAsync());

@@ -107,7 +107,7 @@
     <Compile Include="Services\MainPageService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
-    <Compile Include="Views\JumpHeader.cs" />
+    <Compile Include="Dialogs\JumpHeader.cs" />
     <Compile Include="Dialogs\ListGroupJumpDialog.xaml.cs">
       <DependentUpon>ListGroupJumpDialog.xaml</DependentUpon>
     </Compile>
@@ -120,7 +120,7 @@
     <Compile Include="Views\Messages\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ModalResult.cs" />
+    <Compile Include="Dialogs\DialogResult.cs" />
     <Compile Include="Views\Rooms\RoomsView.xaml.cs">
       <DependentUpon>RoomsView.xaml</DependentUpon>
     </Compile>

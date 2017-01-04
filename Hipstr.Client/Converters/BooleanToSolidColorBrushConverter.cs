@@ -12,13 +12,13 @@ namespace Hipstr.Client.Converters
 		{
 			string[] parameters = (parameter as string)?.Split('|') ?? new[] {nameof(Colors.White), nameof(Colors.DimGray)};
 
-			PropertyInfo enabledColorProp = typeof(Colors).GetProperty(parameters[0]);
-			PropertyInfo disabledColorProp = typeof(Colors).GetProperty(parameters[1]);
+			PropertyInfo trueColorProp = typeof(Colors).GetProperty(parameters[0]);
+			PropertyInfo falseColorProp = typeof(Colors).GetProperty(parameters[1]);
 
-			var enabledColor = (Color)(enabledColorProp?.GetValue(null) ?? Colors.White);
-			var disabledColor = (Color)(disabledColorProp?.GetValue(null) ?? Colors.DimGray);
+			var trueColor = (Color)(trueColorProp?.GetValue(null) ?? Colors.White);
+			var falseColor = (Color)(falseColorProp?.GetValue(null) ?? Colors.DimGray);
 
-			return value is bool && (bool)value ? new SolidColorBrush(enabledColor) : new SolidColorBrush(disabledColor);
+			return value is bool && (bool)value ? new SolidColorBrush(trueColor) : new SolidColorBrush(falseColor);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, string language)

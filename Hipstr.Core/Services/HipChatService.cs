@@ -227,5 +227,24 @@ namespace Hipstr.Core.Services
 				Title = hcUserProfile.Title
 			};
 		}
+
+		public async Task<ApiKeyInfo> GetApiKeyInfoAsync(string apiKey)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
+
+			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/oauth/token/{apiKey}"));
+
+			string json = await get.Content.ReadAsStringAsync();
+
+			var hcSession = JsonConvert.DeserializeObject<HipChatOAuthSession>(json);
+
+			return new ApiKeyInfo
+			{
+				Id = hcSession.Id,
+				ApiKey = hcSession.AccessToken,
+				RefreshToken = hcSession.RefreshToken,
+				Scopes = hcSession.Scopes
+			};
+		}
 	}
 }

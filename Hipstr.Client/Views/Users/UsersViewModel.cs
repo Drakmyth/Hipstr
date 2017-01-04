@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Hipstr.Client.Dialogs;
 
 namespace Hipstr.Client.Views.Users
 {
@@ -134,7 +135,7 @@ namespace Hipstr.Client.Views.Users
 		private async Task JumpToHeaderAsync()
 		{
 			var dialog = new Dialogs.ListGroupJumpDialog();
-			ModalResult<string> headerText = await dialog.ShowAsync(GroupedUsers.Select(ug => new JumpHeader(ug.Header, ug.Any())));
+			DialogResult<string> headerText = await dialog.ShowAsync(GroupedUsers.Select(ug => new JumpHeader(ug.Header, ug.Any())));
 			if (!headerText.Cancelled)
 			{
 				UserGroupScrollToHeaderRequest?.Invoke(this, GroupedUsers.Where(ug => ug.Header == headerText.Result).Single());

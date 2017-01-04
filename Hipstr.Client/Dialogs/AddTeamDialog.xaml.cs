@@ -1,4 +1,8 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
+using Hipstr.Core.Models;
+using Hipstr.Core.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Metadata;
@@ -10,8 +14,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
-using Hipstr.Client.Views;
-using Hipstr.Core.Models;
 
 namespace Hipstr.Client.Dialogs
 {
@@ -20,16 +22,24 @@ namespace Hipstr.Client.Dialogs
 		private string _teamName;
 		private string _apiKey;
 
+		private readonly ITeamService _teamService;
+		private readonly IHipChatService _hipChatService;
+
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
 		private readonly Popup _parent;
-		private TaskCompletionSource<ModalResult<Team>> _taskCompletionSource;
+		private TaskCompletionSource<DialogResult<Team>> _taskCompletionSource;
+		private bool _apiKeyIsErrored;
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
-		public AddTeamDialog()
+		public AddTeamDialog(ITeamService teamService, IHipChatService hipChatService)
 		{
 			InitializeComponent();
-			_parent = new Popup { Child = this };
+
+			_teamService = teamService;
+			_hipChatService = hipChatService;
+
+			_parent = new Popup {Child = this};
 			ResizePopup();
 			_parent.ChildTransitions = new TransitionCollection
 			{
@@ -39,6 +49,7 @@ namespace Hipstr.Client.Dialogs
 				}
 			};
 			_parent.IsLightDismissEnabled = false;
+			_apiKeyIsErrored = false;
 		}
 
 		private void OnLoaded(object sender, RoutedEventArgs e)
@@ -94,12 +105,12 @@ namespace Hipstr.Client.Dialogs
 			e.Handled = true;
 		}
 
-		public IAsyncOperation<ModalResult<Team>> ShowAsync()
+		public IAsyncOperation<DialogResult<Team>> ShowAsync()
 		{
 			_parent.IsOpen = true;
 			return AsyncInfo.Run(token =>
 			{
-				_taskCompletionSource = new TaskCompletionSource<ModalResult<Team>>();
+				_taskCompletionSource = new TaskCompletionSource<DialogResult<Team>>();
 				token.Register(OnCancelled);
 				return _taskCompletionSource.Task;
 			});
@@ -108,7 +119,7 @@ namespace Hipstr.Client.Dialogs
 		private void OnCancelled()
 		{
 			Hide();
-			_taskCompletionSource.SetResult(ModalResult<Team>.CancelledResult());
+			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
 		}
 
 		private void Hide()
@@ -121,10 +132,31 @@ namespace Hipstr.Client.Dialogs
 			OnCancelled();
 		}
 
-		private void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
+		private async void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
 		{
+			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
+			if (teams.Where(team => team.ApiKey == _apiKey).Any())
+			{
+				VisualStateManager.GoToState(this, "ApiKeyErrored", false);
+				// TODO: Handle duplicate Api Key
+				_apiKeyIsErrored = true;
+			}
+
+			try
+			{
+				await _hipChatService.GetApiKeyInfoAsync(_apiKey);
+			}
+			catch
+			{
+				VisualStateManager.GoToState(this, "ApiKeyErrored", false);
+				// TODO: Handle invalid Api Key
+				_apiKeyIsErrored = true;
+			}
+
+			if (_apiKeyIsErrored) return;
+
 			Hide();
-			_taskCompletionSource.SetResult(new ModalResult<Team>(new Team(_teamName, _apiKey)));
+			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(_teamName, _apiKey)));
 		}
 	}
 }

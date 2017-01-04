@@ -9,6 +9,6 @@ namespace Hipstr.Core.Services
 		Task AddTeamAsync(Team team);
 		Task EditTeamAsync(Team team);
 		Task RemoveTeamAsync(Team team);
-		Task<IEnumerable<Team>> GetTeamsAsync();
+		Task<IReadOnlyList<Team>> GetTeamsAsync();
 	}
 }

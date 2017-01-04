@@ -1,4 +1,4 @@
-﻿namespace Hipstr.Client.Views
+﻿namespace Hipstr.Client.Dialogs
 {
 	public class JumpHeader
 	{

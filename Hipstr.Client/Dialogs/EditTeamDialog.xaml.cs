@@ -22,7 +22,7 @@ namespace Hipstr.Client.Dialogs
 		private static ApplicationView Window => ApplicationView.GetForCurrentView();
 
 		private readonly Popup _parent;
-		private TaskCompletionSource<ModalResult<Team>> _taskCompletionSource;
+		private TaskCompletionSource<DialogResult<Team>> _taskCompletionSource;
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
 		public EditTeamDialog()
@@ -80,7 +80,7 @@ namespace Hipstr.Client.Dialogs
 			Margin = new Thickness(0, topMargin, 0, 0);
 		}
 
-		public IAsyncOperation<ModalResult<Team>> ShowAsync(Team team)
+		public IAsyncOperation<DialogResult<Team>> ShowAsync(Team team)
 		{
 			_teamName = team.Name;
 			_apiKey = team.ApiKey;
@@ -89,9 +89,9 @@ namespace Hipstr.Client.Dialogs
 			return AsyncInfo.Run(WaitForInput);
 		}
 
-		private Task<ModalResult<Team>> WaitForInput(CancellationToken token)
+		private Task<DialogResult<Team>> WaitForInput(CancellationToken token)
 		{
-			_taskCompletionSource = new TaskCompletionSource<ModalResult<Team>>();
+			_taskCompletionSource = new TaskCompletionSource<DialogResult<Team>>();
 			token.Register(OnCancelled);
 			return _taskCompletionSource.Task;
 		}
@@ -99,7 +99,7 @@ namespace Hipstr.Client.Dialogs
 		private void OnCancelled()
 		{
 			Hide();
-			_taskCompletionSource.SetResult(ModalResult<Team>.CancelledResult());
+			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
 		}
 
 		private void Hide()
@@ -110,13 +110,13 @@ namespace Hipstr.Client.Dialogs
 		private void CancelDialogButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			Hide();
-			_taskCompletionSource.SetResult(ModalResult<Team>.CancelledResult());
+			_taskCompletionSource.SetResult(DialogResult<Team>.CancelledResult());
 		}
 
 		private void AcceptDialogButton_OnClick(object sender, RoutedEventArgs e)
 		{
 			Hide();
-			_taskCompletionSource.SetResult(new ModalResult<Team>(new Team(_teamName, _apiKey)));
+			_taskCompletionSource.SetResult(new DialogResult<Team>(new Team(_teamName, _apiKey)));
 		}
 	}
 }

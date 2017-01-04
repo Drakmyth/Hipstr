@@ -1,4 +1,5 @@
 ﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Dialogs;
 using Hipstr.Client.Services;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
@@ -32,10 +33,12 @@ namespace Hipstr.Client.Views.Teams
 		}
 
 		private readonly ITeamService _teamService;
+		private readonly IHipChatService _hipChatService;
 
-		public TeamsViewModel(ITeamService teamService, IMainPageService mainPageService)
+		public TeamsViewModel(ITeamService teamService, IHipChatService hipChatService, IMainPageService mainPageService)
 		{
 			_teamService = teamService;
+			_hipChatService = hipChatService; // TODO: Handle AddTeamDialog creation properly so this doesn't need to be injected here.
 
 			Teams = new ObservableCollection<Team>();
 			mainPageService.Title = "Teams";
@@ -47,14 +50,12 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task AddTeamAsync()
 		{
-			var dialog = new Dialogs.AddTeamDialog();
-			ModalResult<Team> team = await dialog.ShowAsync();
+			var dialog = new AddTeamDialog(_teamService, _hipChatService);
+			DialogResult<Team> team = await dialog.ShowAsync();
 			if (!team.Cancelled)
 			{
 				string teamName = team.Result.Name;
 				string apiKey = team.Result.ApiKey;
-
-				// TODO: Duplicate API Key should show error message
 
 				await _teamService.AddTeamAsync(new Team(teamName, apiKey));
 				await RefreshTeamListAsync();
@@ -63,8 +64,8 @@ namespace Hipstr.Client.Views.Teams
 
 		private async Task EditTeamAsync(Team selectedTeam)
 		{
-			var dialog = new Dialogs.EditTeamDialog();
-			ModalResult<Team> team = await dialog.ShowAsync(selectedTeam);
+			var dialog = new EditTeamDialog();
+			DialogResult<Team> team = await dialog.ShowAsync(selectedTeam);
 			if (!team.Cancelled)
 			{
 				string teamName = team.Result.Name;

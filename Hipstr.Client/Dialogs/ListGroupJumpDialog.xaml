@@ -4,7 +4,7 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:views="using:Hipstr.Client.Views"
+	xmlns:dialogs="using:Hipstr.Client.Dialogs"
 	xmlns:converters="using:Hipstr.Client.Converters"
 	mc:Ignorable="d">
 
@@ -21,7 +21,7 @@
 		<Border Background="Black" Opacity="0.75" />
 		<GridView ItemsSource="{x:Bind _groupHeaders, Mode=OneWay}" SelectionMode="None">
 			<GridView.ItemTemplate>
-				<DataTemplate x:DataType="views:JumpHeader">
+				<DataTemplate x:DataType="dialogs:JumpHeader">
 					<TextBlock Text="{x:Bind Header}"
 					           Foreground="{x:Bind Enabled, Converter={StaticResource BoolToBrush}}"
 					           FontSize="36"

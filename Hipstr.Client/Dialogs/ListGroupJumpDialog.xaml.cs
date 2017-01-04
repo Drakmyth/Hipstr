@@ -24,7 +24,7 @@ namespace Hipstr.Client.Dialogs
 		private readonly ObservableCollection<JumpHeader> _groupHeaders;
 
 		private readonly Popup _parent;
-		private TaskCompletionSource<ModalResult<string>> _taskCompletionSource;
+		private TaskCompletionSource<DialogResult<string>> _taskCompletionSource;
 
 		// TODO: Commonize Dialog logic into a control baseclass or service
 		public ListGroupJumpDialog()
@@ -76,7 +76,7 @@ namespace Hipstr.Client.Dialogs
 			Margin = new Thickness(0, topMargin, 0, 0);
 		}
 
-		public IAsyncOperation<ModalResult<string>> ShowAsync(IEnumerable<JumpHeader> headers)
+		public IAsyncOperation<DialogResult<string>> ShowAsync(IEnumerable<JumpHeader> headers)
 		{
 			_groupHeaders.Clear();
 			_groupHeaders.AddRange(headers);
@@ -85,9 +85,9 @@ namespace Hipstr.Client.Dialogs
 			return AsyncInfo.Run(WaitForInput);
 		}
 
-		private Task<ModalResult<string>> WaitForInput(CancellationToken token)
+		private Task<DialogResult<string>> WaitForInput(CancellationToken token)
 		{
-			_taskCompletionSource = new TaskCompletionSource<ModalResult<string>>();
+			_taskCompletionSource = new TaskCompletionSource<DialogResult<string>>();
 			token.Register(OnCancelled);
 			return _taskCompletionSource.Task;
 		}
@@ -95,7 +95,7 @@ namespace Hipstr.Client.Dialogs
 		private void OnCancelled()
 		{
 			Hide();
-			_taskCompletionSource.SetResult(ModalResult<string>.CancelledResult());
+			_taskCompletionSource.SetResult(DialogResult<string>.CancelledResult());
 		}
 
 		private void Hide()
@@ -111,7 +111,7 @@ namespace Hipstr.Client.Dialogs
 			if (!header.Enabled) return;
 
 			Hide();
-			_taskCompletionSource.SetResult(new ModalResult<string>(tapped.Text));
+			_taskCompletionSource.SetResult(new DialogResult<string>(tapped.Text));
 		}
 	}
 }
