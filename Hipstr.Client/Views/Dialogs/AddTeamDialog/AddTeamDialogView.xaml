@@ -1,13 +1,12 @@
-﻿<UserControl
-	x:Class="Hipstr.Client.Views.Dialogs.AddTeamDialog.AddTeamDialogView"
-	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:converters="using:Hipstr.Client.Converters"
-	mc:Ignorable="d"
-	Loaded="OnLoaded"
-	Unloaded="OnUnloaded">
+﻿<UserControl Name="AddTeamDialog"
+			 x:Class="Hipstr.Client.Views.Dialogs.AddTeamDialog.AddTeamDialogView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 Loaded="OnLoaded"
+			 Unloaded="OnUnloaded">
 
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -34,11 +33,16 @@
 				<Setter Property="RelativePanel.AlignRightWithPanel" Value="True" />
 				<Setter Property="Visibility" Value="Collapsed" />
 			</Style>
-			<converters:ValidationResultToStringConverter x:Key="ValidationToStr" />
+			<Style x:Key="ErrorTextBlockStyle" TargetType="TextBlock">
+				<Setter Property="Foreground" Value="Red" />
+				<Setter Property="TextWrapping" Value="WrapWholeWords" />
+				<Setter Property="Margin" Value="10 0" />
+				<Setter Property="Text" Value="ErrorText" /> <!-- Design data -->
+			</Style>
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid HorizontalAlignment="Stretch">
+	<Grid HorizontalAlignment="Stretch" PointerPressed="Grid_OnPointerPressed">
 		<VisualStateManager.VisualStateGroups>
 			<VisualStateGroup x:Name="ApiKeyStates">
 				<VisualState x:Name="ApiKeyNormal" />
@@ -78,22 +82,16 @@
 					 RelativePanel.Below="PageTitle"
 					 Text="{x:Bind ViewModel.TeamName, Mode=TwoWay}"
 					 KeyUp="TeamNameTextBox_OnKeyUp" />
-			<Border Name="TeamNameErrorBorder"
-					RelativePanel.Below="TeamNameTextBox">
-				<TextBlock Name="TeamNameErrorTextBlock"
-						   Foreground="Red"
-						   Margin="10 0" />
+			<Border Name="TeamNameErrorBorder" RelativePanel.Below="TeamNameTextBox">
+				<TextBlock Name="TeamNameErrorTextBlock" Style="{StaticResource ErrorTextBlockStyle}" />
 			</Border>
 			<TextBox Name="ApiKeyTextBox"
 					 Header="API Key"
 					 RelativePanel.Below="TeamNameErrorBorder"
 					 Text="{x:Bind ViewModel.ApiKey, Mode=TwoWay}"
 					 KeyUp="ApiKeyTextBox_OnKeyUp" />
-			<Border Name="ApiKeyErrorBorder"
-					RelativePanel.Below="ApiKeyTextBox">
-				<TextBlock Name="ApiKeyErrorTextBlock"
-						   Foreground="Red"
-						   Margin="10 0" />
+			<Border Name="ApiKeyErrorBorder" RelativePanel.Below="ApiKeyTextBox">
+				<TextBlock Name="ApiKeyErrorTextBlock" Style="{StaticResource ErrorTextBlockStyle}" />
 			</Border>
 			<ProgressRing Width="50"
 						  Height="50"
@@ -109,7 +107,7 @@
 						  Icon="Cancel"
 						  Label="Cancel"
 						  Foreground="White"
-						  Click="CancelDialogButton_OnClick" />
+						  Command="{x:Bind CancelDialogCommand}" />
 			<AppBarButton x:Name="AcceptDialogButton"
 						  Icon="Accept"
 						  Label="Accept"

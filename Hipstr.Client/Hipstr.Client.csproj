@@ -105,6 +105,7 @@
     <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogValidationEventArgs.cs" />
     <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogViewModel.cs" />
+    <Compile Include="Views\Dialogs\ParentPopupManager.cs" />
     <Compile Include="Views\Dialogs\ValidationResult.cs" />
     <Compile Include="Services\IMainPageService.cs" />
     <Compile Include="IoCContainer.cs" />
