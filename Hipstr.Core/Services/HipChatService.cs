@@ -50,7 +50,7 @@ namespace Hipstr.Core.Services
 				case HipChatCacheBehavior.RefreshCache:
 					return await GetRoomsAndSaveToCacheAsync(team);
 				default:
-					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+					throw new ArgumentOutOfRangeException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
 			}
 		}
 
@@ -115,7 +115,7 @@ namespace Hipstr.Core.Services
 				case HipChatCacheBehavior.RefreshCache:
 					return await GetUsersAndSaveToCacheAsync(team);
 				default:
-					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+					throw new ArgumentOutOfRangeException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
 			}
 		}
 
@@ -198,7 +198,7 @@ namespace Hipstr.Core.Services
 				case HipChatCacheBehavior.RefreshCache:
 					return await GetUserProfileFromServerAsync(user);
 				default:
-					throw new ArgumentException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+					throw new ArgumentOutOfRangeException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
 			}
 		}
 

@@ -108,6 +108,7 @@
     <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogValidationEventArgs.cs" />
     <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogViewModel.cs" />
     <Compile Include="Views\Dialogs\ParentPopupManager.cs" />
+    <Compile Include="Views\Dialogs\ParentPopupTransitionType.cs" />
     <Compile Include="Views\Dialogs\ValidationResult.cs" />
     <Compile Include="Services\IMainPageService.cs" />
     <Compile Include="IoCContainer.cs" />

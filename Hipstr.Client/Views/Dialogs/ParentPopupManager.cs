@@ -1,7 +1,7 @@
-﻿using Windows.Foundation.Metadata;
+﻿using System;
+using Windows.Foundation.Metadata;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
-using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media.Animation;
 
@@ -14,19 +14,30 @@ namespace Hipstr.Client.Views.Dialogs
 
 		private readonly Popup _parent;
 
-		public ParentPopupManager(FrameworkElement child)
+		public ParentPopupManager(FrameworkElement child, ParentPopupTransitionType transitionType = ParentPopupTransitionType.Slide)
 		{
 			_parent = new Popup {Child = child};
 			Child = child;
 
 			ResizePopup();
-			_parent.ChildTransitions = new TransitionCollection
+
+			switch (transitionType)
 			{
-				new PopupThemeTransition
-				{
-					FromVerticalOffset = Child.Height * 3
-				}
-			};
+				case ParentPopupTransitionType.Slide:
+					_parent.ChildTransitions = new TransitionCollection
+					{
+						new PopupThemeTransition
+						{
+							FromVerticalOffset = Child.Height * 3
+						}
+					};
+					break;
+				case ParentPopupTransitionType.Fade:
+					// Default transition
+					break;
+				default:
+					throw new ArgumentOutOfRangeException($"Unknown Transition Type - {transitionType}", nameof(transitionType));
+			}
 			_parent.IsLightDismissEnabled = false;
 		}
 
