@@ -32,7 +32,7 @@
 			</ListView.ItemContainerStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:Team">
-					<Grid Padding="12" Holding="OnTeamRightTapped">
+					<Grid Padding="12" Holding="Grid_OnHolding">
 						<TextBlock Text="{x:Bind Name}" Foreground="White" />
 						<FlyoutBase.AttachedFlyout>
 							<MenuFlyout>

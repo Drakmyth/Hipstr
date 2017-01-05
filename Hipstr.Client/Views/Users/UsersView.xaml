@@ -1,4 +1,5 @@
-﻿<Page x:Class="Hipstr.Client.Views.Users.UsersView"
+﻿<Page Name="UsersViewPage"
+	x:Class="Hipstr.Client.Views.Users.UsersView"
 	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -27,14 +28,6 @@
 		<ListView x:Name="UserList"
 				  Grid.Row="0"
 				  ItemsSource="{Binding Source={StaticResource GroupedUsersSource}}">
-			<interactivity:Interaction.Behaviors>
-				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
-					<core:EventTriggerBehavior.Actions>
-						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToUserProfileViewCommand}"
-												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay}" />
-					</core:EventTriggerBehavior.Actions>
-				</core:EventTriggerBehavior>
-			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">
 					<GroupStyle.HeaderTemplate>
@@ -49,12 +42,28 @@
 			</ListView.GroupStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:User">
-					<StackPanel>
+					<StackPanel Holding="StackPanel_OnHolding">
 						<TextBlock Text="{x:Bind Name}"
 								   Foreground="White" />
 						<TextBlock Text="{x:Bind Team.Name}"
 								   Foreground="LightGray"
 								   FontSize="10" />
+						<FlyoutBase.AttachedFlyout>
+							<MenuFlyout>
+								<MenuFlyout.MenuFlyoutPresenterStyle>
+									<Style TargetType="MenuFlyoutPresenter">
+										<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
+									</Style>
+								</MenuFlyout.MenuFlyoutPresenterStyle>
+								<MenuFlyout.Items>
+									<MenuFlyoutItem Text="View User Profile"
+													Background="{StaticResource HipChatControl}"
+													Foreground="White"
+													Command="{Binding ViewModel.NavigateToUserProfileViewCommand, Mode=OneTime, ElementName=UsersViewPage}"
+													CommandParameter="{Binding ViewModel.TappedUser, ElementName=UsersViewPage}" />
+								</MenuFlyout.Items>
+							</MenuFlyout>
+						</FlyoutBase.AttachedFlyout>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>

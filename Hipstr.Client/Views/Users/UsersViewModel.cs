@@ -29,6 +29,18 @@ namespace Hipstr.Client.Views.Users
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshUsersCommand { get; }
 
+		private User _tappedUser;
+
+		public User TappedUser
+		{
+			get { return _tappedUser; }
+			set
+			{
+				_tappedUser = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private bool _loadingUsers;
 
 		public bool LoadingUsers
@@ -56,7 +68,7 @@ namespace Hipstr.Client.Views.Users
 			GroupedUsers = new ObservableCollection<ObservableGroupedUsersCollection>();
 			_users.CollectionChanged += UsersOnCollectionChanged;
 
-			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView>();
+			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView, User>(user => user != null, this, nameof(TappedUser));
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshUsersCommand = new RelayCommandAsync(() => RefreshUsersAsync(), () => !LoadingUsers, this, nameof(LoadingUsers));
 		}

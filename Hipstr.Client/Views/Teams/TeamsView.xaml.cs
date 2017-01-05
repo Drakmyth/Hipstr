@@ -17,10 +17,10 @@ namespace Hipstr.Client.Views.Teams
 			DataContext = IoCContainer.Resolve<TeamsViewModel>();
 		}
 
-		private void OnTeamRightTapped(object sender, HoldingRoutedEventArgs e)
+		private void Grid_OnHolding(object sender, HoldingRoutedEventArgs e)
 		{
 			var listItem = (FrameworkElement)sender;
-			ViewModel.TappedTeam = listItem.DataContext as Team;
+			ViewModel.TappedTeam = (Team)listItem.DataContext;
 			FlyoutBase.ShowAttachedFlyout(listItem);
 		}
 
