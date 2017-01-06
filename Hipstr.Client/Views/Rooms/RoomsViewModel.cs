@@ -58,7 +58,7 @@ namespace Hipstr.Client.Views.Rooms
 
 			_rooms.CollectionChanged += RoomsOnCollectionChanged;
 
-			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView>();
+			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, Room>();
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
 		}

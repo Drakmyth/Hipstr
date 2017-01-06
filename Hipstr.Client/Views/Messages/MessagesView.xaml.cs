@@ -1,6 +1,8 @@
 ﻿using Hipstr.Client.Utility;
 using Hipstr.Core.Models;
 using System;
+using System.Threading.Tasks;
+using Windows.UI.Core;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
@@ -27,6 +29,12 @@ namespace Hipstr.Client.Views.Messages
 
 			scrollViewer.DirectManipulationStarted += ScrollViewerOnDirectManipulationStarted;
 			scrollViewer.DirectManipulationCompleted += ScrollViewerOnDirectManipulationCompleted;
+
+			while (true)
+			{
+				await Task.Delay(TimeSpan.FromSeconds(30));
+				await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () => { await ViewModel.CheckForNewMessages(); });
+			}
 		}
 
 		private void MessagesListView_OnLayoutUpdated(object sender, object e)

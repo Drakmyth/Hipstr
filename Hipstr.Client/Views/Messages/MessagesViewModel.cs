@@ -1,13 +1,15 @@
-﻿using Hipstr.Client.Commands;
+﻿using System;
+using Hipstr.Client.Commands;
+using Hipstr.Client.Services;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Services;
-using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Messages
 {
@@ -65,6 +67,22 @@ namespace Hipstr.Client.Views.Messages
 				IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
 				Messages.Clear();
 				Messages.AddRange(messages);
+			}
+			finally
+			{
+				LoadingMessages = false;
+			}
+		}
+
+		public async Task CheckForNewMessages()
+		{
+			try
+			{
+				LoadingMessages = true;
+				IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
+
+				DateTime latestDate = Messages.Last().Date;
+				Messages.AddRange(messages.Where(message => message.Date > latestDate));
 			}
 			finally
 			{
