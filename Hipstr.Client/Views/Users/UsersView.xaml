@@ -5,6 +5,9 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:models="using:Hipstr.Core.Models"
+	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+	  xmlns:converters="using:Hipstr.Client.Converters"
 	  mc:Ignorable="d">
 
 	<Page.Resources>
@@ -15,6 +18,7 @@
 			<CollectionViewSource x:Name="GroupedUsersSource"
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
 								  IsSourceGrouped="True"/>
+			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -26,6 +30,14 @@
 		<ListView x:Name="UserList"
 				  Grid.Row="0"
 				  ItemsSource="{Binding Source={StaticResource GroupedUsersSource}}">
+			<interactivity:Interaction.Behaviors>
+				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
+					<core:EventTriggerBehavior.Actions>
+						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
+												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
+					</core:EventTriggerBehavior.Actions>
+				</core:EventTriggerBehavior>
+			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">
 					<GroupStyle.HeaderTemplate>

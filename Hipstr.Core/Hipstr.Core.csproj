@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="Comparers\UserNameComparer.cs" />
     <Compile Include="Comparers\RoomNameComparer.cs" />
+    <Compile Include="Messaging\UserMessageSource.cs" />
     <Compile Include="Messaging\RoomMessageSource.cs" />
     <Compile Include="Models\ApiKeyInfo.cs" />
     <Compile Include="Models\HipChat\HipChatOAuthClient.cs" />

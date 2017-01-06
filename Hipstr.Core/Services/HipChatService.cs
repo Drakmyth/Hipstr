@@ -188,6 +188,30 @@ namespace Hipstr.Core.Services
 			}).ToList();
 		}
 
+		public async Task<IReadOnlyList<Message>> GetMessagesForUserAsync(User user)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
+			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/user/{user.Id}/history"));
+			string json = await get.Content.ReadAsStringAsync();
+
+			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
+			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
+			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
+
+			return hcMessages.Select(hcMessage => new Message
+			{
+				PostedBy = new User
+				{
+					Id = hcMessage.From.Id,
+					Handle = hcMessage.From.MentionName,
+					Name = hcMessage.From.Name,
+					Team = user.Team
+				},
+				Date = hcMessage.Date,
+				Text = hcMessage.Message
+			}).ToList();
+		}
+
 		public async Task<UserProfile> GetUserProfileAsync(User user, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
 		{
 			switch (cacheBehavior)

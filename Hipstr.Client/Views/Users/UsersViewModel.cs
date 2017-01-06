@@ -2,7 +2,9 @@
 using Hipstr.Client.Services;
 using Hipstr.Client.Views.Dialogs;
 using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
+using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
+using Hipstr.Core.Messaging;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
@@ -26,6 +28,7 @@ namespace Hipstr.Client.Views.Users
 		private readonly ObservableCollection<User> _users;
 		public ObservableCollection<ObservableGroupedUsersCollection> GroupedUsers { get; }
 		public ICommand NavigateToUserProfileViewCommand { get; }
+		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshUsersCommand { get; }
 
@@ -69,6 +72,7 @@ namespace Hipstr.Client.Views.Users
 			_users.CollectionChanged += UsersOnCollectionChanged;
 
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView, User>(user => user != null, this, nameof(TappedUser));
+			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(user => user != null);
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshUsersCommand = new RelayCommandAsync(() => RefreshUsersAsync(), () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
