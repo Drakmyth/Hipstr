@@ -24,6 +24,11 @@
 				  ItemsSource="{x:Bind ViewModel.Messages}"
 				  SelectionMode="None"
 				  LayoutUpdated="MessagesListView_OnLayoutUpdated">
+			<ListView.ItemContainerTransitions>
+				<TransitionCollection>
+					<PopupThemeTransition FromHorizontalOffset="400" />
+				</TransitionCollection>
+			</ListView.ItemContainerTransitions>
 			<ListView.ItemContainerStyle>
 				<Style TargetType="ListViewItem">
 					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -59,7 +64,7 @@
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="White"
-						  Command="{x:Bind ViewModel.ReloadRoomCommand}" />
+						  Command="{x:Bind ViewModel.ReloadMessagesCommand}" />
 		</CommandBar>
 	</Grid>
 </Page>

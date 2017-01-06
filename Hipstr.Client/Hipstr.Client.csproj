@@ -98,6 +98,7 @@
     <Compile Include="Commands\RelayCommandAsync.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
+    <Compile Include="Converters\RoomToMessageSourceConverter.cs" />
     <Compile Include="Converters\ValidationResultToStringConverter.cs" />
     <Compile Include="Converters\BooleanToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />

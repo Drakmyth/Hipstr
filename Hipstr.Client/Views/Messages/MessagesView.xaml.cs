@@ -1,5 +1,5 @@
 ﻿using Hipstr.Client.Utility;
-using Hipstr.Core.Models;
+using Hipstr.Core.Messaging;
 using System;
 using System.Threading.Tasks;
 using Windows.UI.Core;
@@ -22,7 +22,7 @@ namespace Hipstr.Client.Views.Messages
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
-			ViewModel.Room = (Room)e.Parameter;
+			ViewModel.MessageSource = (IMessageSource)e.Parameter;
 			await ViewModel.ReloadMessagesAsync();
 
 			var scrollViewer = MessagesListView.GetFirstDescendantOfType<ScrollViewer>();

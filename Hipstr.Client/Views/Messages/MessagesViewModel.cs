@@ -1,10 +1,10 @@
-﻿using System;
-using Hipstr.Client.Commands;
+﻿using Hipstr.Client.Commands;
 using Hipstr.Client.Services;
+using Hipstr.Core.Messaging;
 using Hipstr.Core.Models;
-using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,18 +16,18 @@ namespace Hipstr.Client.Views.Messages
 	[UsedImplicitly]
 	public class MessagesViewModel : ViewModelBase
 	{
-		public ICommand ReloadRoomCommand { get; }
+		public ICommand ReloadMessagesCommand { get; }
 		public ObservableCollection<Message> Messages { get; }
 
-		private Room _room;
+		private IMessageSource _messageSource;
 
-		public Room Room
+		public IMessageSource MessageSource
 		{
-			get { return _room; }
+			get { return _messageSource; }
 			set
 			{
-				_room = value;
-				_mainPageService.Title = _room.Name;
+				_messageSource = value;
+				_mainPageService.Title = _messageSource.Name;
 				OnPropertyChanged();
 			}
 		}
@@ -44,19 +44,17 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
-		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
-		public MessagesViewModel(IHipChatService hipChatService, IMainPageService mainPageService)
+		public MessagesViewModel(IMainPageService mainPageService)
 		{
-			_hipChatService = hipChatService;
 			_mainPageService = mainPageService;
 
 			Messages = new ObservableCollection<Message>();
 			_mainPageService.Title = "Messages";
 			_loadingMessages = false;
 
-			ReloadRoomCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
+			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 		}
 
 		public async Task ReloadMessagesAsync()
@@ -64,7 +62,7 @@ namespace Hipstr.Client.Views.Messages
 			try
 			{
 				LoadingMessages = true;
-				IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
+				IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
 				Messages.Clear();
 				Messages.AddRange(messages);
 			}
@@ -79,7 +77,7 @@ namespace Hipstr.Client.Views.Messages
 			try
 			{
 				LoadingMessages = true;
-				IEnumerable<Message> messages = await _hipChatService.GetMessagesAsync(_room);
+				IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
 
 				DateTime latestDate = Messages.Last().Date;
 				Messages.AddRange(messages.Where(message => message.Date > latestDate));

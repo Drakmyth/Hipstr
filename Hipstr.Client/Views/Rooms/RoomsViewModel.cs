@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Hipstr.Core.Messaging;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -58,7 +59,7 @@ namespace Hipstr.Client.Views.Rooms
 
 			_rooms.CollectionChanged += RoomsOnCollectionChanged;
 
-			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, Room>();
+			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(room => room != null);
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
 		}

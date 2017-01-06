@@ -164,7 +164,7 @@ namespace Hipstr.Core.Services
 			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
 
-		public async Task<IReadOnlyList<Message>> GetMessagesAsync(Room room)
+		public async Task<IReadOnlyList<Message>> GetMessagesForRoomAsync(Room room)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
 			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/room/{room.Id}/history"));

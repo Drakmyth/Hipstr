@@ -8,7 +8,7 @@ namespace Hipstr.Core.Services
 	{
 		Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<IReadOnlyList<User>> GetUsersForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
-		Task<IReadOnlyList<Message>> GetMessagesAsync(Room room);
+		Task<IReadOnlyList<Message>> GetMessagesForRoomAsync(Room room);
 		Task<UserProfile> GetUserProfileAsync(User user, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<ApiKeyInfo> GetApiKeyInfoAsync(string apiKey);
 	}
