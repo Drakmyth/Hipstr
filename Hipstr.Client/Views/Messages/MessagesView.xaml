@@ -62,7 +62,9 @@
 		<TextBox Grid.Row="1"
 				 Background="White"
 				 Text="{x:Bind ViewModel.MessageDraft, Mode=TwoWay}"
-				 AcceptsReturn="True" />
+				 AcceptsReturn="True"
+				 PlaceholderText="Enter a message..."
+				 />
 		<CommandBar Grid.Row="2"
 					Background="{StaticResource HipChatControl}"
 					Foreground="White">
