@@ -59,22 +59,18 @@
 					  Foreground="White"
 					  Width="50"
 					  Height="50" />
-		<RelativePanel Grid.Row="1">
-			<TextBox Background="White"
-					 RelativePanel.AlignLeftWithPanel="True"
-					 RelativePanel.AlignRightWith="SendMessageButton"
-					 Text="{x:Bind ViewModel.MessageDraft, Mode=TwoWay}" />
-			<Button Name="SendMessageButton"
-					Background="{StaticResource HipChatControl}"
-					RelativePanel.AlignRightWithPanel="True"
-					Command="{x:Bind ViewModel.SendMessageCommand}"
-					CommandParameter="{x:Bind ViewModel.MessageDraft, Mode=OneWay}">
-				<SymbolIcon Symbol="Play" Foreground="White" />
-			</Button>
-		</RelativePanel>
+		<TextBox Grid.Row="1"
+				 Background="White"
+				 Text="{x:Bind ViewModel.MessageDraft, Mode=TwoWay}"
+				 AcceptsReturn="True" />
 		<CommandBar Grid.Row="2"
 					Background="{StaticResource HipChatControl}"
 					Foreground="White">
+			<AppBarButton Icon="Send"
+						  Label="Send Message"
+						  Foreground="White"
+						  Command="{x:Bind ViewModel.SendMessageCommand}"
+						  CommandParameter="{x:Bind ViewModel.MessageDraft, Mode=OneWay}" />
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="White"
