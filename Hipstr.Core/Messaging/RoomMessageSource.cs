@@ -18,9 +18,9 @@ namespace Hipstr.Core.Messaging
 			Room = room;
 		}
 
-		public Task SendMessageAsync(string message)
+		public async Task SendMessageAsync(string message)
 		{
-			throw new System.NotImplementedException();
+			await _hipChatService.SendMessageToRoomAsync(Room, message);
 		}
 
 		public async Task<IReadOnlyList<Message>> GetMessagesAsync()

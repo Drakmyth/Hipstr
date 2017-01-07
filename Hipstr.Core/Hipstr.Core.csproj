@@ -112,6 +112,7 @@
     <Compile Include="Messaging\UserMessageSource.cs" />
     <Compile Include="Messaging\RoomMessageSource.cs" />
     <Compile Include="Models\ApiKeyInfo.cs" />
+    <Compile Include="Models\HipChat\HipChatMessageToRoom.cs" />
     <Compile Include="Models\HipChat\HipChatMessageToUser.cs" />
     <Compile Include="Models\HipChat\HipChatOAuthClient.cs" />
     <Compile Include="Models\HipChat\HipChatOAuthSession.cs" />
