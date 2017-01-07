@@ -18,9 +18,9 @@ namespace Hipstr.Core.Messaging
 			User = user;
 		}
 
-		public void SendMessage()
+		public async Task SendMessageAsync(string message)
 		{
-			throw new System.NotImplementedException();
+			await _hipChatService.SendMessageToUserAsync(User, message);
 		}
 
 		public async Task<IReadOnlyList<Message>> GetMessagesAsync()

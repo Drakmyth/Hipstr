@@ -188,6 +188,18 @@ namespace Hipstr.Core.Services
 			}).ToList();
 		}
 
+		public async Task SendMessageToUserAsync(User user, string message)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
+			var payload = new HipChatMessageToUser
+			{
+				Message = message,
+				Notify = true,
+				MessageFormat = "text"
+			};
+			await _httpClient.PostAsync(new Uri(RootUri, $"/v2/user/{user.Id}/message"), payload);
+		}
+
 		public async Task<IReadOnlyList<Message>> GetMessagesForUserAsync(User user)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);

@@ -8,7 +8,7 @@ namespace Hipstr.Core.Messaging
 	{
 		string Name { get; }
 
-		void SendMessage();
+		Task SendMessageAsync(string message);
 		Task<IReadOnlyList<Message>> GetMessagesAsync();
 	}
 }

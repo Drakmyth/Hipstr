@@ -18,7 +18,7 @@ namespace Hipstr.Core.Messaging
 			Room = room;
 		}
 
-		public void SendMessage()
+		public Task SendMessageAsync(string message)
 		{
 			throw new System.NotImplementedException();
 		}

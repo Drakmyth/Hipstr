@@ -17,6 +17,7 @@ namespace Hipstr.Client.Views.Messages
 	public class MessagesViewModel : ViewModelBase
 	{
 		public ICommand ReloadMessagesCommand { get; }
+		public ICommand SendMessageCommand { get; }
 		public ObservableCollection<Message> Messages { get; }
 
 		private IMessageSource _messageSource;
@@ -44,6 +45,30 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
+		private bool _sendingMessage;
+
+		public bool SendingMessage
+		{
+			get { return _sendingMessage; }
+			private set
+			{
+				_sendingMessage = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private string _messageDraft;
+
+		public string MessageDraft
+		{
+			get { return _messageDraft; }
+			set
+			{
+				_messageDraft = value;
+				OnPropertyChanged();
+			}
+		}
+
 		private readonly IMainPageService _mainPageService;
 
 		public MessagesViewModel(IMainPageService mainPageService)
@@ -55,6 +80,7 @@ namespace Hipstr.Client.Views.Messages
 			_loadingMessages = false;
 
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
+			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage, this, nameof(SendingMessage));
 		}
 
 		public async Task ReloadMessagesAsync()
@@ -69,6 +95,20 @@ namespace Hipstr.Client.Views.Messages
 			finally
 			{
 				LoadingMessages = false;
+			}
+		}
+
+		private async Task SendMessageAsync()
+		{
+			try
+			{
+				SendingMessage = true;
+				await _messageSource.SendMessageAsync(MessageDraft);
+				MessageDraft = string.Empty;
+			}
+			finally
+			{
+				SendingMessage = false;
 			}
 		}
 
