@@ -10,18 +10,33 @@ namespace Hipstr.Client.Behaviors
 	{
 		private bool _autoScroll;
 		private ScrollViewer _scrollViewer;
+		private bool _firstScroll;
+
+		public static readonly DependencyProperty StartAtBottomProperty = DependencyProperty.Register(nameof(StartAtBottom),
+			typeof(bool),
+			typeof(StickyScrollBehavior),
+			new PropertyMetadata(false));
+
+		public bool StartAtBottom
+		{
+			get { return (bool)GetValue(StartAtBottomProperty); }
+			set { SetValue(StartAtBottomProperty, value); }
+		}
 
 		protected override void OnAttached()
 		{
 			base.OnAttached();
 			_autoScroll = true;
+			_firstScroll = StartAtBottom;
 			AssociatedObject.Loaded += OnAssociatedObjectLoaded;
 		}
 
 		protected override void OnDetaching()
 		{
-			_scrollViewer.DirectManipulationStarted -= ScrollViewerOnDirectManipulationStarted;
-			_scrollViewer.DirectManipulationCompleted -= ScrollViewerOnDirectManipulationCompleted;
+			base.OnDetaching();
+			_scrollViewer.DirectManipulationStarted -= ScrollViewer_OnDirectManipulationStarted;
+			_scrollViewer.DirectManipulationCompleted -= ScrollViewer_OnDirectManipulationCompleted;
+			AssociatedObject.LayoutUpdated -= AssociatedObject_OnLayoutUpdated;
 		}
 
 		private void OnAssociatedObjectLoaded(object sender, RoutedEventArgs e)
@@ -30,20 +45,17 @@ namespace Hipstr.Client.Behaviors
 
 			_scrollViewer = AssociatedObject.GetFirstDescendantOfType<ScrollViewer>();
 
-			_scrollViewer.DirectManipulationStarted += ScrollViewerOnDirectManipulationStarted;
-			_scrollViewer.DirectManipulationCompleted += ScrollViewerOnDirectManipulationCompleted;
+			_scrollViewer.DirectManipulationStarted += ScrollViewer_OnDirectManipulationStarted;
+			_scrollViewer.DirectManipulationCompleted += ScrollViewer_OnDirectManipulationCompleted;
 			AssociatedObject.LayoutUpdated += AssociatedObject_OnLayoutUpdated;
 		}
 
-		private void AssociatedObject_OnLayoutUpdated(object sender, object e)
+		private void ScrollViewer_OnDirectManipulationStarted(object sender, object o)
 		{
-			if (!_autoScroll) return;
-
-			_scrollViewer.ChangeView(null, _scrollViewer.ScrollableHeight, null, true);
-			_scrollViewer.UpdateLayout();
+			_autoScroll = false;
 		}
 
-		private void ScrollViewerOnDirectManipulationCompleted(object sender, object o)
+		private void ScrollViewer_OnDirectManipulationCompleted(object sender, object o)
 		{
 			if (Math.Abs(_scrollViewer.VerticalOffset - _scrollViewer.ScrollableHeight) < 0.01f)
 			{
@@ -51,9 +63,14 @@ namespace Hipstr.Client.Behaviors
 			}
 		}
 
-		private void ScrollViewerOnDirectManipulationStarted(object sender, object o)
+		private void AssociatedObject_OnLayoutUpdated(object sender, object e)
 		{
-			_autoScroll = false;
+			if (!_autoScroll) return;
+
+			_scrollViewer.ChangeView(null, _scrollViewer.ScrollableHeight, null, _firstScroll);
+			_scrollViewer.UpdateLayout();
+
+			_firstScroll = _firstScroll && _scrollViewer.ScrollableHeight < 0.01f;
 		}
 	}
 }

@@ -29,7 +29,7 @@
 				  ItemsSource="{x:Bind ViewModel.Messages}"
 				  SelectionMode="None">
 			<interactivity:Interaction.Behaviors>
-				<behaviors:StickyScrollBehavior/>
+				<behaviors:StickyScrollBehavior StartAtBottom="True"/>
 			</interactivity:Interaction.Behaviors>
 			<ListView.ItemContainerTransitions>
 				<TransitionCollection>
