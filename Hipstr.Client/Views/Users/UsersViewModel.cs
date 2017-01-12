@@ -72,6 +72,7 @@ namespace Hipstr.Client.Views.Users
 			_users.CollectionChanged += UsersOnCollectionChanged;
 
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView, User>(user => user != null, this, nameof(TappedUser));
+			// TODO: Disallow navigating to a 1-on-1 chat with yourself
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(user => user != null);
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshUsersCommand = new RelayCommandAsync(() => RefreshUsersAsync(), () => !LoadingUsers, this, nameof(LoadingUsers));
