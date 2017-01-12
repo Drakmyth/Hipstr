@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using Windows.UI.Xaml.Media.Animation;
 
 namespace Hipstr.Client.Commands
 {
@@ -12,10 +13,12 @@ namespace Hipstr.Client.Commands
 		private readonly string _propertyName;
 
 		public bool ClearBackStackOnNavigate { private get; set; }
+		public Type BackToSpecificType { private get; set; }
 
 		public NavigateToViewCommand(Func<bool> canExecute = null)
 		{
 			ClearBackStackOnNavigate = false;
+			BackToSpecificType = null;
 			_canExecute = canExecute;
 		}
 
@@ -39,14 +42,19 @@ namespace Hipstr.Client.Commands
 
 		public void Execute(object parameter)
 		{
-			if (App.Frame.CurrentSourcePageType != typeof(TView))
+			if (App.Frame.CurrentSourcePageType == typeof(TView)) return;
+
+			if (BackToSpecificType != null)
 			{
-				App.Frame.Navigate(typeof(TView));
-				if (ClearBackStackOnNavigate)
-				{
-					App.Frame.BackStack.Clear();
-				}
+				App.Frame.Navigate(BackToSpecificType, null, new SuppressNavigationTransitionInfo());
 			}
+
+			if (ClearBackStackOnNavigate)
+			{
+				App.Frame.BackStack.Clear();
+			}
+
+			App.Frame.Navigate(typeof(TView));
 		}
 	}
 
@@ -58,10 +66,12 @@ namespace Hipstr.Client.Commands
 		private readonly string _propertyName;
 
 		public bool ClearBackStackOnNavigate { private get; set; }
+		public Type BackToSpecificType { private get; set; }
 
 		public NavigateToViewCommand(Func<TParameter, bool> canExecute = null)
 		{
 			ClearBackStackOnNavigate = false;
+			BackToSpecificType = null;
 			_canExecute = canExecute;
 		}
 
@@ -85,14 +95,19 @@ namespace Hipstr.Client.Commands
 
 		public void Execute(object parameter)
 		{
-			if (App.Frame.CurrentSourcePageType != typeof(TView))
+			if (App.Frame.CurrentSourcePageType == typeof(TView)) return;
+
+			if (BackToSpecificType != null)
 			{
-				App.Frame.Navigate(typeof(TView), (TParameter)parameter);
-				if (ClearBackStackOnNavigate)
-				{
-					App.Frame.BackStack.Clear();
-				}
+				App.Frame.Navigate(BackToSpecificType, parameter, new SuppressNavigationTransitionInfo());
 			}
+
+			if (ClearBackStackOnNavigate)
+			{
+				App.Frame.BackStack.Clear();
+			}
+
+			App.Frame.Navigate(typeof(TView), (TParameter)parameter);
 		}
 	}
 }
