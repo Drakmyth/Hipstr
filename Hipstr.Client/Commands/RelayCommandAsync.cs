@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -11,23 +12,24 @@ namespace Hipstr.Client.Commands
 
 		private readonly Func<Task> _execute;
 		private readonly Func<bool> _canExecute;
-		private readonly string _propertyName;
+		private readonly string[] _propertyNames;
 
 		public RelayCommandAsync(Func<Task> execute, Func<bool> canExecute = null)
 		{
 			_execute = execute;
 			_canExecute = canExecute;
+			_propertyNames = new string[0];
 		}
 
-		public RelayCommandAsync(Func<Task> execute, Func<bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, string propertyName) : this(execute, canExecute)
+		public RelayCommandAsync(Func<Task> execute, Func<bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, params string[] propertyNames) : this(execute, canExecute)
 		{
-			_propertyName = propertyName;
+			_propertyNames = propertyNames;
 			propertyChangedNotifier.PropertyChanged += OnPropertyChanged;
 		}
 
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != _propertyName) return;
+			if (!_propertyNames.Contains(e.PropertyName)) return;
 
 			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
@@ -50,23 +52,24 @@ namespace Hipstr.Client.Commands
 
 		private readonly Func<TParameter, Task> _execute;
 		private readonly Func<TParameter, bool> _canExecute;
-		private readonly string _propertyName;
+		private readonly string[] _propertyNames;
 
 		public RelayCommandAsync(Func<TParameter, Task> execute, Func<TParameter, bool> canExecute = null)
 		{
 			_execute = execute;
 			_canExecute = canExecute;
+			_propertyNames = new string[0];
 		}
 
-		public RelayCommandAsync(Func<TParameter, Task> execute, Func<TParameter, bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, string propertyName) : this(execute, canExecute)
+		public RelayCommandAsync(Func<TParameter, Task> execute, Func<TParameter, bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, params string[] propertyNames) : this(execute, canExecute)
 		{
-			_propertyName = propertyName;
+			_propertyNames = propertyNames;
 			propertyChangedNotifier.PropertyChanged += OnPropertyChanged;
 		}
 
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != _propertyName) return;
+			if (!_propertyNames.Contains(e.PropertyName)) return;
 
 			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Animation;
 
@@ -10,7 +11,7 @@ namespace Hipstr.Client.Commands
 		public event EventHandler CanExecuteChanged;
 
 		private readonly Func<bool> _canExecute;
-		private readonly string _propertyName;
+		private readonly string[] _propertyNames;
 
 		public bool ClearBackStackOnNavigate { private get; set; }
 		public Type BackToSpecificType { private get; set; }
@@ -20,17 +21,18 @@ namespace Hipstr.Client.Commands
 			ClearBackStackOnNavigate = false;
 			BackToSpecificType = null;
 			_canExecute = canExecute;
+			_propertyNames = new string[0];
 		}
 
-		public NavigateToViewCommand(Func<bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, string propertyName) : this(canExecute)
+		public NavigateToViewCommand(Func<bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, params string[] propertyNames) : this(canExecute)
 		{
-			_propertyName = propertyName;
+			_propertyNames = propertyNames;
 			propertyChangedNotifier.PropertyChanged += OnPropertyChanged;
 		}
 
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != _propertyName) return;
+			if (!_propertyNames.Contains(e.PropertyName)) return;
 
 			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
@@ -63,7 +65,7 @@ namespace Hipstr.Client.Commands
 		public event EventHandler CanExecuteChanged;
 
 		private readonly Func<TParameter, bool> _canExecute;
-		private readonly string _propertyName;
+		private readonly string[] _propertyNames;
 
 		public bool ClearBackStackOnNavigate { private get; set; }
 		public Type BackToSpecificType { private get; set; }
@@ -73,17 +75,18 @@ namespace Hipstr.Client.Commands
 			ClearBackStackOnNavigate = false;
 			BackToSpecificType = null;
 			_canExecute = canExecute;
+			_propertyNames = new string[0];
 		}
 
-		public NavigateToViewCommand(Func<TParameter, bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, string propertyName) : this(canExecute)
+		public NavigateToViewCommand(Func<TParameter, bool> canExecute, INotifyPropertyChanged propertyChangedNotifier, params string[] propertyNames) : this(canExecute)
 		{
-			_propertyName = propertyName;
+			_propertyNames = propertyNames;
 			propertyChangedNotifier.PropertyChanged += OnPropertyChanged;
 		}
 
 		private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName != _propertyName) return;
+			if (!_propertyNames.Contains(e.PropertyName)) return;
 
 			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
