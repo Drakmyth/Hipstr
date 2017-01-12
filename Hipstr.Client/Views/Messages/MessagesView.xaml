@@ -4,6 +4,8 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:models="using:Hipstr.Core.Models"
+	  xmlns:behaviors="using:Hipstr.Client.Behaviors"
+	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  mc:Ignorable="d">
 
 	<Page.Resources>
@@ -20,6 +22,9 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
+		<interactivity:Interaction.Behaviors>
+			<behaviors:KeepAboveInputBehavior />
+		</interactivity:Interaction.Behaviors>
 		<ListView x:Name="MessagesListView"
 				  Grid.Row="0"
 				  ItemsSource="{x:Bind ViewModel.Messages}"
@@ -63,10 +68,10 @@
 				 Background="White"
 				 Text="{x:Bind ViewModel.MessageDraft, Mode=TwoWay}"
 				 AcceptsReturn="True"
-				 PlaceholderText="Enter a message..."
-				 />
-		<CommandBar Grid.Row="2"
-					Background="{StaticResource HipChatControl}"
+				 PlaceholderText="Enter a message..." />
+	</Grid>
+	<Page.BottomAppBar>
+		<CommandBar Background="{StaticResource HipChatControl}"
 					Foreground="White">
 			<AppBarButton Icon="Send"
 						  Label="Send Message"
@@ -78,5 +83,5 @@
 						  Foreground="White"
 						  Command="{x:Bind ViewModel.ReloadMessagesCommand}" />
 		</CommandBar>
-	</Grid>
+	</Page.BottomAppBar>
 </Page>

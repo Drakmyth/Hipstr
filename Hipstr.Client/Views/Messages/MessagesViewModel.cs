@@ -116,7 +116,7 @@ namespace Hipstr.Client.Views.Messages
 		{
 			try
 			{
-				LoadingMessages = true;
+//				LoadingMessages = true;
 				IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
 
 				DateTime latestDate = Messages.Last().Date;
@@ -124,7 +124,7 @@ namespace Hipstr.Client.Views.Messages
 			}
 			finally
 			{
-				LoadingMessages = false;
+//				LoadingMessages = false;
 			}
 		}
 	}
