@@ -78,9 +78,11 @@ namespace Hipstr.Client.Views.Messages
 			Messages = new ObservableCollection<Message>();
 			_mainPageService.Title = "Messages";
 			_loadingMessages = false;
+			_sendingMessage = false;
+			_messageDraft = string.Empty;
 
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
-			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage, this, nameof(SendingMessage));
+			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
 		}
 
 		public async Task ReloadMessagesAsync()

@@ -12,7 +12,8 @@ namespace Hipstr.Client.Behaviors
 		private ScrollViewer _scrollViewer;
 		private bool _firstScroll;
 
-		public static readonly DependencyProperty StartAtBottomProperty = DependencyProperty.Register(nameof(StartAtBottom),
+		public static readonly DependencyProperty StartAtBottomProperty = DependencyProperty.Register(
+			nameof(StartAtBottom),
 			typeof(bool),
 			typeof(StickyScrollBehavior),
 			new PropertyMetadata(false));

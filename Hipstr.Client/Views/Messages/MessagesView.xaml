@@ -6,6 +6,7 @@
 	  xmlns:models="using:Hipstr.Core.Models"
 	  xmlns:behaviors="using:Hipstr.Client.Behaviors"
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+	  xmlns:attachments="using:Hipstr.Client.Attachments"
 	  mc:Ignorable="d">
 
 	<Page.Resources>
@@ -29,7 +30,7 @@
 				  ItemsSource="{x:Bind ViewModel.Messages}"
 				  SelectionMode="None">
 			<interactivity:Interaction.Behaviors>
-				<behaviors:StickyScrollBehavior StartAtBottom="True"/>
+				<behaviors:StickyScrollBehavior StartAtBottom="True" />
 			</interactivity:Interaction.Behaviors>
 			<ListView.ItemContainerTransitions>
 				<TransitionCollection>
@@ -69,7 +70,9 @@
 				 Background="White"
 				 Text="{x:Bind ViewModel.MessageDraft, Mode=TwoWay}"
 				 AcceptsReturn="True"
-				 PlaceholderText="Enter a message..." />
+				 PlaceholderText="Enter a message..."
+				 IsTextPredictionEnabled="True"
+				 attachments:ImmediateSourceUpdate.Source="{Binding MessageDraft, Mode=TwoWay}" />
 	</Grid>
 	<Page.BottomAppBar>
 		<CommandBar Background="{StaticResource HipChatControl}"
