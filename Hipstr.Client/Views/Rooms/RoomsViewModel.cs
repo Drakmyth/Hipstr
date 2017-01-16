@@ -4,6 +4,7 @@ using Hipstr.Client.Views.Dialogs;
 using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
+using Hipstr.Core.Messaging;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
@@ -16,7 +17,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Core.Messaging;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -24,6 +24,7 @@ namespace Hipstr.Client.Views.Rooms
 	public class RoomsViewModel : ViewModelBase
 	{
 		public event EventHandler<ObservableGroupedRoomsCollection> RoomGroupScrollToHeaderRequest;
+		public event EventHandler<IEnumerable<ObservableGroupedCollection<Room>>> RoomsLoaded;
 
 		private readonly ObservableCollection<Room> _rooms;
 		public ObservableCollection<ObservableGroupedRoomsCollection> GroupedRooms { get; }
@@ -68,6 +69,7 @@ namespace Hipstr.Client.Views.Rooms
 		{
 			GroupedRooms.Clear();
 			GroupedRooms.AddRange(OrderAndGroupRooms(_rooms));
+			RoomsLoaded?.Invoke(this, GroupedRooms);
 		}
 
 		public async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
