@@ -1,5 +1,5 @@
 ﻿<Page Name="UsersViewPage"
-	x:Class="Hipstr.Client.Views.Users.UsersView"
+	  x:Class="Hipstr.Client.Views.Users.UsersView"
 	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,6 +8,7 @@
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:converters="using:Hipstr.Client.Converters"
+	  xmlns:behaviors="using:Hipstr.Client.Behaviors"
 	  mc:Ignorable="d">
 
 	<Page.Resources>
@@ -17,8 +18,9 @@
 			</ResourceDictionary.MergedDictionaries>
 			<CollectionViewSource x:Name="GroupedUsersSource"
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
-								  IsSourceGrouped="True"/>
+								  IsSourceGrouped="True" />
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
+			<behaviors:UserPersistScrollAdapter x:Key="UserScrollAdapter" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -37,6 +39,9 @@
 												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
+				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"
+																	 EventName="UsersLoaded"
+																	 Adapter="{StaticResource UserScrollAdapter}" />
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">
@@ -62,7 +67,7 @@
 							<MenuFlyout>
 								<MenuFlyout.MenuFlyoutPresenterStyle>
 									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
+										<Setter Property="Background" Value="{StaticResource HipChatControl}" />
 									</Style>
 								</MenuFlyout.MenuFlyoutPresenterStyle>
 								<MenuFlyout.Items>

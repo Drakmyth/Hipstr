@@ -24,6 +24,7 @@ namespace Hipstr.Client.Views.Users
 	public class UsersViewModel : ViewModelBase
 	{
 		public event EventHandler<ObservableGroupedUsersCollection> UserGroupScrollToHeaderRequest;
+		public event EventHandler<IEnumerable<ObservableGroupedCollection<User>>> UsersLoaded;
 
 		private readonly ObservableCollection<User> _users;
 		public ObservableCollection<ObservableGroupedUsersCollection> GroupedUsers { get; }
@@ -82,6 +83,7 @@ namespace Hipstr.Client.Views.Users
 		{
 			GroupedUsers.Clear();
 			GroupedUsers.AddRange(OrderAndGroupUsers(_users));
+			UsersLoaded?.Invoke(this, GroupedUsers);
 		}
 
 		public async Task RefreshUsersAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
