@@ -116,18 +116,15 @@ namespace Hipstr.Client.Views.Messages
 
 		public async Task CheckForNewMessages()
 		{
-			try
-			{
-//				LoadingMessages = true;
-				IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
+			IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
 
-				DateTime latestDate = Messages.Last().Date;
-				Messages.AddRange(messages.Where(message => message.Date > latestDate));
-			}
-			finally
+			if (Messages.Any())
 			{
-//				LoadingMessages = false;
+				DateTime latestDate = Messages.Last().Date;
+				messages = messages.Where(message => message.Date > latestDate).ToList();
 			}
+
+			Messages.AddRange(messages);
 		}
 	}
 }
