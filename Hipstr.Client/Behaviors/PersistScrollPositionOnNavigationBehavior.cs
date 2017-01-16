@@ -64,6 +64,8 @@ namespace Hipstr.Client.Behaviors
 		{
 			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
 
+			// TODO: If no SourceObject/EventName, call OnCollectionLoadedEvent here with direct contents of AssociatedObject list
+
 			EventInfo ev = SourceObject.GetType().GetEvent(EventName);
 			Action<object, IEnumerable> handler = OnCollectionLoadedEvent;
 			Delegate d = handler.GetMethodInfo().CreateDelegate(ev.EventHandlerType, this);
