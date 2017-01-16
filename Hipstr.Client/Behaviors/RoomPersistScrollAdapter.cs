@@ -5,56 +5,37 @@ using System.Linq;
 
 namespace Hipstr.Client.Behaviors
 {
-	public class RoomPersistScrollAdapter : IPersistScrollAdapter<Room>
+	public class RoomPersistScrollAdapter : IPersistScrollAdapter
 	{
-		public Room GetItem(string key, IEnumerable<Room> collection)
-		{
-			return collection.Where(room => GetKey(room) == key).SingleOrDefault();
-		}
-
-		private static ObservableGroupedCollection<Room> GetItem(string key, IEnumerable<ObservableGroupedCollection<Room>> collection)
-		{
-			return collection.Where(group => GetKey(group) == key).SingleOrDefault();
-		}
-
 		public object GetItem(string key, IEnumerable collection)
 		{
-			if (collection is IEnumerable<Room>)
-			{
-				return GetItem(key, (IEnumerable<Room>)collection);
-			}
+			List<ObservableGroupedCollection<Room>> groups = ((IEnumerable<ObservableGroupedCollection<Room>>)collection).ToList();
+			var groupMappings = groups.Select(group => new {Key = GetKey(group), Group = group});
 
-			if (collection is IEnumerable<ObservableGroupedCollection<Room>>)
+			var groupKeyMapping = groupMappings.Where(mapping => mapping.Key == key).SingleOrDefault();
+			if (groupKeyMapping != null) return groupKeyMapping.Group;
+
+			foreach (ObservableGroupedCollection<Room> group in groups)
 			{
-				return GetItem(key, (IEnumerable<ObservableGroupedCollection<Room>>)collection);
+				var roomMappings = group.Select(room => new {Key = GetKey(room), Room = room});
+
+				var roomKeyMapping = roomMappings.Where(mapping => mapping.Key == key).SingleOrDefault();
+				if (roomKeyMapping != null) return roomKeyMapping.Room;
 			}
 
 			return null;
-		}
-
-		public string GetKey(Room room)
-		{
-			return room.Id.ToString();
-		}
-
-		private static string GetKey(ObservableGroupedCollection<Room> group)
-		{
-			return group.Header;
 		}
 
 		public string GetKey(object item)
 		{
-			if (item is Room)
+			var room = item as Room;
+			if (room != null)
 			{
-				return GetKey((Room)item);
+				return room.Id.ToString();
 			}
 
-			if (item is ObservableGroupedCollection<Room>)
-			{
-				return GetKey((ObservableGroupedCollection<Room>)item);
-			}
-
-			return null;
+			var group = item as ObservableGroupedCollection<Room>;
+			return group?.Header;
 		}
 	}
 }

@@ -8,10 +8,4 @@ namespace Hipstr.Client.Behaviors
 		object GetItem(string key, IEnumerable collection);
 		string GetKey(object item);
 	}
-
-	public interface IPersistScrollAdapter<T> : IPersistScrollAdapter
-	{
-		T GetItem(string key, IEnumerable<T> collection);
-		string GetKey(T item);
-	}
 }
