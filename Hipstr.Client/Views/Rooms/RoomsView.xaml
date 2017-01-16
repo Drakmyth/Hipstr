@@ -19,7 +19,7 @@
 								  Source="{x:Bind ViewModel.GroupedRooms, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:RoomToMessageSourceConverter x:Key="RoomToMsgSrc" />
-			<behaviors:RoomPersistScrollAdapter x:Key="RoomScrollAdapter" />
+<!--			<behaviors:RoomPersistScrollAdapter x:Key="RoomScrollAdapter" />-->
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -38,9 +38,9 @@
 												  CommandParameter="{x:Bind RoomList.SelectedItem, Mode=OneWay, Converter={StaticResource RoomToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
-				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"
-																	 EventName="RoomsLoaded"
-																	 Adapter="{StaticResource RoomScrollAdapter}" />
+<!--				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"-->
+<!--																	 EventName="RoomsLoaded"-->
+<!--																	 Adapter="{StaticResource RoomScrollAdapter}" />-->
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">

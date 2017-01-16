@@ -20,7 +20,7 @@
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
-			<behaviors:UserPersistScrollAdapter x:Key="UserScrollAdapter" />
+<!--			<behaviors:UserPersistScrollAdapter x:Key="UserScrollAdapter" />-->
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -39,9 +39,9 @@
 												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
-				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"
-																	 EventName="UsersLoaded"
-																	 Adapter="{StaticResource UserScrollAdapter}" />
+<!--				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"-->
+<!--																	 EventName="UsersLoaded"-->
+<!--																	 Adapter="{StaticResource UserScrollAdapter}" />-->
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">
