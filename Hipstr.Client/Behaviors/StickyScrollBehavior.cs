@@ -49,9 +49,9 @@ namespace Hipstr.Client.Behaviors
 			AssociatedObject.LayoutUpdated += AssociatedObject_OnLayoutUpdated;
 		}
 
-		private void ScrollViewerOnViewChanged(object sender, ScrollViewerViewChangedEventArgs scrollViewerViewChangedEventArgs)
+		private void ScrollViewerOnViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
 		{
-			if (scrollViewerViewChangedEventArgs.IsIntermediate)
+			if (e.IsIntermediate)
 			{
 				_autoScroll = false;
 			}
