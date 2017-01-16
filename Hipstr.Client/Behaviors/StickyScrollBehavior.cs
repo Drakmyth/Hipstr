@@ -35,8 +35,7 @@ namespace Hipstr.Client.Behaviors
 		protected override void OnDetaching()
 		{
 			base.OnDetaching();
-			_scrollViewer.DirectManipulationStarted -= ScrollViewer_OnDirectManipulationStarted;
-			_scrollViewer.DirectManipulationCompleted -= ScrollViewer_OnDirectManipulationCompleted;
+			_scrollViewer.ViewChanged -= ScrollViewerOnViewChanged;
 			AssociatedObject.LayoutUpdated -= AssociatedObject_OnLayoutUpdated;
 		}
 
@@ -46,19 +45,17 @@ namespace Hipstr.Client.Behaviors
 
 			_scrollViewer = AssociatedObject.GetFirstDescendantOfType<ScrollViewer>();
 
-			_scrollViewer.DirectManipulationStarted += ScrollViewer_OnDirectManipulationStarted;
-			_scrollViewer.DirectManipulationCompleted += ScrollViewer_OnDirectManipulationCompleted;
+			_scrollViewer.ViewChanged += ScrollViewerOnViewChanged;
 			AssociatedObject.LayoutUpdated += AssociatedObject_OnLayoutUpdated;
 		}
 
-		private void ScrollViewer_OnDirectManipulationStarted(object sender, object o)
+		private void ScrollViewerOnViewChanged(object sender, ScrollViewerViewChangedEventArgs scrollViewerViewChangedEventArgs)
 		{
-			_autoScroll = false;
-		}
-
-		private void ScrollViewer_OnDirectManipulationCompleted(object sender, object o)
-		{
-			if (Math.Abs(_scrollViewer.VerticalOffset - _scrollViewer.ScrollableHeight) < 0.01f)
+			if (scrollViewerViewChangedEventArgs.IsIntermediate)
+			{
+				_autoScroll = false;
+			}
+			else if (Math.Abs(_scrollViewer.VerticalOffset - _scrollViewer.ScrollableHeight) < 0.01f)
 			{
 				_autoScroll = true;
 			}
