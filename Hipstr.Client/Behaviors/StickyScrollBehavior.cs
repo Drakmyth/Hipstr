@@ -29,7 +29,7 @@ namespace Hipstr.Client.Behaviors
 			base.OnAttached();
 			_autoScroll = true;
 			_firstScroll = StartAtBottom;
-			AssociatedObject.Loaded += OnAssociatedObjectLoaded;
+			AssociatedObject.Loaded += AssociatedObject_OnLoaded;
 		}
 
 		protected override void OnDetaching()
@@ -40,9 +40,9 @@ namespace Hipstr.Client.Behaviors
 			AssociatedObject.LayoutUpdated -= AssociatedObject_OnLayoutUpdated;
 		}
 
-		private void OnAssociatedObjectLoaded(object sender, RoutedEventArgs e)
+		private void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			AssociatedObject.Loaded -= OnAssociatedObjectLoaded;
+			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
 
 			_scrollViewer = AssociatedObject.GetFirstDescendantOfType<ScrollViewer>();
 

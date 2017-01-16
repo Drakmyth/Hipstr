@@ -11,19 +11,21 @@ namespace Hipstr.Client.Behaviors
 		protected override void OnAttached()
 		{
 			base.OnAttached();
-			AssociatedObject.Loaded += OnAssociatedObjectLoaded;
-			_originalMargin = AssociatedObject.Margin;
+			AssociatedObject.Loaded += AssociatedObject_OnLoaded;
 		}
 
 		protected override void OnDetaching()
 		{
+			base.OnDetaching();
 			InputPane.GetForCurrentView().Hiding -= OnInputPanelHiding;
 			InputPane.GetForCurrentView().Showing -= OnInputPanelShowing;
 		}
 
-		private void OnAssociatedObjectLoaded(object sender, RoutedEventArgs e)
+		private void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			AssociatedObject.Loaded -= OnAssociatedObjectLoaded;
+			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
+
+			_originalMargin = AssociatedObject.Margin;
 			InputPane.GetForCurrentView().Hiding += OnInputPanelHiding;
 			InputPane.GetForCurrentView().Showing += OnInputPanelShowing;
 		}

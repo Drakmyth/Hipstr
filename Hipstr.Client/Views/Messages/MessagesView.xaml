@@ -26,7 +26,8 @@
 		<interactivity:Interaction.Behaviors>
 			<behaviors:KeepAboveInputBehavior />
 		</interactivity:Interaction.Behaviors>
-		<ListView Grid.Row="0"
+		<ListView Name="MessagesListView"
+				  Grid.Row="0"
 				  ItemsSource="{x:Bind ViewModel.Messages}"
 				  SelectionMode="None">
 			<interactivity:Interaction.Behaviors>

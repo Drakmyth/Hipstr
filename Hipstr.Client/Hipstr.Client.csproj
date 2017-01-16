@@ -96,6 +96,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Attachments\ImmediateSourceUpdate.cs" />
+    <Compile Include="Behaviors\IPersistScrollAdapter.cs" />
+    <Compile Include="Behaviors\PersistScrollPositionOnNavigationBehavior.cs" />
+    <Compile Include="Behaviors\RoomPersistScrollAdapter.cs" />
     <Compile Include="Behaviors\StickyScrollBehavior.cs" />
     <Compile Include="Behaviors\KeepAboveInputBehavior.cs" />
     <Compile Include="Commands\RelayCommandAsync.cs" />
@@ -231,7 +234,6 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
