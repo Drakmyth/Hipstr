@@ -53,6 +53,22 @@ namespace Hipstr.Core.Services
 			return users;
 		}
 
+		public async Task SaveEmoticonsForTeamAsync(IEnumerable<Emoticon> emoticons, Team team)
+		{
+			await SaveDataAsync($"Users-{team.ApiKey}.json", emoticons);
+		}
+
+		public async Task<IReadOnlyList<Emoticon>> LoadEmoticonsForTeamAsync(Team team)
+		{
+			IReadOnlyList<Emoticon> emoticons = await LoadDataAsync<Emoticon>($"Emoticons-{team.ApiKey}.json");
+			foreach (Emoticon emoticon in emoticons)
+			{
+				emoticon.Team = team;
+			}
+
+			return emoticons;
+		}
+
 		private static async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)
 		{
 			StorageFile file = await GetStorageFileAsync(filename);

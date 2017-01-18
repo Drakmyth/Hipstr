@@ -24,6 +24,9 @@ namespace Hipstr.Core.Services
 		private const bool IncludeGuestUsers = true;
 		private const bool IncludeDeletedUsers = false;
 
+		private const int MaxEmoticonResults = 1000;
+		private const string FilterEmoticonType = "all";
+
 		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
 		private readonly IDataService _dataService;
@@ -291,6 +294,68 @@ namespace Hipstr.Core.Services
 				RefreshToken = hcSession.RefreshToken,
 				Scopes = hcSession.Scopes
 			};
+		}
+
+		public async Task<IReadOnlyList<Emoticon>> GetEmoticonsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
+		{
+			switch (cacheBehavior)
+			{
+				case HipChatCacheBehavior.LoadFromCache:
+					IReadOnlyList<Emoticon> emoticons = await _dataService.LoadEmoticonsForTeamAsync(team);
+					if (!emoticons.Any())
+					{
+						// emoticon collection data wasn't cached, so we'll fetch it
+						return await GetEmoticonsAndSaveToCacheAsync(team);
+					}
+					return emoticons;
+				case HipChatCacheBehavior.RefreshCache:
+					return await GetEmoticonsAndSaveToCacheAsync(team);
+				default:
+					throw new ArgumentOutOfRangeException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+			}
+		}
+
+		private async Task<IReadOnlyList<Emoticon>> GetEmoticonsAndSaveToCacheAsync(Team team)
+		{
+			IReadOnlyList<Emoticon> emoticons = await GetEmoticonsForTeamFromServerAsync(team);
+			await _dataService.SaveEmoticonsForTeamAsync(emoticons, team);
+			return emoticons;
+		}
+
+		private async Task<IReadOnlyList<Emoticon>> GetEmoticonsForTeamFromServerAsync(Team team)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+
+			var emoticons = new List<Emoticon>();
+			var loadAnotherPage = true;
+
+			while (loadAnotherPage)
+			{
+				HttpResponseMessage response = await GetPageOfEmoticons(_httpClient, emoticons.Count);
+				string json = await response.Content.ReadAsStringAsync();
+				var emoticonWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatEmoticon>>(json);
+
+				emoticons.AddRange(emoticonWrapper.Items.Select(hcEmoticon => new Emoticon
+				{
+					Id = hcEmoticon.Id,
+					Shortcut = hcEmoticon.Shortcut,
+					Url = hcEmoticon.Url
+				}));
+
+				loadAnotherPage = emoticonWrapper.Items.Count() == MaxEmoticonResults;
+			}
+
+			return emoticons;
+		}
+
+		private static async Task<HttpResponseMessage> GetPageOfEmoticons(IHttpClient httpClient, int startIndex)
+		{
+			string route = "/v2/emoticon?"
+						   + $"start-index={startIndex}&"
+						   + $"max-results={MaxEmoticonResults}&"
+						   + $"type={FilterEmoticonType}";
+
+			return await httpClient.GetAsync(new Uri(RootUri, route));
 		}
 	}
 }
