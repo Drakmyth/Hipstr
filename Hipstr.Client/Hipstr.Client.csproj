@@ -106,6 +106,7 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
     <Compile Include="Converters\BooleanToSolidColorBrushConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\UserToMessageSourceConverter.cs" />
     <Compile Include="Converters\RoomToMessageSourceConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
