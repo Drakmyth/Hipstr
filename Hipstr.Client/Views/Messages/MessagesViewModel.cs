@@ -19,6 +19,7 @@ namespace Hipstr.Client.Views.Messages
 	{
 		public ICommand ReloadMessagesCommand { get; }
 		public ICommand SendMessageCommand { get; }
+		public ICommand SelectEmoticonCommand { get; }
 		public ObservableCollection<Message> Messages { get; }
 		public ObservableCollection<Emoticon> Emoticons { get; }
 
@@ -100,6 +101,7 @@ namespace Hipstr.Client.Views.Messages
 
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
+			SelectEmoticonCommand = new RelayCommand<Emoticon>(SelectEmoticon);
 		}
 
 		public async Task ReloadMessagesAsync()
@@ -129,6 +131,11 @@ namespace Hipstr.Client.Views.Messages
 			{
 				SendingMessage = false;
 			}
+		}
+
+		private void SelectEmoticon(Emoticon emoticon)
+		{
+			MessageDraft += $"({emoticon.Shortcut})";
 		}
 
 		public async Task CheckForNewMessages()
