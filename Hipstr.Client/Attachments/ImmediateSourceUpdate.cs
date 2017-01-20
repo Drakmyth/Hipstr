@@ -3,7 +3,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace Hipstr.Client.Attachments
 {
-	public class ImmediateSourceUpdate
+	public static class ImmediateSourceUpdate
 	{
 		public static readonly DependencyProperty SourceProperty = DependencyProperty.RegisterAttached(
 			"Source",

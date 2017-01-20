@@ -55,7 +55,7 @@ namespace Hipstr.Core.Services
 
 		public async Task SaveEmoticonsForTeamAsync(IEnumerable<Emoticon> emoticons, Team team)
 		{
-			await SaveDataAsync($"Users-{team.ApiKey}.json", emoticons);
+			await SaveDataAsync($"Emoticons-{team.ApiKey}.json", emoticons);
 		}
 
 		public async Task<IReadOnlyList<Emoticon>> LoadEmoticonsForTeamAsync(Team team)

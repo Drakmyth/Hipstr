@@ -45,6 +45,7 @@ namespace Hipstr.Client.Views.Messages
 
 			ViewModel.MessageSource = (IMessageSource)e.Parameter;
 			await ViewModel.ReloadMessagesAsync();
+			await ViewModel.LoadEmoticons();
 
 			while (_pollForMessages)
 			{

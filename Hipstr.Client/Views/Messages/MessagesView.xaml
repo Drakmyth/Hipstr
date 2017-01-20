@@ -77,6 +77,43 @@
 				 PlaceholderText="Enter a message..."
 				 IsTextPredictionEnabled="True"
 				 attachments:ImmediateSourceUpdate.Source="{Binding MessageDraft, Mode=TwoWay}" />
+		<GridView Grid.Row="2" ItemsSource="{x:Bind ViewModel.Emoticons}"
+				  Background="{StaticResource HipChatControl}"
+				  Height="300"
+				  ScrollViewer.HorizontalScrollMode="Enabled"
+				  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+				  ScrollViewer.VerticalScrollMode="Disabled"
+				  Visibility="{x:Bind ViewModel.ShowEmoticonPane, Mode=OneWay, Converter={StaticResource BoolToVis}}">
+			<GridView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<ItemsWrapGrid MaximumRowsOrColumns="4"
+								   Orientation="Vertical" />
+				</ItemsPanelTemplate>
+			</GridView.ItemsPanel>
+			<GridView.ItemTemplate>
+				<DataTemplate x:DataType="models:Emoticon">
+					<StackPanel Margin="10" HorizontalAlignment="Center">
+						<StackPanel Orientation="Horizontal">
+							<TextBlock Text="(" Foreground="White" />
+							<TextBlock Text="{x:Bind Shortcut}" Foreground="White" />
+							<TextBlock Text=")" Foreground="White" />
+						</StackPanel>
+						<Image Width="20" Height="20">
+							<Image.Source>
+								<BitmapImage UriSource="{x:Bind Url}" />
+							</Image.Source>
+						</Image>
+					</StackPanel>
+				</DataTemplate>
+			</GridView.ItemTemplate>
+		</GridView>
+		<ProgressRing Grid.Row="2" Width="50"
+					  Height="50"
+					  RelativePanel.AlignHorizontalCenterWithPanel="True"
+					  RelativePanel.AlignVerticalCenterWithPanel="True"
+					  Foreground="White"
+					  IsActive="{x:Bind ViewModel.LoadingEmoticons, Mode=OneWay}"
+					  Visibility="{x:Bind ViewModel.ShowEmoticonPane, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
 	</Grid>
 	<Page.BottomAppBar>
 		<CommandBar Background="{StaticResource HipChatControl}"
@@ -84,7 +121,8 @@
 			<AppBarButton Icon="Emoji2"
 						  Label="Emoticons"
 						  Foreground="White"
-						  Visibility="{x:Bind IsInputPaneVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+						  Visibility="{x:Bind IsInputPaneVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
+						  Command="{x:Bind ViewModel.ToggleEmoticonPaneCommand}" />
 			<AppBarButton Icon="Send"
 						  Label="Send Message"
 						  Foreground="White"

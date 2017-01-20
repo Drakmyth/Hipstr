@@ -7,6 +7,7 @@ namespace Hipstr.Core.Messaging
 	public interface IMessageSource
 	{
 		string Name { get; }
+		Team Team { get; }
 
 		Task SendMessageAsync(string message);
 		Task<IReadOnlyList<Message>> GetMessagesAsync();

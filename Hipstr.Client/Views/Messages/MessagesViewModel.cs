@@ -2,6 +2,7 @@
 using Hipstr.Client.Services;
 using Hipstr.Core.Messaging;
 using Hipstr.Core.Models;
+using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
 using System;
@@ -18,7 +19,9 @@ namespace Hipstr.Client.Views.Messages
 	{
 		public ICommand ReloadMessagesCommand { get; }
 		public ICommand SendMessageCommand { get; }
+		public ICommand ToggleEmoticonPaneCommand { get; }
 		public ObservableCollection<Message> Messages { get; }
+		public ObservableCollection<Emoticon> Emoticons { get; }
 
 		private IMessageSource _messageSource;
 
@@ -69,20 +72,49 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
-		private readonly IMainPageService _mainPageService;
+		private bool _loadingEmoticons;
 
-		public MessagesViewModel(IMainPageService mainPageService)
+		public bool LoadingEmoticons
+		{
+			get { return _loadingEmoticons; }
+			set
+			{
+				_loadingEmoticons = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _showEmoticonPane;
+
+		public bool ShowEmoticonPane
+		{
+			get { return _showEmoticonPane; }
+			set
+			{
+				_showEmoticonPane = value;
+				OnPropertyChanged();
+			}
+		}
+
+		private readonly IMainPageService _mainPageService;
+		private readonly IHipChatService _hipChatService;
+
+		public MessagesViewModel(IMainPageService mainPageService, IHipChatService hipChatService)
 		{
 			_mainPageService = mainPageService;
+			_hipChatService = hipChatService;
 
 			Messages = new ObservableCollection<Message>();
+			Emoticons = new ObservableCollection<Emoticon>();
 			_mainPageService.Title = "Messages";
 			_loadingMessages = false;
 			_sendingMessage = false;
 			_messageDraft = string.Empty;
+			_showEmoticonPane = false;
 
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
+			ToggleEmoticonPaneCommand = new RelayCommand(() => ShowEmoticonPane = !ShowEmoticonPane);
 		}
 
 		public async Task ReloadMessagesAsync()
@@ -125,6 +157,21 @@ namespace Hipstr.Client.Views.Messages
 			}
 
 			Messages.AddRange(messages);
+		}
+
+		public async Task LoadEmoticons()
+		{
+			try
+			{
+				LoadingEmoticons = true;
+				IReadOnlyList<Emoticon> emoticons = await _hipChatService.GetEmoticonsForTeamAsync(MessageSource.Team);
+				Emoticons.Clear();
+				Emoticons.AddRange(emoticons);
+			}
+			finally
+			{
+				LoadingEmoticons = false;
+			}
 		}
 	}
 }

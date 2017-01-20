@@ -11,6 +11,7 @@ namespace Hipstr.Core.Messaging
 
 		private readonly IHipChatService _hipChatService;
 		public User User { get; }
+		public Team Team => User.Team;
 
 		public UserMessageSource(IHipChatService hipChatService, User user)
 		{
