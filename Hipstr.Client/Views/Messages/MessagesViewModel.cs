@@ -19,7 +19,6 @@ namespace Hipstr.Client.Views.Messages
 	{
 		public ICommand ReloadMessagesCommand { get; }
 		public ICommand SendMessageCommand { get; }
-		public ICommand ToggleEmoticonPaneCommand { get; }
 		public ObservableCollection<Message> Messages { get; }
 		public ObservableCollection<Emoticon> Emoticons { get; }
 
@@ -84,18 +83,6 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
-		private bool _showEmoticonPane;
-
-		public bool ShowEmoticonPane
-		{
-			get { return _showEmoticonPane; }
-			set
-			{
-				_showEmoticonPane = value;
-				OnPropertyChanged();
-			}
-		}
-
 		private readonly IMainPageService _mainPageService;
 		private readonly IHipChatService _hipChatService;
 
@@ -110,11 +97,9 @@ namespace Hipstr.Client.Views.Messages
 			_loadingMessages = false;
 			_sendingMessage = false;
 			_messageDraft = string.Empty;
-			_showEmoticonPane = false;
 
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
-			ToggleEmoticonPaneCommand = new RelayCommand(() => ShowEmoticonPane = !ShowEmoticonPane);
 		}
 
 		public async Task ReloadMessagesAsync()

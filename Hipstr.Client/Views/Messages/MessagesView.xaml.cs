@@ -1,9 +1,11 @@
-﻿using Hipstr.Core.Messaging;
+﻿using Hipstr.Client.Commands;
+using Hipstr.Core.Messaging;
 using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
@@ -17,6 +19,7 @@ namespace Hipstr.Client.Views.Messages
 
 		public MessagesViewModel ViewModel => (MessagesViewModel)DataContext;
 		private bool _pollForMessages;
+		public ICommand ToggleEmoticonPaneCommand { get; }
 
 		private bool _inputPaneVisible;
 
@@ -26,6 +29,19 @@ namespace Hipstr.Client.Views.Messages
 			private set
 			{
 				_inputPaneVisible = value;
+				ShowEmoticonPane = ShowEmoticonPane; // Refresh ShowEmoticonPane in case IsInputPanelVisible changed
+				OnPropertyChanged();
+			}
+		}
+
+		private bool _showEmoticonPane;
+
+		public bool ShowEmoticonPane
+		{
+			get { return _showEmoticonPane; }
+			set
+			{
+				_showEmoticonPane = value && IsInputPaneVisible;
 				OnPropertyChanged();
 			}
 		}
@@ -36,6 +52,8 @@ namespace Hipstr.Client.Views.Messages
 			DataContext = IoCContainer.Resolve<MessagesViewModel>();
 			_inputPaneVisible = false;
 			_pollForMessages = true;
+			_showEmoticonPane = false;
+			ToggleEmoticonPaneCommand = new RelayCommand(() => ShowEmoticonPane = !ShowEmoticonPane);
 		}
 
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
