@@ -192,8 +192,19 @@ namespace Hipstr.Client.Attachments
 
 		private static Inline ResolveHyperlink(ReplaceToken token)
 		{
-			// TODO: Resolve to Hyperlink instead of Run
-			return new Run {Text = token.Text};
+			if (token.Text.Contains("@")) // IE7+ and Edge consider links with '@' in them a security hole, and so won't resolve them.
+			{
+				return new Run {Text = token.Text};
+			}
+
+			Uri navigateUri;
+			bool validUri = Uri.TryCreate(Uri.EscapeUriString(token.Text), UriKind.Absolute, out navigateUri);
+
+			if (!validUri) return new Run {Text = token.Text};
+
+			var hyperlink = new Hyperlink {NavigateUri = navigateUri};
+			hyperlink.Inlines.Add(new Run {Text = token.Text});
+			return hyperlink;
 		}
 
 		private static bool LiesBetween(int value, int start, int end)
