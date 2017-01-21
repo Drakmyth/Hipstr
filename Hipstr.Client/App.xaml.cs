@@ -152,7 +152,12 @@ namespace Hipstr.Client
 			{
 				_toastService.ShowCommunicationErrorToast(args.Message);
 				args.Handled = true;
+				return;
 			}
+
+			// TODO: We should probably have a better way of handling "Something terribly has gone wrong"
+			_toastService.ShowUnknownErrorToast(args.Message);
+			args.Handled = true;
 		}
 	}
 }

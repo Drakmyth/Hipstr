@@ -3,5 +3,6 @@
 	public interface IToastService
 	{
 		void ShowCommunicationErrorToast(string message);
+		void ShowUnknownErrorToast(string message);
 	}
 }

@@ -33,5 +33,32 @@ namespace Hipstr.Core.Services
 			var notification = new ToastNotification(content.GetXml());
 			ToastNotificationManager.CreateToastNotifier().Show(notification);
 		}
+
+		public void ShowUnknownErrorToast(string message)
+		{
+			var content = new ToastContent
+			{
+				Visual = new ToastVisual
+				{
+					BindingGeneric = new ToastBindingGeneric
+					{
+						Children =
+						{
+							new AdaptiveText
+							{
+								Text = "Unknown Error"
+							},
+							new AdaptiveText
+							{
+								Text = message
+							}
+						}
+					}
+				}
+			};
+
+			var notification = new ToastNotification(content.GetXml());
+			ToastNotificationManager.CreateToastNotifier().Show(notification);
+		}
 	}
 }
