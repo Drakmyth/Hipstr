@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 
@@ -67,6 +68,17 @@ namespace Hipstr.Core.Services
 			}
 
 			return emoticons;
+		}
+
+		public async Task<Emoticon> UpdateSingleEmoticonAsync(Emoticon emoticon, Team team)
+		{
+			IReadOnlyList<Emoticon> emoticons = await LoadDataAsync<Emoticon>($"Emoticons-{team.ApiKey}.json");
+			Emoticon toUpdate = emoticons.Where(e => e.Id == emoticon.Id).Single();
+			toUpdate.Height = emoticon.Height;
+			toUpdate.Width = emoticon.Width;
+			toUpdate.LastCacheUpdate = emoticon.LastCacheUpdate;
+			await SaveDataAsync($"Emoticons-{team.ApiKey}.json", emoticons);
+			return emoticon;
 		}
 
 		private static async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)

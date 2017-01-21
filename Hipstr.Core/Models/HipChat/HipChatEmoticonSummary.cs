@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Hipstr.Core.Models.HipChat
 {
 	[UsedImplicitly]
-	public class HipChatEmoticon
+	public class HipChatEmoticonSummary
 	{
 		[JsonProperty("id")]
 		public int Id { get; set; }
@@ -22,14 +22,5 @@ namespace Hipstr.Core.Models.HipChat
 
 		[JsonProperty("url")]
 		public Uri Url { get; set; }
-
-		[JsonProperty("height")]
-		public int Height { get; set; }
-
-		[JsonProperty("width")]
-		public int Width { get; set; }
-
-		[JsonProperty("creator")]
-		public HipChatUser Creator { get; set; }
 	}
 }

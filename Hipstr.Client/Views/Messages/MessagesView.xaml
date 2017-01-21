@@ -59,10 +59,11 @@
 									   Foreground="White"
 									   RelativePanel.AlignRightWithPanel="True" />
 						</RelativePanel>
-						<TextBlock Text="{x:Bind Text}"
-								   TextWrapping="Wrap"
-								   Foreground="White"
-								   Margin="15 5 0 5" />
+						<RichTextBlock TextWrapping="Wrap"
+									   Foreground="White"
+									   Margin="15 5 0 5"
+									   attachments:HipChatMessageParser.Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"
+									   attachments:HipChatMessageParser.Text="{x:Bind Text}" />
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>

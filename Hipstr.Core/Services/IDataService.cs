@@ -13,6 +13,7 @@ namespace Hipstr.Core.Services
 		Task SaveUsersForTeamAsync(IEnumerable<User> users, Team team);
 		Task<IReadOnlyList<User>> LoadUsersForTeamAsync(Team team);
 		Task SaveEmoticonsForTeamAsync(IEnumerable<Emoticon> emoticons, Team team);
+		Task<Emoticon> UpdateSingleEmoticonAsync(Emoticon emoticon, Team team);
 		Task<IReadOnlyList<Emoticon>> LoadEmoticonsForTeamAsync(Team team);
 	}
 }

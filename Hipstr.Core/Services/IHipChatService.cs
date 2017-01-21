@@ -9,6 +9,7 @@ namespace Hipstr.Core.Services
 		Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<IReadOnlyList<User>> GetUsersForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<IReadOnlyList<Emoticon>> GetEmoticonsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
+		Task<Emoticon> GetSingleEmoticon(string shortcut, Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<IReadOnlyList<Message>> GetMessagesForRoomAsync(Room room);
 		Task<IReadOnlyList<Message>> GetMessagesForUserAsync(User user);
 		Task SendMessageToRoomAsync(Room room, string message);

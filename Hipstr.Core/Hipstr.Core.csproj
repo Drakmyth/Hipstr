@@ -114,6 +114,7 @@
     <Compile Include="Models\ApiKeyInfo.cs" />
     <Compile Include="Models\Emoticon.cs" />
     <Compile Include="Models\HipChat\HipChatEmoticon.cs" />
+    <Compile Include="Models\HipChat\HipChatEmoticonSummary.cs" />
     <Compile Include="Models\HipChat\HipChatMessageToRoom.cs" />
     <Compile Include="Models\HipChat\HipChatMessageToUser.cs" />
     <Compile Include="Models\HipChat\HipChatOAuthClient.cs" />

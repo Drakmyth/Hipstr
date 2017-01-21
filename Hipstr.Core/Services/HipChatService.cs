@@ -26,6 +26,7 @@ namespace Hipstr.Core.Services
 
 		private const int MaxEmoticonResults = 1000;
 		private const string FilterEmoticonType = "all";
+		private const int PrecachedEmoticonDimensions = 30;
 
 		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
 
@@ -296,6 +297,44 @@ namespace Hipstr.Core.Services
 			};
 		}
 
+		public async Task<Emoticon> GetSingleEmoticon(string shortcut, Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
+		{
+			IReadOnlyList<Emoticon> emoticons = await _dataService.LoadEmoticonsForTeamAsync(team);
+			Emoticon emoticon = emoticons.Where(e => e.Shortcut == shortcut).SingleOrDefault();
+
+			if (emoticon == null)
+			{
+				// the requested emoticon didn't exist last time we cached, so we'll refresh
+				emoticons = await GetEmoticonsAndSaveToCacheAsync(team);
+				emoticon = emoticons.Where(e => e.Shortcut == shortcut).SingleOrDefault();
+
+				if (emoticon == null)
+				{
+					// emoticon still doesn't exist
+					return null;
+				}
+			}
+
+			// We've never retrieved the full version of this emoticon, so we'll do that now
+			// TODO: If time-limited caching is implemented, this is where that happens
+			// We'll also want to make sure to exclude emoticons where Id = 0, because we injected
+			// those ourselves
+			if (emoticon.LastCacheUpdate == 0)
+			{
+				return await GetSingleEmoticonAndUpdateCacheAsync(shortcut, team);
+			}
+
+			switch (cacheBehavior)
+			{
+				case HipChatCacheBehavior.LoadFromCache:
+					return emoticon;
+				case HipChatCacheBehavior.RefreshCache:
+					return await GetSingleEmoticonAndUpdateCacheAsync(shortcut, team);
+				default:
+					throw new ArgumentOutOfRangeException($"Unknown Cache Behavior - {cacheBehavior}", nameof(cacheBehavior));
+			}
+		}
+
 		public async Task<IReadOnlyList<Emoticon>> GetEmoticonsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
 		{
 			switch (cacheBehavior)
@@ -315,11 +354,37 @@ namespace Hipstr.Core.Services
 			}
 		}
 
+		private async Task<Emoticon> GetSingleEmoticonAndUpdateCacheAsync(string shortcut, Team team)
+		{
+			Emoticon emoticon = await GetSingleEmoticonFromServerAsync(shortcut, team);
+			await _dataService.UpdateSingleEmoticonAsync(emoticon, team);
+			return emoticon;
+		}
+
 		private async Task<IReadOnlyList<Emoticon>> GetEmoticonsAndSaveToCacheAsync(Team team)
 		{
 			IReadOnlyList<Emoticon> emoticons = await GetEmoticonsForTeamFromServerAsync(team);
 			await _dataService.SaveEmoticonsForTeamAsync(emoticons, team);
 			return emoticons;
+		}
+
+		private async Task<Emoticon> GetSingleEmoticonFromServerAsync(string shortcut, Team team)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+
+			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/emoticon/{shortcut}"));
+			string json = await get.Content.ReadAsStringAsync();
+			var hcEmoticon = JsonConvert.DeserializeObject<HipChatEmoticon>(json);
+
+			return new Emoticon
+			{
+				Id = hcEmoticon.Id,
+				Shortcut = hcEmoticon.Shortcut,
+				Url = hcEmoticon.Url,
+				Height = hcEmoticon.Height,
+				Width = hcEmoticon.Width,
+				LastCacheUpdate = DateTime.UtcNow.Ticks
+			};
 		}
 
 		private async Task<IReadOnlyList<Emoticon>> GetEmoticonsForTeamFromServerAsync(Team team)
@@ -333,17 +398,22 @@ namespace Hipstr.Core.Services
 			{
 				HttpResponseMessage response = await GetPageOfEmoticons(_httpClient, emoticons.Count);
 				string json = await response.Content.ReadAsStringAsync();
-				var emoticonWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatEmoticon>>(json);
+				var emoticonWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatEmoticonSummary>>(json);
 
 				emoticons.AddRange(emoticonWrapper.Items.Select(hcEmoticon => new Emoticon
 				{
 					Id = hcEmoticon.Id,
 					Shortcut = hcEmoticon.Shortcut,
-					Url = hcEmoticon.Url
+					Url = hcEmoticon.Url,
+					Height = PrecachedEmoticonDimensions,
+					Width = PrecachedEmoticonDimensions,
+					LastCacheUpdate = 0
 				}));
 
 				loadAnotherPage = emoticonWrapper.Items.Count() == MaxEmoticonResults;
 			}
+
+			emoticons.AddRange(GetMissingEmoticons(team));
 
 			return emoticons;
 		}
@@ -356,6 +426,37 @@ namespace Hipstr.Core.Services
 						   + $"type={FilterEmoticonType}";
 
 			return await httpClient.GetAsync(new Uri(RootUri, route));
+		}
+
+		/// <summary>
+		/// There are some emoticons that the HipChat client renders that are not part of the emoticon system.
+		/// This method returns a list containing those emoticons.
+		/// </summary>
+		/// <returns>A list of the client-only emoticons</returns>
+		private static IEnumerable<Emoticon> GetMissingEmoticons(Team team)
+		{
+			IList<Emoticon> emoticons = new List<Emoticon>();
+
+			emoticons.Add(BuildMissingEmoticon(team, "embarrassed", new Uri("ms-appx:///Assets/Emoji/flushed_face.png")));
+			emoticons.Add(BuildMissingEmoticon(team, "oops", new Uri("ms-appx:///Assets/Emoji/disappointed_but_relieved_face.png")));
+			emoticons.Add(BuildMissingEmoticon(team, "thumbsup", new Uri("ms-appx:///Assets/Emoji/thumbs_up.png")));
+			emoticons.Add(BuildMissingEmoticon(team, "thumbsdown", new Uri("ms-appx:///Assets/Emoji/thumbs_down.png")));
+
+			return emoticons;
+		}
+
+		private static Emoticon BuildMissingEmoticon(Team team, string shortcut, Uri uri)
+		{
+			return new Emoticon
+			{
+				Id = 0,
+				Height = 18,
+				Width = 18,
+				LastCacheUpdate = DateTime.UtcNow.Ticks,
+				Shortcut = shortcut,
+				Team = team,
+				Url = uri
+			};
 		}
 	}
 }

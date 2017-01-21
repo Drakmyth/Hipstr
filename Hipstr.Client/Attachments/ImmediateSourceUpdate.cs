@@ -21,9 +21,9 @@ namespace Hipstr.Client.Attachments
 			target.SetValue(SourceProperty, value);
 		}
 
-		private static void OnSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+		private static void OnSourceChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
-			var textBox = d as TextBox;
+			var textBox = sender as TextBox;
 			if (textBox == null) return;
 
 			textBox.TextChanged += TextBox_OnTextChanged;

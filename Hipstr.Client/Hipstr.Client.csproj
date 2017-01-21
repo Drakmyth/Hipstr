@@ -95,6 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Attachments\HipChatMessageParser.cs" />
     <Compile Include="Attachments\ImmediateSourceUpdate.cs" />
     <Compile Include="Behaviors\IPersistScrollAdapter.cs" />
     <Compile Include="Behaviors\PersistScrollPositionOnNavigationBehavior.cs" />
@@ -190,6 +191,27 @@
     <Content Include="Assets\Badge\Badge.scale-150.png" />
     <Content Include="Assets\Badge\Badge.scale-200.png" />
     <Content Include="Assets\Badge\Badge.scale-400.png" />
+    <Content Include="Assets\Emoji\crying_face.png" />
+    <Content Include="Assets\Emoji\disappointed_but_relieved_face.png" />
+    <Content Include="Assets\Emoji\face_throwing_a_kiss.png" />
+    <Content Include="Assets\Emoji\face_without_mouth.png" />
+    <Content Include="Assets\Emoji\face_with_open_mouth.png" />
+    <Content Include="Assets\Emoji\face_with_stuck_out_tongue_and_tightly_closed_eyes.png" />
+    <Content Include="Assets\Emoji\face_with_stuck_out_tongue_and_winking_eye.png" />
+    <Content Include="Assets\Emoji\flushed_face.png" />
+    <Content Include="Assets\Emoji\grimacing_face.png" />
+    <Content Include="Assets\Emoji\money_mouth_face.png" />
+    <Content Include="Assets\Emoji\neutral_face.png" />
+    <Content Include="Assets\Emoji\pouting_face.png" />
+    <Content Include="Assets\Emoji\slightly_frowning_face.png" />
+    <Content Include="Assets\Emoji\slightly_smiling_face.png" />
+    <Content Include="Assets\Emoji\smiling_face_with_halo.png" />
+    <Content Include="Assets\Emoji\smiling_face_with_open_mouth_and_smiling_eyes.png" />
+    <Content Include="Assets\Emoji\smiling_face_with_sunglasses.png" />
+    <Content Include="Assets\Emoji\thumbs_down.png" />
+    <Content Include="Assets\Emoji\thumbs_up.png" />
+    <Content Include="Assets\Emoji\unamused_face.png" />
+    <Content Include="Assets\Emoji\winking_face.png" />
     <Content Include="Assets\hipstr-logo.svg" />
     <Content Include="Assets\Large\Large310x310Logo.scale-100.png" />
     <Content Include="Assets\Large\Large310x310Logo.scale-125.png" />
