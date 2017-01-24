@@ -24,7 +24,7 @@ namespace Hipstr.Core.Services
 
 		public async Task<HttpResponseMessage> GetAsync(Uri requestUri)
 		{
-			return await SendRequestAsync(requestUri, async () => await _httpClient.GetAsync(requestUri))
+			return await SendRequestAsync(requestUri, async () => await _httpClient.GetAsync(requestUri));
 		}
 
 		public async Task<HttpResponseMessage> PostAsync<T>(Uri requestUri, T payload)
