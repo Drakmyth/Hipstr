@@ -1,4 +1,5 @@
 ﻿using Hipstr.Core.Models;
+using Windows.Devices.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -19,7 +20,22 @@ namespace Hipstr.Client.Views.Teams
 
 		private void Grid_OnHolding(object sender, HoldingRoutedEventArgs e)
 		{
-			var listItem = (FrameworkElement)sender;
+			if (e.PointerDeviceType != PointerDeviceType.Mouse)
+			{
+				ShowFlyout((FrameworkElement)sender);
+			}
+		}
+
+		private void Grid_OnRightTapped(object sender, RightTappedRoutedEventArgs e)
+		{
+			if (e.PointerDeviceType == PointerDeviceType.Mouse)
+			{
+				ShowFlyout((FrameworkElement)sender);
+			}
+		}
+
+		private void ShowFlyout(FrameworkElement listItem)
+		{
 			ViewModel.TappedTeam = (Team)listItem.DataContext;
 			FlyoutBase.ShowAttachedFlyout(listItem);
 		}

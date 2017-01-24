@@ -20,7 +20,7 @@
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
-<!--			<behaviors:UserPersistScrollAdapter x:Key="UserScrollAdapter" />-->
+			<!--			<behaviors:UserPersistScrollAdapter x:Key="UserScrollAdapter" />-->
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -36,12 +36,12 @@
 				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
 					<core:EventTriggerBehavior.Actions>
 						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
-												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
+												  CommandParameter="{x:Bind ViewModel.TappedUser, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
-<!--				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"-->
-<!--																	 EventName="UsersLoaded"-->
-<!--																	 Adapter="{StaticResource UserScrollAdapter}" />-->
+				<!--				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"-->
+				<!--																	 EventName="UsersLoaded"-->
+				<!--																	 Adapter="{StaticResource UserScrollAdapter}" />-->
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">
@@ -55,9 +55,15 @@
 					</GroupStyle.HeaderTemplate>
 				</GroupStyle>
 			</ListView.GroupStyle>
+			<ListView.ItemContainerStyle>
+				<Style TargetType="ListViewItem">
+					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
+				</Style>
+			</ListView.ItemContainerStyle>
 			<ListView.ItemTemplate>
 				<DataTemplate x:DataType="models:User">
-					<StackPanel Holding="StackPanel_OnHolding">
+					<StackPanel Holding="StackPanel_OnHolding"
+								RightTapped="StackPanel_OnRightTapped">
 						<TextBlock Text="{x:Bind Name}"
 								   Foreground="White" />
 						<TextBlock Text="{x:Bind Team.Name}"
