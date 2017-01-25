@@ -63,7 +63,7 @@
 									   Foreground="White"
 									   Margin="15 5 0 5">
 							<interactivity:Interaction.Behaviors>
-								<behaviors:HipChatMessageParser Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"
+								<behaviors:HipChatMessageParsingBehavior Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"
 																Text="{x:Bind Text}" />
 							</interactivity:Interaction.Behaviors>
 						</RichTextBlock>

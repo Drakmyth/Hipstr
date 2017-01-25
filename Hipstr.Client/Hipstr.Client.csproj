@@ -95,7 +95,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\HipChatMessageParser.cs" />
+    <Compile Include="Behaviors\HipChatMessageParsingBehavior.cs" />
     <Compile Include="Attachments\ImmediateSourceUpdate.cs" />
     <Compile Include="Behaviors\IPersistScrollAdapter.cs" />
     <Compile Include="Behaviors\PersistScrollPositionOnNavigationBehavior.cs" />

@@ -13,24 +13,25 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipstr.Client.Behaviors
 {
-	public class HipChatMessageParser : Behavior<RichTextBlock>, INotifyPropertyChanged
+	public class HipChatMessageParsingBehavior : Behavior<RichTextBlock>, INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
 			"Text",
 			typeof(string),
-			typeof(HipChatMessageParser),
+			typeof(HipChatMessageParsingBehavior),
 			new PropertyMetadata(string.Empty));
 
 		public static readonly DependencyProperty TeamProperty = DependencyProperty.Register(
 			"Team",
 			typeof(Team),
-			typeof(HipChatMessageParser),
+			typeof(HipChatMessageParsingBehavior),
 			new PropertyMetadata(default(Team)));
 
 		public string Text
@@ -209,7 +210,7 @@ namespace Hipstr.Client.Behaviors
 					{
 						Source = new BitmapImage(emoticon.Url),
 						Width = emoticon.Width,
-						Height = emoticon.Height, VerticalAlignment = VerticalAlignment.Center
+						Height = emoticon.Height
 					}
 				};
 			}
