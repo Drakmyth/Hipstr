@@ -61,9 +61,12 @@
 						</RelativePanel>
 						<RichTextBlock TextWrapping="Wrap"
 									   Foreground="White"
-									   Margin="15 5 0 5"
-									   attachments:HipChatMessageParser.Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"
-									   attachments:HipChatMessageParser.Text="{x:Bind Text}" />
+									   Margin="15 5 0 5">
+							<interactivity:Interaction.Behaviors>
+								<behaviors:HipChatMessageParser Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"
+																Text="{x:Bind Text}" />
+							</interactivity:Interaction.Behaviors>
+						</RichTextBlock>
 					</StackPanel>
 				</DataTemplate>
 			</ListView.ItemTemplate>

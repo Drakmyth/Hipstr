@@ -1,9 +1,13 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
+using JetBrains.Annotations;
+using Microsoft.Xaml.Interactivity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -11,62 +15,85 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
 using Windows.UI.Xaml.Media.Imaging;
 
-namespace Hipstr.Client.Attachments
+namespace Hipstr.Client.Behaviors
 {
-	public static class HipChatMessageParser
+	public class HipChatMessageParser : Behavior<RichTextBlock>, INotifyPropertyChanged
 	{
-		public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached(
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
 			"Text",
 			typeof(string),
 			typeof(HipChatMessageParser),
-			new PropertyMetadata(default(string), OnTextChangedAsync));
+			new PropertyMetadata(string.Empty));
 
-		public static readonly DependencyProperty TeamProperty = DependencyProperty.RegisterAttached(
+		public static readonly DependencyProperty TeamProperty = DependencyProperty.Register(
 			"Team",
 			typeof(Team),
 			typeof(HipChatMessageParser),
 			new PropertyMetadata(default(Team)));
 
-		private static readonly IHipChatService _hipChatService;
-
-		static HipChatMessageParser()
+		public string Text
 		{
+			get { return (string)GetValue(TextProperty); }
+			set
+			{
+				SetValue(TextProperty, value);
+				OnPropertyChanged();
+			}
+		}
+
+		public Team Team
+		{
+			get { return (Team)GetValue(TeamProperty); }
+			set
+			{
+				SetValue(TeamProperty, value);
+				OnPropertyChanged();
+			}
+		}
+
+		private IHipChatService _hipChatService;
+
+		protected override void OnAttached()
+		{
+			base.OnAttached();
 			_hipChatService = IoCContainer.Resolve<IHipChatService>();
+			AssociatedObject.Loaded += AssociatedObject_OnLoaded;
 		}
 
-		public static string GetText(DependencyObject target)
+		protected override void OnDetaching()
 		{
-			return (string)target.GetValue(TextProperty);
+			base.OnDetaching();
+
+			PropertyChanged -= OnPropertyChanged;
 		}
 
-		public static void SetText(DependencyObject target, string value)
+		private async void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
 		{
-			target.SetValue(TextProperty, value);
+			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
+
+			await ParseMessage();
+			PropertyChanged += OnPropertyChanged;
 		}
 
-		public static Team GetTeam(DependencyObject target)
+		private async void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
 		{
-			return (Team)target.GetValue(TeamProperty);
+			if (propertyChangedEventArgs.PropertyName != nameof(Text)) return;
+
+			await ParseMessage();
 		}
 
-		public static void SetTeam(DependencyObject target, Team value)
+		private async Task ParseMessage()
 		{
-			target.SetValue(TeamProperty, value);
-		}
-
-		private static async void OnTextChangedAsync(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-		{
-			var textBlock = sender as RichTextBlock;
-			if (textBlock == null) return;
-
-			textBlock.Blocks.Clear();
-			IEnumerable<Inline> inlines = await ParseTextToInlinesAsync(sender, (string)e.NewValue);
+			AssociatedObject.Blocks.Clear();
+			IEnumerable<Inline> inlines = await ParseTextToInlinesAsync(Text);
 			var paragraph = new Paragraph();
 			paragraph.Inlines.AddRange(inlines);
-			textBlock.Blocks.Add(paragraph);
+			AssociatedObject.Blocks.Add(paragraph);
 		}
 
-		private static async Task<IEnumerable<Inline>> ParseTextToInlinesAsync(DependencyObject sender, string text)
+		private async Task<IEnumerable<Inline>> ParseTextToInlinesAsync(string text)
 		{
 			IList<Inline> inlines = new List<Inline>();
 			IList<ReplaceToken> tokens = new List<ReplaceToken>();
@@ -101,7 +128,7 @@ namespace Hipstr.Client.Attachments
 				switch (token.Type)
 				{
 					case ReplaceToken.TokenType.Emoticon:
-						inlines.Add(await ResolveEmoticonAsync(sender, token));
+						inlines.Add(await ResolveEmoticonAsync(token));
 						break;
 					case ReplaceToken.TokenType.Mention:
 						inlines.Add(ResolveMention(token));
@@ -121,6 +148,11 @@ namespace Hipstr.Client.Attachments
 			}
 
 			return inlines;
+		}
+
+		private static bool LiesBetween(int value, int start, int end)
+		{
+			return value >= start && value <= end;
 		}
 
 		private static IEnumerable<ReplaceToken> ParseEmoticonTokens(string text)
@@ -159,10 +191,10 @@ namespace Hipstr.Client.Attachments
 			return tokens;
 		}
 
-		private static async Task<Inline> ResolveEmoticonAsync(DependencyObject sender, ReplaceToken token)
+		private async Task<Inline> ResolveEmoticonAsync(ReplaceToken token)
 		{
 			string shortcut = token.Text.Substring(1, token.Text.Length - 2);
-			Emoticon emoticon = await _hipChatService.GetSingleEmoticon(shortcut, GetTeam(sender));
+			Emoticon emoticon = await _hipChatService.GetSingleEmoticon(shortcut, Team);
 
 			Inline inline;
 			if (emoticon == null)
@@ -177,7 +209,7 @@ namespace Hipstr.Client.Attachments
 					{
 						Source = new BitmapImage(emoticon.Url),
 						Width = emoticon.Width,
-						Height = emoticon.Height
+						Height = emoticon.Height, VerticalAlignment = VerticalAlignment.Center
 					}
 				};
 			}
@@ -207,11 +239,6 @@ namespace Hipstr.Client.Attachments
 			return hyperlink;
 		}
 
-		private static bool LiesBetween(int value, int start, int end)
-		{
-			return value >= start && value <= end;
-		}
-
 		private class ReplaceToken
 		{
 			public enum TokenType
@@ -232,6 +259,12 @@ namespace Hipstr.Client.Attachments
 				Type = type;
 				Text = text;
 			}
+		}
+
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
