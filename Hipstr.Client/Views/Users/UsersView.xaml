@@ -36,7 +36,7 @@
 				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
 					<core:EventTriggerBehavior.Actions>
 						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
-												  CommandParameter="{x:Bind ViewModel.TappedUser, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
+												  CommandParameter="{x:Bind ViewModel.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
 			</interactivity:Interaction.Behaviors>
