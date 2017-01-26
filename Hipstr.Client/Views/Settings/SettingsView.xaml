@@ -18,20 +18,43 @@
 				<Setter Property="IsThreeState" Value="False" />
 			</Style>
 			<converters:NullableBooleanToBooleanConverter x:Key="NBoolToBool" />
+			<Style TargetType="TextBlock"
+				   x:Key="SettingSectionHeaderTextBlockStyle"
+				   BasedOn="{StaticResource SubheaderTextBlockStyle}">
+				<Setter Property="Margin" Value="0, 0, 0, 10" />
+			</Style>
+			<Style TargetType="StackPanel" x:Key="SettingSectionStackPanelStyle">
+				<Setter Property="Margin" Value="0, 0, 0, 20" />
+			</Style>
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
-		<StackPanel>
-			<RadioButton GroupName="Theme"
-						 Content="Dark"
-						 IsChecked="{x:Bind ViewModel.IsDarkTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
-			<RadioButton GroupName="Theme"
-						 Content="Light"
-						 IsChecked="{x:Bind ViewModel.IsLightTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
-			<RadioButton GroupName="Theme"
-						 Content="System"
-						 IsChecked="{x:Bind ViewModel.IsSystemTheme, Mode=TwoWay, FallbackValue='True', Converter={StaticResource NBoolToBool}}" />
+	<StackPanel Background="{ThemeResource HipChatBackground}" Padding="10">
+		<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
+			<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">Theme</TextBlock>
+			<StackPanel>
+				<RadioButton GroupName="Theme"
+							 Content="Dark"
+							 IsChecked="{x:Bind ViewModel.IsDarkTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
+				<RadioButton GroupName="Theme"
+							 Content="Light"
+							 IsChecked="{x:Bind ViewModel.IsLightTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
+				<RadioButton GroupName="Theme"
+							 Content="System"
+							 IsChecked="{x:Bind ViewModel.IsSystemTheme, Mode=TwoWay, FallbackValue='True', Converter={StaticResource NBoolToBool}}" />
+			</StackPanel>
 		</StackPanel>
-	</Grid>
+		<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
+			<StackPanel.Resources>
+				<Style TargetType="TextBlock">
+					<Setter Property="FontSize" Value="18" />
+				</Style>
+			</StackPanel.Resources>
+			<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">About this app</TextBlock>
+			<TextBlock>Hipstr v1.0.0.0</TextBlock>
+			<TextBlock>© 2017 Shaun Hamman</TextBlock>
+			<TextBlock>All rights reserved</TextBlock>
+			<HyperlinkButton NavigateUri="https://github.com/Drakmyth/Hipstr">Visit Homepage</HyperlinkButton>
+		</StackPanel>
+	</StackPanel>
 </Page>
