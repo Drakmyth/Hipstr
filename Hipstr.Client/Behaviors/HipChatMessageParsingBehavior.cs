@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Documents;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipstr.Client.Behaviors
@@ -63,24 +62,9 @@ namespace Hipstr.Client.Behaviors
 			AssociatedObject.Loaded += AssociatedObject_OnLoaded;
 		}
 
-		protected override void OnDetaching()
-		{
-			base.OnDetaching();
-
-			PropertyChanged -= OnPropertyChanged;
-		}
-
 		private async void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
 		{
 			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
-
-			await ParseMessage();
-			PropertyChanged += OnPropertyChanged;
-		}
-
-		private async void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
-		{
-			if (propertyChangedEventArgs.PropertyName != nameof(Text)) return;
 
 			await ParseMessage();
 		}
@@ -263,8 +247,13 @@ namespace Hipstr.Client.Behaviors
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		protected virtual async void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
+			if (propertyName == nameof(Text))
+			{
+				await ParseMessage();
+			}
+
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
