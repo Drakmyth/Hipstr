@@ -1,6 +1,4 @@
-﻿using Hipstr.Client.Views.Dialogs;
-
-namespace Hipstr.Client.Events
+﻿namespace Hipstr.Client.Views.Dialogs.EditTeamDialog
 {
 	public class EditTeamDialogValidationEventArgs
 	{

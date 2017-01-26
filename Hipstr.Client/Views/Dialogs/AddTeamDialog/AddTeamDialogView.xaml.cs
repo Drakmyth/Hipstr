@@ -1,5 +1,4 @@
 using Hipstr.Client.Commands;
-using Hipstr.Client.Events;
 using Hipstr.Core.Models;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;

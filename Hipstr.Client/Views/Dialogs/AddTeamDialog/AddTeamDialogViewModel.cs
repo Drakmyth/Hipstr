@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Events;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using JetBrains.Annotations;

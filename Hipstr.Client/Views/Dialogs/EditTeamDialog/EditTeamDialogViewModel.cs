@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Events;
 using JetBrains.Annotations;
 using System;
 using System.Windows.Input;
