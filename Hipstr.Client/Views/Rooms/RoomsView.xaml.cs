@@ -1,5 +1,6 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using System.Linq;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
@@ -19,7 +20,10 @@ namespace Hipstr.Client.Views.Rooms
 		protected override async void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.RoomGroupScrollToHeaderRequest += OnRoomGroupScrollToHeaderRequest;
-			await ViewModel.RefreshRoomsAsync(HipChatCacheBehavior.LoadFromCache);
+			if (!ViewModel.GroupedRooms.Any())
+			{
+				await ViewModel.RefreshRoomsAsync(HipChatCacheBehavior.LoadFromCache);
+			}
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)

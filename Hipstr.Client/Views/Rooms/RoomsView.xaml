@@ -7,9 +7,9 @@
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:converters="using:Hipstr.Client.Converters"
-	  xmlns:behaviors="using:Hipstr.Client.Behaviors"
 	  mc:Ignorable="d"
-	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
+	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
+	  NavigationCacheMode="Enabled">
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -20,7 +20,6 @@
 								  Source="{x:Bind ViewModel.GroupedRooms, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:RoomToMessageSourceConverter x:Key="RoomToMsgSrc" />
-			<!--			<behaviors:RoomPersistScrollAdapter x:Key="RoomScrollAdapter" />-->
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -39,9 +38,6 @@
 												  CommandParameter="{x:Bind RoomList.SelectedItem, Mode=OneWay, Converter={StaticResource RoomToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
-				<!--				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"-->
-				<!--																	 EventName="RoomsLoaded"-->
-				<!--																	 Adapter="{StaticResource RoomScrollAdapter}" />-->
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">

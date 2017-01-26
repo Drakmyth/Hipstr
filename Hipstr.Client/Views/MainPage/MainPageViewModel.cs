@@ -34,9 +34,22 @@ namespace Hipstr.Client.Views.MainPage
 			mainPageService.TitleChanged += OnTitleChanged;
 
 			Title = "";
-			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView> {ClearBackStackOnNavigate = true};
-			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView> {ClearBackStackOnNavigate = true, BackToSpecificType = typeof(TeamsView)};
-			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView> {ClearBackStackOnNavigate = true, BackToSpecificType = typeof(TeamsView)};
+			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>
+			{
+				ClearBackStackOnNavigate = true
+			};
+			NavigateToRoomsViewCommand = new NavigateToViewCommand<RoomsView>
+			{
+				ClearBackStackOnNavigate = true,
+				BackToSpecificType = typeof(TeamsView),
+				ClearNavigationCache = true
+			};
+			NavigateToUsersViewCommand = new NavigateToViewCommand<UsersView>
+			{
+				ClearBackStackOnNavigate = true,
+				BackToSpecificType = typeof(TeamsView),
+				ClearNavigationCache = true
+			};
 			NavigateToSettingsViewCommand = new NavigateToViewCommand<SettingsView>();
 		}
 

@@ -14,11 +14,13 @@ namespace Hipstr.Client.Commands
 		private readonly string[] _propertyNames;
 
 		public bool ClearBackStackOnNavigate { private get; set; }
+		public bool ClearNavigationCache { private get; set; }
 		public Type BackToSpecificType { private get; set; }
 
 		public NavigateToViewCommand(Func<bool> canExecute = null)
 		{
 			ClearBackStackOnNavigate = false;
+			ClearNavigationCache = false;
 			BackToSpecificType = null;
 			_canExecute = canExecute;
 			_propertyNames = new string[0];
@@ -54,6 +56,13 @@ namespace Hipstr.Client.Commands
 			if (ClearBackStackOnNavigate)
 			{
 				App.Frame.BackStack.Clear();
+			}
+
+			if (ClearNavigationCache)
+			{
+				int previousCacheSize = App.Frame.CacheSize;
+				App.Frame.CacheSize = 0;
+				App.Frame.CacheSize = previousCacheSize;
 			}
 
 			App.Frame.Navigate(typeof(TView));

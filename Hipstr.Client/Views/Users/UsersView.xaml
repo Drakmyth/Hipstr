@@ -8,9 +8,9 @@
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:converters="using:Hipstr.Client.Converters"
-	  xmlns:behaviors="using:Hipstr.Client.Behaviors"
 	  mc:Ignorable="d"
-	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
+	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
+	  NavigationCacheMode="Enabled">
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -21,7 +21,6 @@
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
-			<!--			<behaviors:UserPersistScrollAdapter x:Key="UserScrollAdapter" />-->
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -40,9 +39,6 @@
 												  CommandParameter="{x:Bind ViewModel.TappedUser, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
 					</core:EventTriggerBehavior.Actions>
 				</core:EventTriggerBehavior>
-				<!--				<behaviors:PersistScrollPositionOnNavigationBehavior SourceObject="{x:Bind ViewModel}"-->
-				<!--																	 EventName="UsersLoaded"-->
-				<!--																	 Adapter="{StaticResource UserScrollAdapter}" />-->
 			</interactivity:Interaction.Behaviors>
 			<ListView.GroupStyle>
 				<GroupStyle HidesIfEmpty="True">

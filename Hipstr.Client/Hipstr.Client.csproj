@@ -97,10 +97,6 @@
     </Compile>
     <Compile Include="Behaviors\HipChatMessageParsingBehavior.cs" />
     <Compile Include="Attachments\ImmediateSourceUpdate.cs" />
-    <Compile Include="Behaviors\IPersistScrollAdapter.cs" />
-    <Compile Include="Behaviors\PersistScrollPositionOnNavigationBehavior.cs" />
-    <Compile Include="Behaviors\UserPersistScrollAdapter.cs" />
-    <Compile Include="Behaviors\RoomPersistScrollAdapter.cs" />
     <Compile Include="Behaviors\StickyScrollBehavior.cs" />
     <Compile Include="Behaviors\KeepAboveInputBehavior.cs" />
     <Compile Include="Commands\RelayCommandAsync.cs" />
