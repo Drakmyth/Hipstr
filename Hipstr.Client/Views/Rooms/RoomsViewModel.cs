@@ -46,13 +46,12 @@ namespace Hipstr.Client.Views.Rooms
 		private readonly IHipChatService _hipChatService;
 		private readonly ITeamService _teamService;
 
-		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService, IMainPageService mainPageService)
+		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService) : base("Rooms")
 		{
 			_hipChatService = hipChatService;
 			_teamService = teamService;
 
 			LoadingRooms = false;
-			mainPageService.Title = "Rooms";
 
 			_rooms = new ObservableCollection<Room>();
 			GroupedRooms = new ObservableCollection<ObservableGroupedRoomsCollection>();

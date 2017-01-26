@@ -29,11 +29,11 @@ namespace Hipstr.Client.Views.MainPage
 			}
 		}
 
-		public MainPageViewModel(IMainPageService mainPageService)
+		public MainPageViewModel(IMainPageService mainPageService) : base("Hipstr")
 		{
+			_title = "";
 			mainPageService.TitleChanged += OnTitleChanged;
 
-			Title = "";
 			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>
 			{
 				ClearBackStackOnNavigate = true

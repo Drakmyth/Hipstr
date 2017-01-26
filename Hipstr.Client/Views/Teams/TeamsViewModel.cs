@@ -36,12 +36,11 @@ namespace Hipstr.Client.Views.Teams
 
 		private readonly ITeamService _teamService;
 
-		public TeamsViewModel(ITeamService teamService, IMainPageService mainPageService)
+		public TeamsViewModel(ITeamService teamService) : base("Teams")
 		{
 			_teamService = teamService;
 
 			Teams = new ObservableCollection<Team>();
-			mainPageService.Title = "Teams";
 
 			AddTeamCommand = new RelayCommandAsync(AddTeamAsync);
 			EditTeamCommand = new RelayCommandAsync<Team>(EditTeamAsync, team => team != null, this, nameof(TappedTeam));

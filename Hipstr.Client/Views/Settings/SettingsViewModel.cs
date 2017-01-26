@@ -45,10 +45,8 @@ namespace Hipstr.Client.Views.Settings
 			}
 		}
 
-		public SettingsViewModel(IMainPageService mainPageService)
+		public SettingsViewModel() : base("Settings")
 		{
-			mainPageService.Title = "Settings";
-
 			InitializeThemeSettings();
 		}
 
@@ -59,10 +57,6 @@ namespace Hipstr.Client.Views.Settings
 			_isDarkTheme = theme == ElementTheme.Dark;
 			_isLightTheme = theme == ElementTheme.Light;
 			_isSystemTheme = theme == ElementTheme.Default;
-
-			//			_isDarkTheme = theme.HasValue && theme.Value == ApplicationTheme.Dark;
-			//			_isLightTheme = theme.HasValue && theme.Value == ApplicationTheme.Light;
-			//			_isSystemTheme = !theme.HasValue;
 		}
 
 		private void UpdateThemeSettings()

@@ -84,17 +84,16 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
-		private readonly IMainPageService _mainPageService;
 		private readonly IHipChatService _hipChatService;
+		private readonly IMainPageService _mainPageService;
 
-		public MessagesViewModel(IMainPageService mainPageService, IHipChatService hipChatService)
+		public MessagesViewModel(IHipChatService hipChatService, IMainPageService mainPageService) : base("Messages")
 		{
-			_mainPageService = mainPageService;
 			_hipChatService = hipChatService;
+			_mainPageService = mainPageService;
 
 			Messages = new ObservableCollection<Message>();
 			Emoticons = new ObservableCollection<Emoticon>();
-			_mainPageService.Title = "Messages";
 			_loadingMessages = false;
 			_sendingMessage = false;
 			_messageDraft = string.Empty;

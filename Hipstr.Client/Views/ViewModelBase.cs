@@ -1,4 +1,5 @@
 ﻿using Hipstr.Client.Properties;
+using Hipstr.Client.Services;
 using Hipstr.Core.Utility;
 using System;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using Windows.UI.Xaml;
 
 namespace Hipstr.Client.Views
 {
-	public class ViewModelBase : INotifyPropertyChanged, IDisposable
+	public abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -23,10 +24,22 @@ namespace Hipstr.Client.Views
 			}
 		}
 
-		protected ViewModelBase()
+		private readonly string _title;
+		private readonly IMainPageService _mainPageService;
+
+		protected ViewModelBase(string title)
 		{
 			AppSettings.CurrentThemeChanged += OnCurrentThemeChange;
 			CurrentTheme = AppSettings.CurrentTheme;
+
+			_title = title;
+			_mainPageService = IoCContainer.Resolve<IMainPageService>();
+			RefreshTitle();
+		}
+
+		public void RefreshTitle()
+		{
+			_mainPageService.Title = _title;
 		}
 
 		private void OnCurrentThemeChange(object sender, ElementTheme theme)

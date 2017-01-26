@@ -59,13 +59,12 @@ namespace Hipstr.Client.Views.Users
 		private readonly IHipChatService _hipChatService;
 		private readonly ITeamService _teamService;
 
-		public UsersViewModel(IHipChatService hipChatService, ITeamService teamService, IMainPageService mainPageService)
+		public UsersViewModel(IHipChatService hipChatService, ITeamService teamService) : base("Users")
 		{
 			_hipChatService = hipChatService;
 			_teamService = teamService;
 
 			LoadingUsers = false;
-			mainPageService.Title = "Users";
 
 			_users = new ObservableCollection<User>();
 			GroupedUsers = new ObservableCollection<ObservableGroupedUsersCollection>();

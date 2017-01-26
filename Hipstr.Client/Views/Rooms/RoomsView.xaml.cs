@@ -24,6 +24,7 @@ namespace Hipstr.Client.Views.Rooms
 			{
 				await ViewModel.RefreshRoomsAsync(HipChatCacheBehavior.LoadFromCache);
 			}
+			ViewModel.RefreshTitle();
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)

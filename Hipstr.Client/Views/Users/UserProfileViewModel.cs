@@ -64,16 +64,13 @@ namespace Hipstr.Client.Views.Users
 			}
 		}
 
-
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
-		public UserProfileViewModel(IHipChatService hipChatService, IMainPageService mainPageService)
+		public UserProfileViewModel(IHipChatService hipChatService, IMainPageService mainPageService) : base("User Profile")
 		{
 			_hipChatService = hipChatService;
 			_mainPageService = mainPageService;
-
-			_mainPageService.Title = "User Profile";
 			_loadingUserProfile = false;
 
 			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync, () => !LoadingUserProfile, this, nameof(LoadingUserProfile));

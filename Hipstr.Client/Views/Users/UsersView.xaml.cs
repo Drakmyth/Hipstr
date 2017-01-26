@@ -49,6 +49,7 @@ namespace Hipstr.Client.Views.Users
 			{
 				await ViewModel.RefreshUsersAsync(HipChatCacheBehavior.LoadFromCache);
 			}
+			ViewModel.RefreshTitle();
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
