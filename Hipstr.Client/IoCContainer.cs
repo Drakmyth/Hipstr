@@ -6,6 +6,7 @@ using Hipstr.Client.Views.Dialogs.EditTeamDialog;
 using Hipstr.Client.Views.MainPage;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Client.Views.Rooms;
+using Hipstr.Client.Views.Settings;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
 using Hipstr.Core.Services;
@@ -44,6 +45,7 @@ namespace Hipstr.Client
 			builder.RegisterType<UserProfileViewModel, UserProfileViewModel>();
 			builder.RegisterType<AddTeamDialogViewModel, AddTeamDialogViewModel>();
 			builder.RegisterType<EditTeamDialogViewModel, EditTeamDialogViewModel>();
+			builder.RegisterType<SettingsViewModel, SettingsViewModel>();
 		}
 
 		private static IRegistrationBuilder<TInstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<TInterface, TInstanceType>(this ContainerBuilder builder) where TInstanceType : TInterface

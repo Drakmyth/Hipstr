@@ -120,6 +120,7 @@
     <Compile Include="Models\HipChat\HipChatOAuthClient.cs" />
     <Compile Include="Models\HipChat\HipChatOAuthSession.cs" />
     <Compile Include="Messaging\IMessageSource.cs" />
+    <Compile Include="Models\Settings.cs" />
     <Compile Include="Models\UserProfile.cs" />
     <Compile Include="Models\HipChat\HipChatClient.cs" />
     <Compile Include="Models\HipChat\HipChatPresence.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="Services\IToastService.cs" />
     <Compile Include="Services\TeamService.cs" />
     <Compile Include="Services\ToastService.cs" />
+    <Compile Include="Utility\AppSettings.cs" />
     <Compile Include="Utility\Extensions\CollectionExtensions.cs" />
     <EmbeddedResource Include="Properties\Hipstr.Core.rd.xml" />
   </ItemGroup>

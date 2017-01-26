@@ -45,6 +45,7 @@ namespace Hipstr.Client.Views.Dialogs.EditTeamDialog
 		{
 			_popUp.UnbindFromWindow();
 			SystemNavigationManager.GetForCurrentView().BackRequested -= OnBackRequested;
+			ViewModel.Dispose();
 		}
 
 		private void TeamNameTextBox_OnKeyUp(object sender, KeyRoutedEventArgs keyRoutedEventArgs)

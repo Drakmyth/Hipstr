@@ -1,0 +1,37 @@
+﻿<Page Name="SettingsViewPage"
+	  x:Class="Hipstr.Client.Views.Settings.SettingsView"
+	  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	  xmlns:converters="using:Hipstr.Client.Converters"
+	  mc:Ignorable="d"
+	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
+
+	<Page.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="/Styles/Colors.xaml" />
+			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="RadioButton">
+				<Setter Property="Foreground" Value="White" />
+				<Setter Property="IsThreeState" Value="False" />
+			</Style>
+			<converters:NullableBooleanToBooleanConverter x:Key="NBoolToBool" />
+		</ResourceDictionary>
+	</Page.Resources>
+
+	<Grid Background="{ThemeResource HipChatBackground}">
+		<StackPanel>
+			<RadioButton GroupName="Theme"
+						 Content="Dark"
+						 IsChecked="{x:Bind ViewModel.IsDarkTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
+			<RadioButton GroupName="Theme"
+						 Content="Light"
+						 IsChecked="{x:Bind ViewModel.IsLightTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
+			<RadioButton GroupName="Theme"
+						 Content="System"
+						 IsChecked="{x:Bind ViewModel.IsSystemTheme, Mode=TwoWay, FallbackValue='True', Converter={StaticResource NBoolToBool}}" />
+		</StackPanel>
+	</Grid>
+</Page>

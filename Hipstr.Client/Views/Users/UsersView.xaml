@@ -9,7 +9,8 @@
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:converters="using:Hipstr.Client.Converters"
 	  xmlns:behaviors="using:Hipstr.Client.Behaviors"
-	  mc:Ignorable="d">
+	  mc:Ignorable="d"
+	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -24,7 +25,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipChatBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -73,12 +74,12 @@
 							<MenuFlyout>
 								<MenuFlyout.MenuFlyoutPresenterStyle>
 									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{StaticResource HipChatControl}" />
+										<Setter Property="Background" Value="{ThemeResource HipChatControl}" />
 									</Style>
 								</MenuFlyout.MenuFlyoutPresenterStyle>
 								<MenuFlyout.Items>
 									<MenuFlyoutItem Text="View User Profile"
-													Background="{StaticResource HipChatControl}"
+													Background="{ThemeResource HipChatControl}"
 													Foreground="White"
 													Command="{Binding ViewModel.NavigateToUserProfileViewCommand, Mode=OneTime, ElementName=UsersViewPage}"
 													CommandParameter="{Binding ViewModel.TappedUser, ElementName=UsersViewPage}" />
@@ -95,7 +96,7 @@
 					  Width="50"
 					  Height="50" />
 		<CommandBar Grid.Row="1"
-					Background="{StaticResource HipChatControl}"
+					Background="{ThemeResource HipChatControl}"
 					Foreground="White">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"

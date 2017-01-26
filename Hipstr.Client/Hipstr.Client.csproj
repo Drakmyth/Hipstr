@@ -108,6 +108,7 @@
     <Compile Include="Commands\NavigateToViewCommand.cs" />
     <Compile Include="Converters\BooleanToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\NullableBooleanToBooleanConverter.cs" />
     <Compile Include="Converters\UserToMessageSourceConverter.cs" />
     <Compile Include="Converters\RoomToMessageSourceConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
@@ -147,6 +148,10 @@
     <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogView.xaml.cs">
       <DependentUpon>AddTeamDialogView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Settings\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Settings\SettingsViewModel.cs" />
     <Compile Include="Views\Users\UserProfileView.xaml.cs">
       <DependentUpon>UserProfileView.xaml</DependentUpon>
     </Compile>
@@ -281,6 +286,10 @@
     <Page Include="Views\Dialogs\AddTeamDialog\AddTeamDialogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Settings\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Users\UserProfileView.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -12,6 +12,7 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace Hipstr.Client
@@ -62,6 +63,7 @@ namespace Hipstr.Client
 				Frame = new Frame();
 
 				Frame.NavigationFailed += OnNavigationFailed;
+				Frame.Navigating += OnNavigating;
 				Frame.Navigated += OnNavigated;
 
 				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
@@ -96,7 +98,7 @@ namespace Hipstr.Client
 			if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) return;
 
 			StatusBar statusBar = StatusBar.GetForCurrentView();
-			statusBar.BackgroundColor = Color.FromArgb(255, 32, 80, 129); // HipChatBackground
+			statusBar.BackgroundColor = (Current.Resources["HipChatControl"] as SolidColorBrush)?.Color;
 			statusBar.ForegroundColor = Colors.White;
 			statusBar.BackgroundOpacity = 1;
 		}
@@ -109,6 +111,12 @@ namespace Hipstr.Client
 		private static void OnNavigationFailed(object sender, NavigationFailedEventArgs e)
 		{
 			throw new Exception("Failed to load Page " + e.SourcePageType.FullName);
+		}
+
+		private static void OnNavigating(object sender, NavigatingCancelEventArgs e)
+		{
+			var dataContext = (Frame.Content as Page)?.DataContext as IDisposable;
+			dataContext?.Dispose();
 		}
 
 		private static void OnNavigated(object sender, NavigationEventArgs e)

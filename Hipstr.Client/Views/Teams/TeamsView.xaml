@@ -5,7 +5,8 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:models="using:Hipstr.Core.Models"
-	  mc:Ignorable="d">
+	  mc:Ignorable="d"
+	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
 	<Page.Resources>
 		<ResourceDictionary>
@@ -15,7 +16,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{StaticResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipChatBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -40,17 +41,17 @@
 							<MenuFlyout>
 								<MenuFlyout.MenuFlyoutPresenterStyle>
 									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{StaticResource HipChatControl}"/>
+										<Setter Property="Background" Value="{ThemeResource HipChatControl}" />
 									</Style>
 								</MenuFlyout.MenuFlyoutPresenterStyle>
 								<MenuFlyout.Items>
 									<MenuFlyoutItem Text="Edit"
-													Background="{StaticResource HipChatControl}"
+													Background="{ThemeResource HipChatControl}"
 													Foreground="White"
 													Command="{Binding ViewModel.EditTeamCommand, Mode=OneTime, ElementName=TeamsViewPage}"
 													CommandParameter="{Binding ViewModel.TappedTeam, ElementName=TeamsViewPage}" />
 									<MenuFlyoutItem Text="Delete"
-													Background="{StaticResource HipChatControl}"
+													Background="{ThemeResource HipChatControl}"
 													Foreground="White"
 													Command="{Binding ViewModel.DeleteTeamCommand, Mode=OneTime, ElementName=TeamsViewPage}"
 													CommandParameter="{Binding ViewModel.TappedTeam, ElementName=TeamsViewPage}" />
@@ -62,7 +63,7 @@
 			</ListView.ItemTemplate>
 		</ListView>
 		<CommandBar Grid.Row="1"
-					Background="{StaticResource HipChatControl}"
+					Background="{ThemeResource HipChatControl}"
 					Foreground="White">
 			<AppBarButton Icon="Add"
 						  Label="Add Team"

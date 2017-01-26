@@ -1,5 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<SolidColorBrush x:Key="HipChatBackground" Color="#FF205081" />
-	<SolidColorBrush x:Key="HipChatControl" Color="#FF3572B0" />
+	<ResourceDictionary.ThemeDictionaries>
+		<ResourceDictionary x:Key="Light">
+			<SolidColorBrush x:Key="HipChatBackground" Color="#FF205081" />
+			<SolidColorBrush x:Key="HipChatControl" Color="#FF3572B0" />
+		</ResourceDictionary>
+		<ResourceDictionary x:Key="Dark">
+			<SolidColorBrush x:Key="HipChatBackground" Color="#FF205081" />
+			<SolidColorBrush x:Key="HipChatControl" Color="#FF3572B0" />
+		</ResourceDictionary>
+	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>
