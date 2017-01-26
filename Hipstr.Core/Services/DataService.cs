@@ -19,7 +19,7 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<Team>> LoadTeamsAsync()
 		{
-			return await LoadDataAsync<Team>("teams.json");
+			return await LoadCollectionDataAsync<Team>("teams.json");
 		}
 
 		public async Task SaveRoomsForTeamAsync(IEnumerable<Room> rooms, Team team)
@@ -29,7 +29,7 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<Room>> LoadRoomsForTeamAsync(Team team)
 		{
-			IReadOnlyList<Room> rooms = await LoadDataAsync<Room>($"Rooms-{team.ApiKey}.json");
+			IReadOnlyList<Room> rooms = await LoadCollectionDataAsync<Room>($"Rooms-{team.ApiKey}.json");
 			foreach (Room room in rooms)
 			{
 				room.Team = team;
@@ -45,7 +45,7 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<User>> LoadUsersForTeamAsync(Team team)
 		{
-			IReadOnlyList<User> users = await LoadDataAsync<User>($"Users-{team.ApiKey}.json");
+			IReadOnlyList<User> users = await LoadCollectionDataAsync<User>($"Users-{team.ApiKey}.json");
 			foreach (User user in users)
 			{
 				user.Team = team;
@@ -61,7 +61,7 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<Emoticon>> LoadEmoticonsForTeamAsync(Team team)
 		{
-			IReadOnlyList<Emoticon> emoticons = await LoadDataAsync<Emoticon>($"Emoticons-{team.ApiKey}.json");
+			IReadOnlyList<Emoticon> emoticons = await LoadCollectionDataAsync<Emoticon>($"Emoticons-{team.ApiKey}.json");
 			foreach (Emoticon emoticon in emoticons)
 			{
 				emoticon.Team = team;
@@ -72,7 +72,7 @@ namespace Hipstr.Core.Services
 
 		public async Task<Emoticon> UpdateSingleEmoticonAsync(Emoticon emoticon, Team team)
 		{
-			IReadOnlyList<Emoticon> emoticons = await LoadDataAsync<Emoticon>($"Emoticons-{team.ApiKey}.json");
+			IReadOnlyList<Emoticon> emoticons = await LoadCollectionDataAsync<Emoticon>($"Emoticons-{team.ApiKey}.json");
 			Emoticon toUpdate = emoticons.Where(e => e.Id == emoticon.Id).Single();
 			toUpdate.Height = emoticon.Height;
 			toUpdate.Width = emoticon.Width;
@@ -81,14 +81,14 @@ namespace Hipstr.Core.Services
 			return emoticon;
 		}
 
-		private static async Task SaveDataAsync<T>(string filename, IEnumerable<T> data)
+		private static async Task SaveDataAsync<T>(string filename, T data)
 		{
 			StorageFile file = await GetStorageFileAsync(filename);
 			string json = JsonConvert.SerializeObject(data);
 			await FileIO.WriteTextAsync(file, json);
 		}
 
-		private static async Task<IReadOnlyList<T>> LoadDataAsync<T>(string filename)
+		private static async Task<IReadOnlyList<T>> LoadCollectionDataAsync<T>(string filename)
 		{
 			StorageFile file = await GetStorageFileAsync(filename);
 			string json = await FileIO.ReadTextAsync(file);
