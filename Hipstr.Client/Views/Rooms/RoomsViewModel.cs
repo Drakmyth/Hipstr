@@ -24,7 +24,6 @@ namespace Hipstr.Client.Views.Rooms
 	public class RoomsViewModel : ViewModelBase
 	{
 		public event EventHandler<ObservableGroupedRoomsCollection> RoomGroupScrollToHeaderRequest;
-		public event EventHandler<IEnumerable<ObservableGroupedCollection<Room>>> RoomsLoaded;
 
 		private readonly ObservableCollection<Room> _rooms;
 		public ObservableCollection<ObservableGroupedRoomsCollection> GroupedRooms { get; }
@@ -69,7 +68,6 @@ namespace Hipstr.Client.Views.Rooms
 		{
 			GroupedRooms.Clear();
 			GroupedRooms.AddRange(OrderAndGroupRooms(_rooms));
-			RoomsLoaded?.Invoke(this, GroupedRooms);
 		}
 
 		public async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
