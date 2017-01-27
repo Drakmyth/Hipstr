@@ -21,6 +21,7 @@ namespace Hipstr.Core.Utility
 			}
 		}
 
+		// typeof(T) doesn't work on WinRT, so we have to pass in the type separately
 		private static T LoadEnumSetting<T>(T defaultValue, Type type, [CallerMemberName] string setting = null)
 		{
 			object value = ApplicationData.Current.LocalSettings.Values[setting];
