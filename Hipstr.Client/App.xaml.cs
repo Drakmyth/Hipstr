@@ -78,6 +78,7 @@ namespace Hipstr.Client
 
 				// Create a MainPageView to hold the frame and place it in the current Window
 				Window.Current.Content = new MainPageView(Frame);
+				((MainPageViewModel)((MainPageView)Window.Current.Content).DataContext).Initialize();
 
 				// Register a handler for BackRequested events and set the visibility of the Back button
 				SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
@@ -124,10 +125,25 @@ namespace Hipstr.Client
 			dataContext?.Dispose();
 		}
 
-		private static async void OnNavigated(object sender, NavigationEventArgs e)
+		private static void OnNavigated(object sender, NavigationEventArgs e)
 		{
 			// Each time a navigation event occurs, update the Back button's visibility
 			UpdateBackButtonVisibility();
+
+			var page = Frame.Content as Page;
+			if (page != null)
+			{
+				page.Loaded += OnLoaded;
+			}
+		}
+
+		private static async void OnLoaded(object sender, RoutedEventArgs e)
+		{
+			var page = sender as Page;
+			if (page != null)
+			{
+				page.Loaded -= OnLoaded;
+			}
 
 			var dataContext = (Frame.Content as Page)?.DataContext as ViewModelBase;
 			dataContext?.Initialize();
