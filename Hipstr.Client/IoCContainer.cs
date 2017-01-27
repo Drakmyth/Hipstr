@@ -10,6 +10,7 @@ using Hipstr.Client.Views.Settings;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Client.Views.Users;
 using Hipstr.Core.Services;
+using Hipstr.Core.Utility;
 
 namespace Hipstr.Client
 {
@@ -34,6 +35,7 @@ namespace Hipstr.Client
 			builder.RegisterType<IToastService, ToastService>();
 			builder.RegisterType<IHttpClient, HipstrHttpClient>();
 			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
+			builder.RegisterType<IAppSettings, AppSettings>();
 
 			// XAML binding breaks when using an interface as the DataContext, so we
 			// need to request implementations rather than interfaces for the view models

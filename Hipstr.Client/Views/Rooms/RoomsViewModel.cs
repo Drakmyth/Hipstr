@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Services;
 using Hipstr.Client.Views.Dialogs;
 using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
@@ -56,11 +55,25 @@ namespace Hipstr.Client.Views.Rooms
 			_rooms = new ObservableCollection<Room>();
 			GroupedRooms = new ObservableCollection<ObservableGroupedRoomsCollection>();
 
-			_rooms.CollectionChanged += RoomsOnCollectionChanged;
-
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(room => room != null);
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			_rooms.CollectionChanged += RoomsOnCollectionChanged;
+			RefreshTitle();
+		}
+
+		public override async Task InitializeAsync()
+		{
+			if (!GroupedRooms.Any())
+			{
+				await RefreshRoomsAsync(HipChatCacheBehavior.LoadFromCache);
+			}
 		}
 
 		private void RoomsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
@@ -69,7 +82,7 @@ namespace Hipstr.Client.Views.Rooms
 			GroupedRooms.AddRange(OrderAndGroupRooms(_rooms));
 		}
 
-		public async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
+		private async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
 		{
 			try
 			{

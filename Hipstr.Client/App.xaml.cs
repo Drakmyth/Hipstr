@@ -1,8 +1,9 @@
-﻿using Hipstr.Client.Views.MainPage;
+﻿using Hipstr.Client.Views;
+using Hipstr.Client.Views.MainPage;
 using Hipstr.Client.Views.Teams;
 using Hipstr.Core.Services;
+using Hipstr.Core.Utility;
 using System;
-using System.Diagnostics;
 using System.ServiceModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -23,6 +24,7 @@ namespace Hipstr.Client
 	sealed partial class App : Application
 	{
 		public static Frame Frame { get; private set; }
+		public static IAppSettings Settings { get; private set; }
 
 		private readonly IToastService _toastService;
 
@@ -59,6 +61,8 @@ namespace Hipstr.Client
 			// just ensure that the window is active
 			if (Window.Current.Content == null)
 			{
+				Settings = IoCContainer.Resolve<IAppSettings>();
+
 				// Create a Frame to act as the navigation context and navigate to the first page
 				Frame = new Frame();
 
@@ -119,10 +123,15 @@ namespace Hipstr.Client
 			dataContext?.Dispose();
 		}
 
-		private static void OnNavigated(object sender, NavigationEventArgs e)
+		private static async void OnNavigated(object sender, NavigationEventArgs e)
 		{
 			// Each time a navigation event occurs, update the Back button's visibility
 			UpdateBackButtonVisibility();
+
+			var dataContext = (Frame.Content as Page)?.DataContext as ViewModelBase;
+			dataContext?.Initialize();
+			// ReSharper disable once PossibleNullReferenceException
+			await dataContext?.InitializeAsync();
 		}
 
 		private static void UpdateBackButtonVisibility()

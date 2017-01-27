@@ -14,10 +14,9 @@ namespace Hipstr.Client.Views.Users
 			DataContext = IoCContainer.Resolve<UserProfileViewModel>();
 		}
 
-		protected override async void OnNavigatedTo(NavigationEventArgs e)
+		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.User = (User)e.Parameter;
-			await ViewModel.ReloadUserProfileAsync();
 		}
 	}
 }

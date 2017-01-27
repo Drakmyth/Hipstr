@@ -1,9 +1,9 @@
 ﻿using Hipstr.Client.Properties;
 using Hipstr.Client.Services;
-using Hipstr.Core.Utility;
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
 namespace Hipstr.Client.Views
@@ -29,12 +29,21 @@ namespace Hipstr.Client.Views
 
 		protected ViewModelBase(string title)
 		{
-			AppSettings.CurrentThemeChanged += OnCurrentThemeChange;
-			CurrentTheme = AppSettings.CurrentTheme;
-
 			_title = title;
 			_mainPageService = IoCContainer.Resolve<IMainPageService>();
+		}
+
+		public virtual void Initialize()
+		{
+			App.Settings.CurrentThemeChanged += OnCurrentThemeChange;
+			_currentTheme = App.Settings.CurrentTheme;
+
 			RefreshTitle();
+		}
+
+		public virtual Task InitializeAsync()
+		{
+			return Task.CompletedTask;
 		}
 
 		public void RefreshTitle()
@@ -53,9 +62,9 @@ namespace Hipstr.Client.Views
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 
-		public void Dispose()
+		public virtual void Dispose()
 		{
-			AppSettings.CurrentThemeChanged -= OnCurrentThemeChange;
+			App.Settings.CurrentThemeChanged -= OnCurrentThemeChange;
 		}
 	}
 }

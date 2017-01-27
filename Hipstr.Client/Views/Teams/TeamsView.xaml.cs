@@ -39,10 +39,5 @@ namespace Hipstr.Client.Views.Teams
 			ViewModel.TappedTeam = (Team)listItem.DataContext;
 			FlyoutBase.ShowAttachedFlyout(listItem);
 		}
-
-		protected override async void OnNavigatedTo(NavigationEventArgs e)
-		{
-			await ViewModel.RefreshTeamListAsync();
-		}
 	}
 }

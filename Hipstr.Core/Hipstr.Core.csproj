@@ -151,6 +151,7 @@
     <Compile Include="Services\ToastService.cs" />
     <Compile Include="Utility\AppSettings.cs" />
     <Compile Include="Utility\Extensions\CollectionExtensions.cs" />
+    <Compile Include="Utility\IAppSettings.cs" />
     <EmbeddedResource Include="Properties\Hipstr.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup />

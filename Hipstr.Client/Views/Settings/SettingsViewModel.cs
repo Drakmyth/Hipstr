@@ -1,6 +1,4 @@
-﻿using Hipstr.Client.Services;
-using Hipstr.Core.Utility;
-using JetBrains.Annotations;
+﻿using JetBrains.Annotations;
 using System.Runtime.CompilerServices;
 using Windows.UI.Xaml;
 
@@ -47,11 +45,15 @@ namespace Hipstr.Client.Views.Settings
 
 		public SettingsViewModel() : base("Settings")
 		{
-			InitializeThemeSettings();
+			_isDarkTheme = false;
+			_isLightTheme = false;
+			_isSystemTheme = true;
 		}
 
-		private void InitializeThemeSettings()
+		public override void Initialize()
 		{
+			base.Initialize();
+
 			ElementTheme theme = CurrentTheme;
 
 			_isDarkTheme = theme == ElementTheme.Dark;
@@ -63,15 +65,15 @@ namespace Hipstr.Client.Views.Settings
 		{
 			if (IsSystemTheme)
 			{
-				AppSettings.CurrentTheme = ElementTheme.Default;
+				App.Settings.CurrentTheme = ElementTheme.Default;
 			}
 			else if (IsDarkTheme)
 			{
-				AppSettings.CurrentTheme = ElementTheme.Dark;
+				App.Settings.CurrentTheme = ElementTheme.Dark;
 			}
 			else if (IsLightTheme)
 			{
-				AppSettings.CurrentTheme = ElementTheme.Light;
+				App.Settings.CurrentTheme = ElementTheme.Light;
 			}
 		}
 

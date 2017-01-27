@@ -1,12 +1,12 @@
 ﻿using Hipstr.Client.Commands;
+using Hipstr.Client.Services;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
+using JetBrains.Annotations;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Windows.UI.Xaml.Media.Imaging;
-using Hipstr.Client.Services;
-using JetBrains.Annotations;
 
 namespace Hipstr.Client.Views.Users
 {
@@ -76,7 +76,12 @@ namespace Hipstr.Client.Views.Users
 			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync, () => !LoadingUserProfile, this, nameof(LoadingUserProfile));
 		}
 
-		public async Task ReloadUserProfileAsync()
+		public override async Task InitializeAsync()
+		{
+			await ReloadUserProfileAsync();
+		}
+
+		private async Task ReloadUserProfileAsync()
 		{
 			try
 			{

@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Services;
 using Hipstr.Client.Views.Dialogs;
 using Hipstr.Client.Views.Dialogs.AddTeamDialog;
 using Hipstr.Client.Views.Dialogs.EditTeamDialog;
@@ -47,6 +46,11 @@ namespace Hipstr.Client.Views.Teams
 			DeleteTeamCommand = new RelayCommandAsync<Team>(DeleteTeamAsync, team => team != null, this, nameof(TappedTeam));
 		}
 
+		public override async Task InitializeAsync()
+		{
+			await RefreshTeamListAsync();
+		}
+
 		private async Task AddTeamAsync()
 		{
 			var dialog = new AddTeamDialogView();
@@ -81,7 +85,7 @@ namespace Hipstr.Client.Views.Teams
 			await RefreshTeamListAsync();
 		}
 
-		public async Task RefreshTeamListAsync()
+		private async Task RefreshTeamListAsync()
 		{
 			Teams.Clear();
 			Teams.AddRange(await _teamService.GetTeamsAsync());

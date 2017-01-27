@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Services;
 using Hipstr.Client.Views.Dialogs;
 using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
@@ -68,7 +67,6 @@ namespace Hipstr.Client.Views.Users
 
 			_users = new ObservableCollection<User>();
 			GroupedUsers = new ObservableCollection<ObservableGroupedUsersCollection>();
-			_users.CollectionChanged += UsersOnCollectionChanged;
 
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView, User>(user => user != null, this, nameof(TappedUser));
 			// TODO: Disallow navigating to a 1-on-1 chat with yourself
@@ -77,13 +75,29 @@ namespace Hipstr.Client.Views.Users
 			RefreshUsersCommand = new RelayCommandAsync(() => RefreshUsersAsync(), () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
 
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			_users.CollectionChanged += UsersOnCollectionChanged;
+			RefreshTitle();
+		}
+
+		public override async Task InitializeAsync()
+		{
+			if (!GroupedUsers.Any())
+			{
+				await RefreshUsersAsync(HipChatCacheBehavior.LoadFromCache);
+			}
+		}
+
 		private void UsersOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
 		{
 			GroupedUsers.Clear();
 			GroupedUsers.AddRange(OrderAndGroupUsers(_users));
 		}
 
-		public async Task RefreshUsersAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
+		private async Task RefreshUsersAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
 		{
 			try
 			{

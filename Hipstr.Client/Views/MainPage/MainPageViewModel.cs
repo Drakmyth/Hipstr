@@ -29,10 +29,12 @@ namespace Hipstr.Client.Views.MainPage
 			}
 		}
 
+		private readonly IMainPageService _mainPageService;
+
 		public MainPageViewModel(IMainPageService mainPageService) : base("Hipstr")
 		{
-			_title = "";
-			mainPageService.TitleChanged += OnTitleChanged;
+			_mainPageService = mainPageService;
+			_title = "Hipstr";
 
 			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>
 			{
@@ -51,6 +53,13 @@ namespace Hipstr.Client.Views.MainPage
 				ClearNavigationCache = true
 			};
 			NavigateToSettingsViewCommand = new NavigateToViewCommand<SettingsView>();
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			_mainPageService.TitleChanged += OnTitleChanged;
 		}
 
 		private void OnTitleChanged(object sender, string title)

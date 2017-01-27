@@ -84,6 +84,7 @@ namespace Hipstr.Client.Views.Messages
 			}
 		}
 
+		private bool _pollingForMessages;
 		private readonly IHipChatService _hipChatService;
 		private readonly IMainPageService _mainPageService;
 
@@ -97,13 +98,33 @@ namespace Hipstr.Client.Views.Messages
 			_loadingMessages = false;
 			_sendingMessage = false;
 			_messageDraft = string.Empty;
+			_pollingForMessages = true;
 
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
 			SelectEmoticonCommand = new RelayCommand<Emoticon>(SelectEmoticon);
 		}
 
-		public async Task ReloadMessagesAsync()
+		public override async Task InitializeAsync()
+		{
+			await ReloadMessagesAsync();
+			await LoadEmoticons();
+
+			while (_pollingForMessages)
+			{
+				await Task.Delay(TimeSpan.FromSeconds(30));
+				await CheckForNewMessages();
+			}
+		}
+
+		public override void Dispose()
+		{
+			base.Dispose();
+
+			_pollingForMessages = false;
+		}
+
+		private async Task ReloadMessagesAsync()
 		{
 			try
 			{
@@ -137,7 +158,7 @@ namespace Hipstr.Client.Views.Messages
 			MessageDraft += $"({emoticon.Shortcut})";
 		}
 
-		public async Task CheckForNewMessages()
+		private async Task CheckForNewMessages()
 		{
 			IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
 
@@ -150,7 +171,7 @@ namespace Hipstr.Client.Views.Messages
 			Messages.AddRange(messages);
 		}
 
-		public async Task LoadEmoticons()
+		private async Task LoadEmoticons()
 		{
 			try
 			{

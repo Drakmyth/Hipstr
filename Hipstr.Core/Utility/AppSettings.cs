@@ -1,55 +1,46 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
+﻿using JetBrains.Annotations;
+using System;
 using System.Runtime.CompilerServices;
 using Windows.Storage;
 using Windows.UI.Xaml;
 
 namespace Hipstr.Core.Utility
 {
-	public static class AppSettings
+	[UsedImplicitly]
+	public class AppSettings : IAppSettings
 	{
-		public static event EventHandler<ElementTheme> CurrentThemeChanged;
+		public event EventHandler<ElementTheme> CurrentThemeChanged;
 
-		public static ElementTheme CurrentTheme
+		public ElementTheme CurrentTheme
 		{
-			get { return LoadSetting(ElementTheme.Default); }
+			get { return LoadEnumSetting(ElementTheme.Default, typeof(ElementTheme)); }
 			set
 			{
-				SaveSetting(value);
+				SaveEnumSetting(value);
 				CurrentThemeChanged?.Invoke(nameof(AppSettings), value);
 			}
 		}
 
-		private static T LoadSetting<T>(T defaultValue, [CallerMemberName] string setting = null)
+		private static T LoadEnumSetting<T>(T defaultValue, Type type, [CallerMemberName] string setting = null)
 		{
-			var value = LoadSetting<T>(setting);
-			bool isNullable = typeof(T).GetTypeInfo().IsGenericType && typeof(T).GetGenericTypeDefinition() == typeof(Nullable<>);
-			return value == null && !isNullable ? defaultValue : value;
+			object value = ApplicationData.Current.LocalSettings.Values[setting];
+			if (value == null)
+			{
+				return defaultValue;
+			}
+
+			return (T)Enum.Parse(type, (string)value);
 		}
 
-		private static T LoadSetting<T>([CallerMemberName] string setting = null)
+		private static T LoadSetting<T>(T defaultValue, [CallerMemberName] string setting = null)
 		{
-			Type type = typeof(T);
-
-			bool isNullable = type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-			if (isNullable)
+			object value = ApplicationData.Current.LocalSettings.Values[setting];
+			if (value == null)
 			{
-				type = type.GetGenericArguments().First();
+				return defaultValue;
 			}
 
-			bool isEnum = type.GetTypeInfo().IsEnum;
-			if (isEnum)
-			{
-				object value = ApplicationData.Current.LocalSettings.Values[setting];
-				if (value == null)
-				{
-					return (T)value;
-				}
-				return (T)Enum.Parse(type, (string)value);
-			}
-
-			return (T)ApplicationData.Current.LocalSettings.Values[setting];
+			return (T)value;
 		}
 
 		/* Application Data supports the following types:
@@ -62,25 +53,14 @@ namespace Hipstr.Core.Utility
 		 * ApplicationDataCompositeValue
 		 */
 
-		private static void SaveSetting<T>(T value, [CallerMemberName] string setting = null)
+		private static void SaveEnumSetting(object value, [CallerMemberName] string setting = null)
 		{
-			Type type = typeof(T);
+			ApplicationData.Current.LocalSettings.Values[setting] = value?.ToString();
+		}
 
-			bool isNullable = type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
-			if (isNullable)
-			{
-				type = type.GetGenericArguments().First();
-			}
-
-			bool isEnum = type.GetTypeInfo().IsEnum;
-			if (isEnum)
-			{
-				ApplicationData.Current.LocalSettings.Values[setting] = value?.ToString();
-			}
-			else
-			{
-				ApplicationData.Current.LocalSettings.Values[setting] = value;
-			}
+		private void SaveSetting(object value, [CallerMemberName] string setting = null)
+		{
+			ApplicationData.Current.LocalSettings.Values[setting] = value;
 		}
 	}
 }

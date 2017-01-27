@@ -42,14 +42,9 @@ namespace Hipstr.Client.Views.Users
 			FlyoutBase.ShowAttachedFlyout(listItem);
 		}
 
-		protected override async void OnNavigatedTo(NavigationEventArgs e)
+		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.UserGroupScrollToHeaderRequest += OnUserGroupScrollToHeaderRequest;
-			if (!ViewModel.GroupedUsers.Any())
-			{
-				await ViewModel.RefreshUsersAsync(HipChatCacheBehavior.LoadFromCache);
-			}
-			ViewModel.RefreshTitle();
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)

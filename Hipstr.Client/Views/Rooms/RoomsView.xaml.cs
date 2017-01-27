@@ -17,14 +17,9 @@ namespace Hipstr.Client.Views.Rooms
 			DataContext = IoCContainer.Resolve<RoomsViewModel>();
 		}
 
-		protected override async void OnNavigatedTo(NavigationEventArgs e)
+		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.RoomGroupScrollToHeaderRequest += OnRoomGroupScrollToHeaderRequest;
-			if (!ViewModel.GroupedRooms.Any())
-			{
-				await ViewModel.RefreshRoomsAsync(HipChatCacheBehavior.LoadFromCache);
-			}
-			ViewModel.RefreshTitle();
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
