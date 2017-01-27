@@ -31,7 +31,6 @@ namespace Hipstr.Client.Views.Messages
 			set
 			{
 				_messageSource = value;
-				_mainPageService.Title = _messageSource.Name;
 				OnPropertyChanged();
 			}
 		}
@@ -103,6 +102,11 @@ namespace Hipstr.Client.Views.Messages
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
 			SelectEmoticonCommand = new RelayCommand<Emoticon>(SelectEmoticon);
+		}
+
+		public override void Initialize()
+		{
+			_mainPageService.Title = _messageSource.Name;
 		}
 
 		public override async Task InitializeAsync()
