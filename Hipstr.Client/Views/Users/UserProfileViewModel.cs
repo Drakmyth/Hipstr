@@ -23,7 +23,6 @@ namespace Hipstr.Client.Views.Users
 			set
 			{
 				_user = value;
-				_mainPageService.Title = _user.Name;
 				OnPropertyChanged();
 			}
 		}
@@ -74,6 +73,11 @@ namespace Hipstr.Client.Views.Users
 			_loadingUserProfile = false;
 
 			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync, () => !LoadingUserProfile, this, nameof(LoadingUserProfile));
+		}
+
+		public override void Initialize()
+		{
+			_mainPageService.Title = _user.Name;
 		}
 
 		public override async Task InitializeAsync()
