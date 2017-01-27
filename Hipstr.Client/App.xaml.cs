@@ -4,6 +4,7 @@ using Hipstr.Client.Views.Teams;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility;
 using System;
+using System.Diagnostics;
 using System.ServiceModel;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
