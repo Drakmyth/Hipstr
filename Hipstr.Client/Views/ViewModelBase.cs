@@ -46,7 +46,7 @@ namespace Hipstr.Client.Views
 			return Task.CompletedTask;
 		}
 
-		public void RefreshTitle()
+		protected void RefreshTitle()
 		{
 			_mainPageService.Title = _title;
 		}
