@@ -5,9 +5,11 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Hipstr.Core.Services
@@ -188,18 +190,80 @@ namespace Hipstr.Core.Services
 			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
 			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
 
-			return hcMessages.Select(hcMessage => new Message
-			{
-				PostedBy = new User
+			IList<Message> messages = hcMessages.Select(hcMessage => new Message(
+				new User
 				{
 					Id = hcMessage.From.Id,
 					Handle = hcMessage.From.MentionName,
 					Name = hcMessage.From.Name,
 					Team = room.Team
 				},
-				Date = hcMessage.Date,
-				Text = hcMessage.Message
-			}).ToList();
+				hcMessage.Date,
+				hcMessage.Message
+			)).ToList();
+
+			return ParseMessages(messages);
+		}
+
+		private static IReadOnlyList<Message> ParseMessages(IList<Message> messages)
+		{
+			IList<Message> parsedMessages = new List<Message>();
+
+			for (var i = 0; i < messages.Count; i++)
+			{
+				Message currentMessage = messages[i];
+				if (i == messages.Count - 1)
+				{
+					parsedMessages.Add(currentMessage);
+					continue;
+				}
+
+				Message nextMessage = messages[i + 1];
+				Message editedMessage = ParseForSedReplacement(currentMessage, nextMessage);
+				if (editedMessage.Edits.Contains(nextMessage))
+				{
+					messages.Remove(nextMessage);
+					messages[i] = editedMessage;
+					i--;
+					continue;
+				}
+				parsedMessages.Add(editedMessage);
+			}
+
+			return new ReadOnlyCollection<Message>(parsedMessages);
+		}
+
+		private static Message ParseForSedReplacement(Message originalMessage, Message replacementMessage)
+		{
+			if (originalMessage.PostedBy.Id != replacementMessage.PostedBy.Id) return originalMessage;
+			if (replacementMessage.Date - originalMessage.Date > new TimeSpan(0, 30, 0)) return originalMessage;
+
+			int slashCount = replacementMessage.Text.Where(x => x == '/').Count();
+
+			if (slashCount < 2) return originalMessage;
+			if (slashCount == 3 && !replacementMessage.Text.EndsWith("/")) return originalMessage;
+			if (slashCount > 3) return originalMessage;
+
+			var sedRegex = new Regex(@"\As\/([^\/]+)\/([^\/]*)\/?$");
+			Match match = sedRegex.Match(replacementMessage.Text);
+
+			if (match.Groups.Count != 3) return originalMessage;
+
+			string originalSlug = match.Groups[1].Value;
+			string replacementSlug = match.Groups[2].Value;
+
+			string editedText = originalMessage.Text.Replace(originalSlug, replacementSlug);
+
+			IList<Message> edits = new List<Message>(originalMessage.Edits);
+			edits.Add(replacementMessage);
+
+			var editedMessage = new Message(
+				originalMessage.PostedBy,
+				originalMessage.Date,
+				editedText,
+				edits);
+
+			return editedMessage;
 		}
 
 		public async Task SendMessageToUserAsync(User user, string message)
@@ -224,18 +288,19 @@ namespace Hipstr.Core.Services
 			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
 			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
 
-			return hcMessages.Select(hcMessage => new Message
-			{
-				PostedBy = new User
+			IList<Message> messages = hcMessages.Select(hcMessage => new Message(
+				new User
 				{
 					Id = hcMessage.From.Id,
 					Handle = hcMessage.From.MentionName,
 					Name = hcMessage.From.Name,
 					Team = user.Team
 				},
-				Date = hcMessage.Date,
-				Text = hcMessage.Message
-			}).ToList();
+				hcMessage.Date,
+				hcMessage.Message
+			)).ToList();
+
+			return ParseMessages(messages);
 		}
 
 		public async Task<UserProfile> GetUserProfileAsync(User user, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)

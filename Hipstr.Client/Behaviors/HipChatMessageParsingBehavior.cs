@@ -17,7 +17,7 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipstr.Client.Behaviors
 {
-	public class HipChatMessageParsingBehavior : Behavior<RichTextBlock>, INotifyPropertyChanged
+	public sealed class HipChatMessageParsingBehavior : Behavior<RichTextBlock>, INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
@@ -247,7 +247,7 @@ namespace Hipstr.Client.Behaviors
 		}
 
 		[NotifyPropertyChangedInvocator]
-		protected virtual async void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		private async void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			if (propertyName == nameof(Text))
 			{
