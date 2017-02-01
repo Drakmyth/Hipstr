@@ -26,6 +26,9 @@ namespace Hipstr.Core.Models.HipChat
 		[JsonProperty("message_links")]
 		public IEnumerable<object> MessageLinks { get; set; }
 
+		[JsonProperty("file")]
+		public HipChatMessageFile File { get; set; }
+
 		[JsonProperty("type")]
 		public string Type { get; set; }
 	}

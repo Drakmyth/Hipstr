@@ -15,6 +15,7 @@ namespace Hipstr.Core.Models
 		public IReadOnlyList<MessageTwitterUser> TwitterUsers { get; private set; }
 		public IReadOnlyList<MessageTwitterStatus> TwitterStatuses { get; private set; }
 		public IReadOnlyList<MessageVideo> Videos { get; private set; }
+		public MessageFile File { get; private set; }
 
 		private Message(User postedBy, DateTime date, string text)
 		{
@@ -109,6 +110,12 @@ namespace Hipstr.Core.Models
 				return this;
 			}
 
+			public IMessageBuilder WithFile(MessageFile file)
+			{
+				File = file;
+				return this;
+			}
+
 			public Message Build()
 			{
 				return new Message(PostedBy, Date, Text)
@@ -118,7 +125,8 @@ namespace Hipstr.Core.Models
 					Links = Links,
 					TwitterUsers = TwitterUsers,
 					TwitterStatuses = TwitterStatuses,
-					Videos = Videos
+					Videos = Videos,
+					File = File
 				};
 			}
 		}

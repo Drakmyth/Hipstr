@@ -60,17 +60,40 @@ namespace Hipstr.Client.Behaviors
 			AssociatedObject.Blocks.Clear();
 
 			AddParagraph(await ParseTextToInlinesAsync(message.Text));
-			AddParagraph(ParseMessageLinks(message));
+			AddParagraph(ResolveMessageLinks(message));
+			AddParagraph(ResolveFile(message.File));
 		}
 
-		private void AddParagraph(IEnumerable<Inline> inlines)
+		private void AddParagraph(IList<Inline> inlines)
 		{
+			if (!inlines.Any()) return;
+
 			var paragraph = new Paragraph();
 			paragraph.Inlines.AddRange(inlines);
 			AssociatedObject.Blocks.Add(paragraph);
 		}
 
-		private async Task<IEnumerable<Inline>> ParseTextToInlinesAsync(string text)
+		private static IList<Inline> ResolveFile(MessageFile file)
+		{
+			IList<Inline> inlines = new List<Inline>();
+			if (file == null) return inlines;
+
+			Inline inline = new InlineUIContainer
+			{
+				Child = new HyperlinkButton
+				{
+					NavigateUri = file.Uri,
+					Content = new Image
+					{
+						Source = new BitmapImage(file.ThumbnailUri)
+					}
+				}
+			};
+			inlines.Add(inline);
+			return inlines;
+		}
+
+		private async Task<IList<Inline>> ParseTextToInlinesAsync(string text)
 		{
 			IList<Inline> inlines = new List<Inline>();
 			IList<ReplaceToken> tokens = new List<ReplaceToken>();
@@ -127,20 +150,23 @@ namespace Hipstr.Client.Behaviors
 			return inlines;
 		}
 
-		private IEnumerable<Inline> ParseMessageLinks(Message message)
+		private static IList<Inline> ResolveMessageLinks(Message message)
 		{
 			IList<Inline> inlines = new List<Inline>();
 			foreach (MessageImage image in message.Images)
 			{
-				Inline inline = new InlineUIContainer
+				var inline = new InlineUIContainer
 				{
-					Child = new Image
+					Child = new HyperlinkButton
 					{
-						Source = new BitmapImage(image.ImageUri),
-						Width = 200,
-						Height = 200
+						NavigateUri = image.ImageUri,
+						Content = new Image
+						{
+							Source = new BitmapImage(image.ImageUri)
+						}
 					}
 				};
+
 				inlines.Add(inline);
 			}
 			return inlines;

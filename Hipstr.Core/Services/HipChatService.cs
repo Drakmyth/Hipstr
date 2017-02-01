@@ -213,9 +213,23 @@ namespace Hipstr.Core.Services
 				hcMessage.Date,
 				hcMessage.Message);
 
-			return hcMessage.MessageLinks == null
-				? messageBuilder.Build()
-				: ParseMessageLinks(messageBuilder, hcMessage.MessageLinks.Cast<JObject>().ToList()).Build();
+			if (hcMessage.MessageLinks != null)
+			{
+				messageBuilder = ParseMessageLinks(messageBuilder, hcMessage.MessageLinks.Cast<JObject>().ToList());
+			}
+
+			if (hcMessage.File != null)
+			{
+				messageBuilder.WithFile(new MessageFile
+				{
+					FileSize = hcMessage.File.FileSize,
+					Name = hcMessage.File.Name,
+					ThumbnailUri = hcMessage.File.ThumbnailUri,
+					Uri = hcMessage.File.Uri
+				});
+			}
+
+			return messageBuilder.Build();
 		}
 
 		private static IMessageBuilder ParseMessageLinks(IMessageBuilder builder, IList<JObject> messageLinks)

@@ -15,5 +15,6 @@ namespace Hipstr.Core.Models
 		IMessageBuilder WithTwitterStatuses(IEnumerable<MessageTwitterStatus> twitterStatuses);
 		IMessageBuilder WithTwitterUsers(IEnumerable<MessageTwitterUser> twitterUsers);
 		IMessageBuilder WithVideos(IEnumerable<MessageVideo> videos);
+		IMessageBuilder WithFile(MessageFile file);
 	}
 }
