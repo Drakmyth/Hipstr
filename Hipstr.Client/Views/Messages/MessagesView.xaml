@@ -65,8 +65,7 @@
 									   Margin="15 5 0 5">
 							<interactivity:Interaction.Behaviors>
 								<behaviors:HipChatMessageParsingBehavior
-									Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"
-									Text="{x:Bind Text}" />
+									Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"/>
 							</interactivity:Interaction.Behaviors>
 						</RichTextBlock>
 					</StackPanel>

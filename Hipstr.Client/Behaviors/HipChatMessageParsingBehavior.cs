@@ -1,13 +1,10 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
-using JetBrains.Annotations;
 using Microsoft.Xaml.Interactivity;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
@@ -17,40 +14,18 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace Hipstr.Client.Behaviors
 {
-	public sealed class HipChatMessageParsingBehavior : Behavior<RichTextBlock>, INotifyPropertyChanged
+	public sealed class HipChatMessageParsingBehavior : Behavior<RichTextBlock>
 	{
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		public static readonly DependencyProperty TextProperty = DependencyProperty.Register(
-			"Text",
-			typeof(string),
-			typeof(HipChatMessageParsingBehavior),
-			new PropertyMetadata(string.Empty));
-
 		public static readonly DependencyProperty TeamProperty = DependencyProperty.Register(
 			"Team",
 			typeof(Team),
 			typeof(HipChatMessageParsingBehavior),
 			new PropertyMetadata(default(Team)));
 
-		public string Text
-		{
-			get { return (string)GetValue(TextProperty); }
-			set
-			{
-				SetValue(TextProperty, value);
-				OnPropertyChanged();
-			}
-		}
-
 		public Team Team
 		{
 			get { return (Team)GetValue(TeamProperty); }
-			set
-			{
-				SetValue(TeamProperty, value);
-				OnPropertyChanged();
-			}
+			set { SetValue(TeamProperty, value); }
 		}
 
 		private IHipChatService _hipChatService;
@@ -62,17 +37,28 @@ namespace Hipstr.Client.Behaviors
 			AssociatedObject.Loaded += AssociatedObject_OnLoaded;
 		}
 
-		private async void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
+		private void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
 		{
 			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
 
-			await ParseMessage();
+			AssociatedObject.DataContextChanged += AssociatedObject_OnDataContextChanged;
 		}
 
-		private async Task ParseMessage()
+		protected override void OnDetaching()
+		{
+			base.OnDetaching();
+			AssociatedObject.DataContextChanged -= AssociatedObject_OnDataContextChanged;
+		}
+
+		private async void AssociatedObject_OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
+		{
+			await ParseMessage((Message)AssociatedObject.DataContext);
+		}
+
+		private async Task ParseMessage(Message message)
 		{
 			AssociatedObject.Blocks.Clear();
-			IEnumerable<Inline> inlines = await ParseTextToInlinesAsync(Text);
+			IEnumerable<Inline> inlines = await ParseTextToInlinesAsync(message.Text);
 			var paragraph = new Paragraph();
 			paragraph.Inlines.AddRange(inlines);
 			AssociatedObject.Blocks.Add(paragraph);
@@ -244,17 +230,6 @@ namespace Hipstr.Client.Behaviors
 				Type = type;
 				Text = text;
 			}
-		}
-
-		[NotifyPropertyChangedInvocator]
-		private async void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			if (propertyName == nameof(Text))
-			{
-				await ParseMessage();
-			}
-
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
