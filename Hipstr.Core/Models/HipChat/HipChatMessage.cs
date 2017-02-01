@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 using System;
-using JetBrains.Annotations;
+using System.Collections.Generic;
 
 namespace Hipstr.Core.Models.HipChat
 {
@@ -21,6 +22,9 @@ namespace Hipstr.Core.Models.HipChat
 
 		[JsonProperty("message")]
 		public string Message { get; set; }
+
+		[JsonProperty("message_links")]
+		public IEnumerable<object> MessageLinks { get; set; }
 
 		[JsonProperty("type")]
 		public string Type { get; set; }

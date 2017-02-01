@@ -187,22 +187,50 @@ namespace Hipstr.Core.Services
 			string json = await get.Content.ReadAsStringAsync();
 
 			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
-			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
+			// TODO: Deserialize each message individually based on type
+			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message).ToList();
 			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
 
-			IList<Message> messages = hcMessages.Select(hcMessage => new Message(
+			IList<Message> messages = hcMessages.Select(hcMessage => BuildMessage(room.Team, hcMessage)).ToList();
+
+			return ParseMessages(messages);
+		}
+
+		private static Message BuildMessage(Team team, HipChatMessage hcMessage)
+		{
+			IMessageBuilder messageBuilder = Message.Builder(
 				new User
 				{
 					Id = hcMessage.From.Id,
 					Handle = hcMessage.From.MentionName,
 					Name = hcMessage.From.Name,
-					Team = room.Team
+					Team = team
 				},
 				hcMessage.Date,
-				hcMessage.Message
-			)).ToList();
+				hcMessage.Message);
 
-			return ParseMessages(messages);
+			if (hcMessage.MessageLinks == null) return messageBuilder.Build();
+
+			IEnumerable<JObject> messageLinks = hcMessage.MessageLinks.Cast<JObject>().ToList();
+
+			IEnumerable<JObject> imageJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Image).ToList();
+			IEnumerable<JObject> linkJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Link).ToList();
+			IEnumerable<JObject> twitterUserJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterUser).ToList();
+			IEnumerable<JObject> twitterStatusJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterStatus).ToList();
+			IEnumerable<JObject> videoJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Video).ToList();
+
+			var images = JsonConvert.DeserializeObject<IEnumerable<MessageImage>>(JsonConvert.SerializeObject(imageJObjects));
+			var links = JsonConvert.DeserializeObject<IEnumerable<MessageLink>>(JsonConvert.SerializeObject(linkJObjects));
+			var twitterUsers = JsonConvert.DeserializeObject<IEnumerable<MessageTwitterUser>>(JsonConvert.SerializeObject(twitterUserJObjects));
+			var twitterStatuses = JsonConvert.DeserializeObject<IEnumerable<MessageTwitterStatus>>(JsonConvert.SerializeObject(twitterStatusJObjects));
+			var videos = JsonConvert.DeserializeObject<IEnumerable<MessageVideo>>(JsonConvert.SerializeObject(videoJObjects));
+
+			return messageBuilder.WithImages(images)
+				.WithLinks(links)
+				.WithTwitterUsers(twitterUsers)
+				.WithTwitterStatuses(twitterStatuses)
+				.WithVideos(videos)
+				.Build();
 		}
 
 		private static IReadOnlyList<Message> ParseMessages(IList<Message> messages)
@@ -257,13 +285,10 @@ namespace Hipstr.Core.Services
 			IList<Message> edits = new List<Message>(originalMessage.Edits);
 			edits.Add(replacementMessage);
 
-			var editedMessage = new Message(
-				originalMessage.PostedBy,
-				originalMessage.Date,
-				editedText,
-				edits);
-
-			return editedMessage;
+			return Message.Builder(originalMessage)
+				.WithText(editedText)
+				.WithEdits(edits)
+				.Build();
 		}
 
 		public async Task SendMessageToUserAsync(User user, string message)
@@ -288,17 +313,7 @@ namespace Hipstr.Core.Services
 			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
 			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
 
-			IList<Message> messages = hcMessages.Select(hcMessage => new Message(
-				new User
-				{
-					Id = hcMessage.From.Id,
-					Handle = hcMessage.From.MentionName,
-					Name = hcMessage.From.Name,
-					Team = user.Team
-				},
-				hcMessage.Date,
-				hcMessage.Message
-			)).ToList();
+			IList<Message> messages = hcMessages.Select(hcMessage => BuildMessage(user.Team, hcMessage)).ToList();
 
 			return ParseMessages(messages);
 		}
