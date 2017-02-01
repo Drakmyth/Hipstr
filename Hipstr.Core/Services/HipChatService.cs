@@ -178,14 +178,26 @@ namespace Hipstr.Core.Services
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
 			HttpClientResponse<HipChatCollectionWrapper<object>> response = await _httpClient.GetAsync<HipChatCollectionWrapper<object>>(new Uri(_rootUri, $"/v2/room/{room.Id}/history"));
-			IList<Message> messages = response.Payload.Items
-				.Cast<JObject>()
-				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message) // TODO: Deserialize each message individually based on type
-				.Select(jobj => jobj.ToObject<HipChatMessage>())
-				.Select(hcMessage => BuildMessage(room.Team, hcMessage))
+			return UnwrapMessages(room.Team, response.Payload);
+		}
+
+		private static IReadOnlyList<Message> UnwrapMessages(Team team, HipChatCollectionWrapper<object> wrapper)
+		{
+			IEnumerable<JObject> jObjects = wrapper.Items.Cast<JObject>().ToList();
+
+			IList<Message> notifications = jObjects
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Notification)
+				.Select(jobj => jobj.ToObject<HipChatNotificationMessage>())
+				.Select(hcNotification => BuildMessage(team, hcNotification))
 				.ToList();
 
-			return ParseMessages(messages);
+			IList<Message> messages = jObjects
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message) // TODO: Deserialize each message individually based on type
+				.Select(jobj => jobj.ToObject<HipChatMessage>())
+				.Select(hcMessage => BuildMessage(team, hcMessage))
+				.ToList();
+
+			return ParseMessages(messages.Concat(notifications).OrderBy(m => m.Date).ToList());
 		}
 
 		private static Message BuildMessage(Team team, HipChatMessage hcMessage)
@@ -201,37 +213,94 @@ namespace Hipstr.Core.Services
 				hcMessage.Date,
 				hcMessage.Message);
 
-			if (hcMessage.MessageLinks == null) return messageBuilder.Build();
+			return hcMessage.MessageLinks == null
+				? messageBuilder.Build()
+				: ParseMessageLinks(messageBuilder, hcMessage.MessageLinks.Cast<JObject>().ToList()).Build();
+		}
 
-			IEnumerable<JObject> messageLinks = hcMessage.MessageLinks.Cast<JObject>().ToList();
-
+		private static IMessageBuilder ParseMessageLinks(IMessageBuilder builder, IList<JObject> messageLinks)
+		{
 			IEnumerable<MessageImage> images = messageLinks
 				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Image)
-				.Select(jobj => jobj.ToObject<MessageImage>())
+				.Select(jobj => jobj.Value<JObject>("image").ToObject<HipChatMessageImage>())
+				.Select(hcMessageImage => new MessageImage
+				{
+					ImageUri = hcMessageImage.ImageUri,
+					Name = hcMessageImage.Name
+				})
 				.ToList();
 			IEnumerable<MessageLink> links = messageLinks
 				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Link)
-				.Select(jobj => jobj.ToObject<MessageLink>())
+				.Select(jobj => jobj.Value<JObject>("link").ToObject<HipChatMessageLink>())
+				.Select(hcMessageLink => new MessageLink
+				{
+					Description = hcMessageLink.Description,
+					FaviconUri = hcMessageLink.FaviconUri,
+					FullUri = hcMessageLink.FullUri,
+					HeaderText = hcMessageLink.HeaderText,
+					LinkText = hcMessageLink.LinkText,
+					Title = hcMessageLink.Title
+				})
 				.ToList();
 			IEnumerable<MessageTwitterUser> twitterUsers = messageLinks
 				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterUser)
-				.Select(jobj => jobj.ToObject<MessageTwitterUser>())
+				.Select(jobj => jobj.Value<JObject>("twitter_user").ToObject<HipChatMessageTwitterUser>())
+				.Select(hcMessageTwitterUser => new MessageTwitterUser
+				{
+					Followers = hcMessageTwitterUser.Followers,
+					Name = hcMessageTwitterUser.Name,
+					ProfileImageUri = hcMessageTwitterUser.ProfileImageUri,
+					ScreenName = hcMessageTwitterUser.ScreenName
+				})
 				.ToList();
 			IEnumerable<MessageTwitterStatus> twitterStatuses = messageLinks
 				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterStatus)
-				.Select(jobj => jobj.ToObject<MessageTwitterStatus>())
+				.Select(jobj => jobj.Value<JObject>("twitter_status").ToObject<HipChatMessageTwitterStatus>())
+				.Select(hcMessageTwitterStatus => new MessageTwitterStatus
+				{
+					Created = hcMessageTwitterStatus.Created,
+					Name = hcMessageTwitterStatus.Name,
+					ProfileImageUri = hcMessageTwitterStatus.ProfileImageUri,
+					ScreenName = hcMessageTwitterStatus.ScreenName,
+					Source = hcMessageTwitterStatus.Source,
+					Text = hcMessageTwitterStatus.Text
+				})
 				.ToList();
 			IEnumerable<MessageVideo> videos = messageLinks
 				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Video)
-				.Select(jobj => jobj.ToObject<MessageVideo>())
+				.Select(jobj => jobj.Value<JObject>("video").ToObject<HipChatMessageVideo>())
+				.Select(hcMessageVideo => new MessageVideo
+				{
+					Author = hcMessageVideo.Author,
+					ThumbnailUri = hcMessageVideo.ThumbnailUri,
+					Title = hcMessageVideo.Title,
+					Views = hcMessageVideo.Views
+				})
 				.ToList();
 
-			return messageBuilder.WithImages(images)
+			return builder.WithImages(images)
 				.WithLinks(links)
 				.WithTwitterUsers(twitterUsers)
 				.WithTwitterStatuses(twitterStatuses)
-				.WithVideos(videos)
-				.Build();
+				.WithVideos(videos);
+		}
+
+		private static Message BuildMessage(Team team, HipChatNotificationMessage hcMessage)
+		{
+			IMessageBuilder messageBuilder = Message.Builder(
+				new User
+				{
+					Id = 0,
+					Handle = "",
+					Name = hcMessage.From,
+					Team = team
+				},
+				hcMessage.Date,
+				hcMessage.Message);
+
+			return hcMessage.MessageLinks == null
+				? messageBuilder.Build()
+				: ParseMessageLinks(messageBuilder, hcMessage.MessageLinks.Cast<JObject>().ToList()).Build();
 		}
 
 		private static IReadOnlyList<Message> ParseMessages(IList<Message> messages)
@@ -308,14 +377,7 @@ namespace Hipstr.Core.Services
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
 			HttpClientResponse<HipChatCollectionWrapper<object>> response = await _httpClient.GetAsync<HipChatCollectionWrapper<object>>(new Uri(_rootUri, $"/v2/user/{user.Id}/history"));
-			IList<Message> messages = response.Payload.Items
-				.Cast<JObject>()
-				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message) // TODO: Deserialize each message individually based on type
-				.Select(jobj => jobj.ToObject<HipChatMessage>())
-				.Select(hcMessage => BuildMessage(user.Team, hcMessage))
-				.ToList();
-
-			return ParseMessages(messages);
+			return UnwrapMessages(user.Team, response.Payload);
 		}
 
 		public async Task<UserProfile> GetUserProfileAsync(User user, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)

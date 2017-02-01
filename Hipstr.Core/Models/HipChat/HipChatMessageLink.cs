@@ -3,7 +3,7 @@ using System;
 
 namespace Hipstr.Core.Models.HipChat
 {
-	public class HipChatLink
+	public class HipChatMessageLink
 	{
 		[JsonProperty("description")]
 		public string Description { get; set; }

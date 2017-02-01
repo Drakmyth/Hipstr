@@ -3,7 +3,7 @@ using System;
 
 namespace Hipstr.Core.Models.HipChat
 {
-	public class HipChatVideo
+	public class HipChatMessageVideo
 	{
 		[JsonProperty("thumbnailUrl")]
 		public Uri ThumbnailUri { get; set; }
