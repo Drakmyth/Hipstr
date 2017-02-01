@@ -22,16 +22,18 @@ namespace Hipstr.Core.Services
 			_httpClient = new HttpClient();
 		}
 
-		public async Task<HttpResponseMessage> GetAsync(Uri requestUri)
+		public async Task<HttpClientResponse<TResponse>> GetAsync<TResponse>(Uri requestUri)
 		{
-			return await SendRequestAsync(requestUri, async () => await _httpClient.GetAsync(requestUri));
+			HttpResponseMessage response = await SendRequestAsync(requestUri, async () => await _httpClient.GetAsync(requestUri));
+			return await HttpClientResponse<TResponse>.FromResponseMessageAsync(response);
 		}
 
-		public async Task<HttpResponseMessage> PostAsync<T>(Uri requestUri, T payload)
+		public async Task<HttpClientResponse<TResponse>> PostAsync<TResponse>(Uri requestUri, object payload)
 		{
 			HttpContent content = new StringContent(JsonConvert.SerializeObject(payload));
 			content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-			return await SendRequestAsync(requestUri, async () => await _httpClient.PostAsync(requestUri, content));
+			HttpResponseMessage response = await SendRequestAsync(requestUri, async () => await _httpClient.PostAsync(requestUri, content));
+			return await HttpClientResponse<TResponse>.FromResponseMessageAsync(response);
 		}
 
 		private static async Task<HttpResponseMessage> SendRequestAsync(Uri requestUri, Func<Task<HttpResponseMessage>> clientRequestMethod)

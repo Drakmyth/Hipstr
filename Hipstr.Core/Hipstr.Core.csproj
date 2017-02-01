@@ -156,6 +156,7 @@
     <Compile Include="Services\HipChatCacheBehavior.cs" />
     <Compile Include="Services\HipChatService.cs" />
     <Compile Include="Services\HipstrHttpClient.cs" />
+    <Compile Include="Services\HttpClientResponse.cs" />
     <Compile Include="Services\IDataService.cs" />
     <Compile Include="Services\IHipChatService.cs" />
     <Compile Include="Services\IHttpClient.cs" />

@@ -1,13 +1,11 @@
 ﻿using Hipstr.Core.Models;
 using Hipstr.Core.Models.HipChat;
 using JetBrains.Annotations;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -30,7 +28,7 @@ namespace Hipstr.Core.Services
 		private const string FilterEmoticonType = "all";
 		private const int PrecachedEmoticonDimensions = 30;
 
-		private static readonly Uri RootUri = new Uri("http://www.hipchat.com");
+		private static readonly Uri _rootUri = new Uri("http://www.hipchat.com");
 
 		private readonly IDataService _dataService;
 		private readonly IHttpClient _httpClient;
@@ -76,10 +74,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HttpResponseMessage response = await GetPageOfRooms(_httpClient, rooms.Count);
-				string json = await response.Content.ReadAsStringAsync();
-				var roomWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatRoom>>(json);
-
+				HipChatCollectionWrapper<HipChatRoom> roomWrapper = await GetPageOfRooms(_httpClient, rooms.Count);
 				rooms.AddRange(roomWrapper.Items.Select(hcRoom => new Room
 				{
 					Id = hcRoom.Id,
@@ -95,7 +90,7 @@ namespace Hipstr.Core.Services
 			return rooms;
 		}
 
-		private static async Task<HttpResponseMessage> GetPageOfRooms(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatRoom>> GetPageOfRooms(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/room?"
 						   + $"start-index={startIndex}&"
@@ -103,7 +98,8 @@ namespace Hipstr.Core.Services
 						   + $"include-private={IncludePrivateRooms}&"
 						   + $"include-archived={IncludeArchivedRooms}";
 
-			return await httpClient.GetAsync(new Uri(RootUri, route));
+			HttpClientResponse<HipChatCollectionWrapper<HipChatRoom>> response = await httpClient.GetAsync<HipChatCollectionWrapper<HipChatRoom>>(new Uri(_rootUri, route));
+			return response.Payload;
 		}
 
 		public async Task<IReadOnlyList<User>> GetUsersForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
@@ -141,10 +137,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HttpResponseMessage response = await GetPageOfUsers(_httpClient, users.Count);
-				string json = await response.Content.ReadAsStringAsync();
-				var userWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatUser>>(json);
-
+				HipChatCollectionWrapper<HipChatUser> userWrapper = await GetPageOfUsers(_httpClient, users.Count);
 				users.AddRange(userWrapper.Items.Select(hcUser => new User
 				{
 					Id = hcUser.Id,
@@ -159,7 +152,7 @@ namespace Hipstr.Core.Services
 			return users;
 		}
 
-		private static async Task<HttpResponseMessage> GetPageOfUsers(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatUser>> GetPageOfUsers(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/user?"
 						   + $"start-index={startIndex}&"
@@ -167,7 +160,8 @@ namespace Hipstr.Core.Services
 						   + $"include-guests={IncludeGuestUsers}&"
 						   + $"include-deleted={IncludeDeletedUsers}";
 
-			return await httpClient.GetAsync(new Uri(RootUri, route));
+			HttpClientResponse<HipChatCollectionWrapper<HipChatUser>> response = await httpClient.GetAsync<HipChatCollectionWrapper<HipChatUser>>(new Uri(_rootUri, route));
+			return response.Payload;
 		}
 
 		public async Task SendMessageToRoomAsync(Room room, string message)
@@ -177,21 +171,19 @@ namespace Hipstr.Core.Services
 			{
 				Message = message
 			};
-			await _httpClient.PostAsync(new Uri(RootUri, $"/v2/room/{room.Id}/message"), payload);
+			await _httpClient.PostAsync<object>(new Uri(_rootUri, $"/v2/room/{room.Id}/message"), payload);
 		}
 
 		public async Task<IReadOnlyList<Message>> GetMessagesForRoomAsync(Room room)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", room.Team.ApiKey);
-			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/room/{room.Id}/history"));
-			string json = await get.Content.ReadAsStringAsync();
-
-			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
-			// TODO: Deserialize each message individually based on type
-			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message).ToList();
-			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
-
-			IList<Message> messages = hcMessages.Select(hcMessage => BuildMessage(room.Team, hcMessage)).ToList();
+			HttpClientResponse<HipChatCollectionWrapper<object>> response = await _httpClient.GetAsync<HipChatCollectionWrapper<object>>(new Uri(_rootUri, $"/v2/room/{room.Id}/history"));
+			IList<Message> messages = response.Payload.Items
+				.Cast<JObject>()
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message) // TODO: Deserialize each message individually based on type
+				.Select(jobj => jobj.ToObject<HipChatMessage>())
+				.Select(hcMessage => BuildMessage(room.Team, hcMessage))
+				.ToList();
 
 			return ParseMessages(messages);
 		}
@@ -213,17 +205,26 @@ namespace Hipstr.Core.Services
 
 			IEnumerable<JObject> messageLinks = hcMessage.MessageLinks.Cast<JObject>().ToList();
 
-			IEnumerable<JObject> imageJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Image).ToList();
-			IEnumerable<JObject> linkJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Link).ToList();
-			IEnumerable<JObject> twitterUserJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterUser).ToList();
-			IEnumerable<JObject> twitterStatusJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterStatus).ToList();
-			IEnumerable<JObject> videoJObjects = messageLinks.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Video).ToList();
-
-			var images = JsonConvert.DeserializeObject<IEnumerable<MessageImage>>(JsonConvert.SerializeObject(imageJObjects));
-			var links = JsonConvert.DeserializeObject<IEnumerable<MessageLink>>(JsonConvert.SerializeObject(linkJObjects));
-			var twitterUsers = JsonConvert.DeserializeObject<IEnumerable<MessageTwitterUser>>(JsonConvert.SerializeObject(twitterUserJObjects));
-			var twitterStatuses = JsonConvert.DeserializeObject<IEnumerable<MessageTwitterStatus>>(JsonConvert.SerializeObject(twitterStatusJObjects));
-			var videos = JsonConvert.DeserializeObject<IEnumerable<MessageVideo>>(JsonConvert.SerializeObject(videoJObjects));
+			IEnumerable<MessageImage> images = messageLinks
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Image)
+				.Select(jobj => jobj.ToObject<MessageImage>())
+				.ToList();
+			IEnumerable<MessageLink> links = messageLinks
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Link)
+				.Select(jobj => jobj.ToObject<MessageLink>())
+				.ToList();
+			IEnumerable<MessageTwitterUser> twitterUsers = messageLinks
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterUser)
+				.Select(jobj => jobj.ToObject<MessageTwitterUser>())
+				.ToList();
+			IEnumerable<MessageTwitterStatus> twitterStatuses = messageLinks
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.TwitterStatus)
+				.Select(jobj => jobj.ToObject<MessageTwitterStatus>())
+				.ToList();
+			IEnumerable<MessageVideo> videos = messageLinks
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageLinkTypes.Video)
+				.Select(jobj => jobj.ToObject<MessageVideo>())
+				.ToList();
 
 			return messageBuilder.WithImages(images)
 				.WithLinks(links)
@@ -300,20 +301,19 @@ namespace Hipstr.Core.Services
 				Notify = true,
 				MessageFormat = "text"
 			};
-			await _httpClient.PostAsync(new Uri(RootUri, $"/v2/user/{user.Id}/message"), payload);
+			await _httpClient.PostAsync<object>(new Uri(_rootUri, $"/v2/user/{user.Id}/message"), payload);
 		}
 
 		public async Task<IReadOnlyList<Message>> GetMessagesForUserAsync(User user)
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
-			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/user/{user.Id}/history"));
-			string json = await get.Content.ReadAsStringAsync();
-
-			var messageWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<object>>(json);
-			IEnumerable<JObject> jsonObjects = messageWrapper.Items.Cast<JObject>().Where(jobj => jobj.Value<string>("type") == "message").ToList();
-			var hcMessages = JsonConvert.DeserializeObject<IEnumerable<HipChatMessage>>(JsonConvert.SerializeObject(jsonObjects));
-
-			IList<Message> messages = hcMessages.Select(hcMessage => BuildMessage(user.Team, hcMessage)).ToList();
+			HttpClientResponse<HipChatCollectionWrapper<object>> response = await _httpClient.GetAsync<HipChatCollectionWrapper<object>>(new Uri(_rootUri, $"/v2/user/{user.Id}/history"));
+			IList<Message> messages = response.Payload.Items
+				.Cast<JObject>()
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message) // TODO: Deserialize each message individually based on type
+				.Select(jobj => jobj.ToObject<HipChatMessage>())
+				.Select(hcMessage => BuildMessage(user.Team, hcMessage))
+				.ToList();
 
 			return ParseMessages(messages);
 		}
@@ -336,11 +336,8 @@ namespace Hipstr.Core.Services
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", user.Team.ApiKey);
 
-			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/user/{user.Id}"));
-
-			string json = await get.Content.ReadAsStringAsync();
-
-			var hcUserProfile = JsonConvert.DeserializeObject<HipChatUserProfile>(json);
+			HttpClientResponse<HipChatUserProfile> response = await _httpClient.GetAsync<HipChatUserProfile>(new Uri(_rootUri, $"/v2/user/{user.Id}"));
+			var hcUserProfile = response.Payload;
 
 			return new UserProfile
 			{
@@ -362,11 +359,8 @@ namespace Hipstr.Core.Services
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
-			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/oauth/token/{apiKey}"));
-
-			string json = await get.Content.ReadAsStringAsync();
-
-			var hcSession = JsonConvert.DeserializeObject<HipChatOAuthSession>(json);
+			HttpClientResponse<HipChatOAuthSession> response = await _httpClient.GetAsync<HipChatOAuthSession>(new Uri(_rootUri, $"/v2/oauth/token/{apiKey}"));
+			HipChatOAuthSession hcSession = response.Payload;
 
 			return new ApiKeyInfo
 			{
@@ -452,9 +446,8 @@ namespace Hipstr.Core.Services
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
 
-			HttpResponseMessage get = await _httpClient.GetAsync(new Uri(RootUri, $"/v2/emoticon/{shortcut}"));
-			string json = await get.Content.ReadAsStringAsync();
-			var hcEmoticon = JsonConvert.DeserializeObject<HipChatEmoticon>(json);
+			HttpClientResponse<HipChatEmoticon> response = await _httpClient.GetAsync<HipChatEmoticon>(new Uri(_rootUri, $"/v2/emoticon/{shortcut}"));
+			HipChatEmoticon hcEmoticon = response.Payload;
 
 			return new Emoticon
 			{
@@ -476,10 +469,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HttpResponseMessage response = await GetPageOfEmoticons(_httpClient, emoticons.Count);
-				string json = await response.Content.ReadAsStringAsync();
-				var emoticonWrapper = JsonConvert.DeserializeObject<HipChatCollectionWrapper<HipChatEmoticonSummary>>(json);
-
+				HipChatCollectionWrapper<HipChatEmoticonSummary> emoticonWrapper = await GetPageOfEmoticons(_httpClient, emoticons.Count);
 				emoticons.AddRange(emoticonWrapper.Items.Select(hcEmoticon => new Emoticon
 				{
 					Id = hcEmoticon.Id,
@@ -498,14 +488,15 @@ namespace Hipstr.Core.Services
 			return emoticons;
 		}
 
-		private static async Task<HttpResponseMessage> GetPageOfEmoticons(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatEmoticonSummary>> GetPageOfEmoticons(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/emoticon?"
 						   + $"start-index={startIndex}&"
 						   + $"max-results={MaxEmoticonResults}&"
 						   + $"type={FilterEmoticonType}";
 
-			return await httpClient.GetAsync(new Uri(RootUri, route));
+			var response = await httpClient.GetAsync<HipChatCollectionWrapper<HipChatEmoticonSummary>>(new Uri(_rootUri, route));
+			return response.Payload;
 		}
 
 		/// <summary>
