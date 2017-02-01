@@ -40,7 +40,6 @@ namespace Hipstr.Client.Behaviors
 		private void AssociatedObject_OnLoaded(object sender, RoutedEventArgs e)
 		{
 			AssociatedObject.Loaded -= AssociatedObject_OnLoaded;
-
 			AssociatedObject.DataContextChanged += AssociatedObject_OnDataContextChanged;
 		}
 
@@ -52,13 +51,20 @@ namespace Hipstr.Client.Behaviors
 
 		private async void AssociatedObject_OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
 		{
-			await ParseMessage((Message)AssociatedObject.DataContext);
+			if (args.NewValue == null) return;
+			await ParseMessage((Message)args.NewValue);
 		}
 
 		private async Task ParseMessage(Message message)
 		{
 			AssociatedObject.Blocks.Clear();
-			IEnumerable<Inline> inlines = await ParseTextToInlinesAsync(message.Text);
+
+			AddParagraph(await ParseTextToInlinesAsync(message.Text));
+			AddParagraph(ParseMessageLinks(message));
+		}
+
+		private void AddParagraph(IEnumerable<Inline> inlines)
+		{
 			var paragraph = new Paragraph();
 			paragraph.Inlines.AddRange(inlines);
 			AssociatedObject.Blocks.Add(paragraph);
@@ -118,6 +124,25 @@ namespace Hipstr.Client.Behaviors
 				inlines.Add(new Run {Text = text.Substring(currentIndex)});
 			}
 
+			return inlines;
+		}
+
+		private IEnumerable<Inline> ParseMessageLinks(Message message)
+		{
+			IList<Inline> inlines = new List<Inline>();
+			foreach (MessageImage image in message.Images)
+			{
+				Inline inline = new InlineUIContainer
+				{
+					Child = new Image
+					{
+						Source = new BitmapImage(image.ImageUri),
+						Width = 200,
+						Height = 200
+					}
+				};
+				inlines.Add(inline);
+			}
 			return inlines;
 		}
 
