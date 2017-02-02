@@ -12,7 +12,7 @@
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style x:Key="HamburgerButtonStyle" TargetType="Button">
-				<Setter Property="Background" Value="{ThemeResource HipChatControl}" />
+				<Setter Property="Background" Value="{ThemeResource HipstrAccent}" />
 				<Setter Property="Foreground" Value="White" />
 				<Setter Property="Padding" Value="0" />
 				<Setter Property="Template">
@@ -88,13 +88,14 @@
 				</Setter>
 			</Style>
 			<Style x:Key="MenuItemButtonStyle" TargetType="Button" BasedOn="{StaticResource HamburgerButtonStyle}">
+				<Setter Property="Background" Value="{ThemeResource HipstrAccentBright}" />
 				<Setter Property="Padding" Value="15" />
 				<Setter Property="HorizontalContentAlignment" Value="Left" />
 			</Style>
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipstrAccent}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
@@ -105,16 +106,16 @@
 					Style="{StaticResource HamburgerButtonStyle}"
 					Click="HamburgerButton_Click">
 				<StackPanel Width="15" HorizontalAlignment="Center" Padding="0 10">
-					<Rectangle Height="2" Margin="0 1.5" Fill="White" />
-					<Rectangle Height="2" Margin="0 1.5" Fill="White" />
-					<Rectangle Height="2" Margin="0 1.5" Fill="White" />
+					<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
+					<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
+					<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
 				</StackPanel>
 			</Button>
 			<TextBlock RelativePanel.RightOf="MenuButton"
 					   RelativePanel.AlignVerticalCenterWith="MenuButton"
 					   Margin="10 0 0 0"
 					   FontWeight="Bold"
-					   Foreground="White"
+					   Foreground="{ThemeResource HipstrAccentText}"
 					   Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
 		</RelativePanel>
 		<SplitView Name="MenuSplitView"
@@ -122,26 +123,26 @@
 				   DisplayMode="Overlay"
 				   IsPaneOpen="False"
 				   OpenPaneLength="150"
-				   PaneBackground="{ThemeResource HipChatControl}">
+				   PaneBackground="{ThemeResource HipstrAccentBright}">
 			<SplitView.Pane>
 				<StackPanel>
 					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
 							Style="{StaticResource MenuItemButtonStyle}"
 							Click="MenuButton_Click">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Clock" Foreground="White" />
-							<TextBlock Text="Recent" Margin="15 0 0 0" Foreground="White" />
+							<SymbolIcon Symbol="Clock" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text="Recent" Margin="15 0 0 0" Foreground="{ThemeResource HipstrAccentText}" />
 						</StackPanel>
 					</Button>
-					<Rectangle Height="1" Fill="Black" />
+					<Rectangle Height="1" Fill="{ThemeResource HipstrAccentSeparator}" />
 					<Button Name="TeamsButton"
 							Width="{x:Bind MenuSplitView.OpenPaneLength}"
 							Style="{StaticResource MenuItemButtonStyle}"
 							Click="MenuButton_Click"
 							Command="{x:Bind ViewModel.NavigateToTeamsViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Globe" Foreground="White" />
-							<TextBlock Text="Teams" Margin="15 0 0 0" Foreground="White" />
+							<SymbolIcon Symbol="Globe" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text="Teams" Margin="15 0 0 0" Foreground="{ThemeResource HipstrAccentText}" />
 						</StackPanel>
 					</Button>
 					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
@@ -149,8 +150,8 @@
 							Click="MenuButton_Click"
 							Command="{x:Bind ViewModel.NavigateToRoomsViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Message" Foreground="White" />
-							<TextBlock Text="Rooms" Margin="15 0 0 0" Foreground="White" />
+							<SymbolIcon Symbol="Message" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text="Rooms" Margin="15 0 0 0" Foreground="{ThemeResource HipstrAccentText}" />
 						</StackPanel>
 					</Button>
 					<Button Width="{x:Bind MenuSplitView.OpenPaneLength}"
@@ -158,19 +159,19 @@
 							Click="MenuButton_Click"
 							Command="{x:Bind ViewModel.NavigateToUsersViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="People" Foreground="White" />
-							<TextBlock Text="Users" Margin="15 0 0 0" Foreground="White" />
+							<SymbolIcon Symbol="People" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text="Users" Margin="15 0 0 0" Foreground="{ThemeResource HipstrAccentText}" />
 						</StackPanel>
 					</Button>
-					<Rectangle Height="1" Fill="Black" />
+					<Rectangle Height="1" Fill="{ThemeResource HipstrAccentSeparator}" />
 					<Button Name="SettingsButton"
 							Width="{x:Bind MenuSplitView.OpenPaneLength}"
 							Style="{StaticResource MenuItemButtonStyle}"
 							Click="MenuButton_Click"
 							Command="{x:Bind ViewModel.NavigateToSettingsViewCommand}">
 						<StackPanel Orientation="Horizontal">
-							<SymbolIcon Symbol="Setting" Foreground="White" />
-							<TextBlock Text="Settings" Margin="15 0 0 0" Foreground="White" />
+							<SymbolIcon Symbol="Setting" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text="Settings" Margin="15 0 0 0" Foreground="{ThemeResource HipstrAccentText}" />
 						</StackPanel>
 					</Button>
 				</StackPanel>

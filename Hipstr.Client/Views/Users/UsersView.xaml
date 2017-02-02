@@ -14,9 +14,9 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
-			</ResourceDictionary.MergedDictionaries>
+<!--			<ResourceDictionary.MergedDictionaries>-->
+<!--				<ResourceDictionary Source="/Styles/Colors.xaml" />-->
+<!--			</ResourceDictionary.MergedDictionaries>-->
 			<CollectionViewSource x:Name="GroupedUsersSource"
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
 								  IsSourceGrouped="True" />
@@ -24,7 +24,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -45,7 +45,7 @@
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate x:DataType="models:ObservableGroupedUsersCollection">
 							<TextBlock Text="{x:Bind Header}"
-									   Foreground="White"
+									   Foreground="{ThemeResource HipstrHeaderText}"
 									   FontSize="24"
 									   Tapped="HeaderTextBlock_OnTapped" />
 						</DataTemplate>
@@ -62,21 +62,21 @@
 					<StackPanel Holding="StackPanel_OnHolding"
 								RightTapped="StackPanel_OnRightTapped">
 						<TextBlock Text="{x:Bind Name}"
-								   Foreground="White" />
+								   Foreground="{ThemeResource HipstrText}" />
 						<TextBlock Text="{x:Bind Team.Name}"
-								   Foreground="LightGray"
+								   Foreground="{ThemeResource HipstrSubText}"
 								   FontSize="10" />
 						<FlyoutBase.AttachedFlyout>
 							<MenuFlyout>
 								<MenuFlyout.MenuFlyoutPresenterStyle>
 									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{ThemeResource HipChatControl}" />
+										<Setter Property="Background" Value="{ThemeResource HipstrBackgroundBright}" />
 									</Style>
 								</MenuFlyout.MenuFlyoutPresenterStyle>
 								<MenuFlyout.Items>
 									<MenuFlyoutItem Text="View User Profile"
-													Background="{ThemeResource HipChatControl}"
-													Foreground="White"
+													Background="{ThemeResource HipstrBackgroundBright}"
+													Foreground="{ThemeResource HipstrText}"
 													Command="{Binding ViewModel.NavigateToUserProfileViewCommand, Mode=OneTime, ElementName=UsersViewPage}"
 													CommandParameter="{Binding ViewModel.TappedUser, ElementName=UsersViewPage}" />
 								</MenuFlyout.Items>
@@ -88,15 +88,15 @@
 		</ListView>
 		<ProgressRing Grid.Row="0"
 					  IsActive="{x:Bind ViewModel.LoadingUsers, Mode=OneWay}"
-					  Foreground="White"
+					  Foreground="{ThemeResource HipstrText}"
 					  Width="50"
 					  Height="50" />
 		<CommandBar Grid.Row="1"
-					Background="{ThemeResource HipChatControl}"
-					Foreground="White">
+					Background="{ThemeResource HipstrAccentBright}"
+					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind ViewModel.RefreshUsersCommand}" />
 		</CommandBar>
 	</Grid>

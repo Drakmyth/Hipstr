@@ -19,7 +19,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipstrAccent}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -42,7 +42,7 @@
 					   RelativePanel.Below="Avatar"
 					   RelativePanel.AlignHorizontalCenterWithPanel="True" />
 			<StackPanel Name="MentionNameTextBlock"
-						Background="{ThemeResource HipChatControl}"
+						Background="{ThemeResource HipstrAccentBright}"
 						CornerRadius="5"
 						Margin="0 2"
 						Orientation="Horizontal"
@@ -89,7 +89,7 @@
 						  RelativePanel.AlignVerticalCenterWithPanel="True" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
-					Background="{ThemeResource HipChatControl}"
+					Background="{ThemeResource HipstrAccentBright}"
 					Foreground="White">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"

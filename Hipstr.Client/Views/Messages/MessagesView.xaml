@@ -23,7 +23,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipstrAccent}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -86,7 +86,7 @@
 				 attachments:ImmediateSourceUpdate.Source="{Binding MessageDraft, Mode=TwoWay}" />
 		<GridView Grid.Row="2"
 				  ItemsSource="{x:Bind ViewModel.Emoticons}"
-				  Background="{ThemeResource HipChatControl}"
+				  Background="{ThemeResource HipstrAccentBright}"
 				  Height="300"
 				  ScrollViewer.HorizontalScrollMode="Enabled"
 				  ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -134,7 +134,7 @@
 					  Visibility="{x:Bind ShowEmoticonPane, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
 	</Grid>
 	<Page.BottomAppBar>
-		<CommandBar Background="{ThemeResource HipChatControl}"
+		<CommandBar Background="{ThemeResource HipstrAccentBright}"
 					Foreground="White">
 			<AppBarButton Icon="Emoji2"
 						  Label="Emoticons"

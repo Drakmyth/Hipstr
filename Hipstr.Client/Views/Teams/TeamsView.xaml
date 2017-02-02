@@ -16,7 +16,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -36,23 +36,23 @@
 					<Grid Padding="12"
 						  Holding="Grid_OnHolding"
 						  RightTapped="Grid_OnRightTapped">
-						<TextBlock Text="{x:Bind Name}" Foreground="White" />
+						<TextBlock Text="{x:Bind Name}" Foreground="{ThemeResource HipstrText}" />
 						<FlyoutBase.AttachedFlyout>
 							<MenuFlyout>
 								<MenuFlyout.MenuFlyoutPresenterStyle>
 									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{ThemeResource HipChatControl}" />
+										<Setter Property="Background" Value="{ThemeResource HipstrBackgroundBright}" />
 									</Style>
 								</MenuFlyout.MenuFlyoutPresenterStyle>
 								<MenuFlyout.Items>
 									<MenuFlyoutItem Text="Edit"
-													Background="{ThemeResource HipChatControl}"
-													Foreground="White"
+													Background="{ThemeResource HipstrBackgroundBright}"
+													Foreground="{ThemeResource HipstrText}"
 													Command="{Binding ViewModel.EditTeamCommand, Mode=OneTime, ElementName=TeamsViewPage}"
 													CommandParameter="{Binding ViewModel.TappedTeam, ElementName=TeamsViewPage}" />
 									<MenuFlyoutItem Text="Delete"
-													Background="{ThemeResource HipChatControl}"
-													Foreground="White"
+													Background="{ThemeResource HipstrBackgroundBright}"
+													Foreground="{ThemeResource HipstrText}"
 													Command="{Binding ViewModel.DeleteTeamCommand, Mode=OneTime, ElementName=TeamsViewPage}"
 													CommandParameter="{Binding ViewModel.TappedTeam, ElementName=TeamsViewPage}" />
 								</MenuFlyout.Items>
@@ -63,12 +63,12 @@
 			</ListView.ItemTemplate>
 		</ListView>
 		<CommandBar Grid.Row="1"
-					Background="{ThemeResource HipChatControl}"
-					Foreground="White">
+					Background="{ThemeResource HipstrAccentBright}"
+					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Add"
 						  Label="Add Team"
 						  Command="{x:Bind ViewModel.AddTeamCommand}"
-						  Foreground="White" />
+						  Foreground="{ThemeResource HipstrAccentText}" />
 		</CommandBar>
 	</Grid>
 </Page>

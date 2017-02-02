@@ -2,12 +2,26 @@
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<ResourceDictionary.ThemeDictionaries>
 		<ResourceDictionary x:Key="Light">
-			<SolidColorBrush x:Key="HipChatBackground" Color="#FF205081" />
-			<SolidColorBrush x:Key="HipChatControl" Color="#FF3572B0" />
+			<SolidColorBrush x:Key="HipstrAccent" Color="#FF205081" />
+			<SolidColorBrush x:Key="HipstrAccentBright" Color="#FF3572B0" />
+			<SolidColorBrush x:Key="HipstrAccentText" Color="White"/>
+			<SolidColorBrush x:Key="HipstrAccentSeparator" Color="Black"/>
+			<SolidColorBrush x:Key="HipstrBackground" Color="AliceBlue" />
+			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="White" />
+			<SolidColorBrush x:Key="HipstrHeaderText" Color="#FF1E252B" />
+			<SolidColorBrush x:Key="HipstrText" Color="#FF1E252B" />
+			<SolidColorBrush x:Key="HipstrSubText" Color="LightGray" />
 		</ResourceDictionary>
 		<ResourceDictionary x:Key="Dark">
-			<SolidColorBrush x:Key="HipChatBackground" Color="#FF205081" />
-			<SolidColorBrush x:Key="HipChatControl" Color="#FF3572B0" />
+			<SolidColorBrush x:Key="HipstrAccent" Color="#FF205081" />
+			<SolidColorBrush x:Key="HipstrAccentBright" Color="#FF3572B0" />
+			<SolidColorBrush x:Key="HipstrAccentText" Color="White"/>
+			<SolidColorBrush x:Key="HipstrAccentSeparator" Color="Black"/>
+			<SolidColorBrush x:Key="HipstrBackground" Color="#FF1E252B" />
+			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="#FF333940" />
+			<SolidColorBrush x:Key="HipstrHeaderText" Color="AliceBlue" />
+			<SolidColorBrush x:Key="HipstrText" Color="AliceBlue" />
+			<SolidColorBrush x:Key="HipstrSubText" Color="LightGray" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

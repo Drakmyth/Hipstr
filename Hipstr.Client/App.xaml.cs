@@ -104,7 +104,7 @@ namespace Hipstr.Client
 			if (!ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar")) return;
 
 			StatusBar statusBar = StatusBar.GetForCurrentView();
-			statusBar.BackgroundColor = (Current.Resources["HipChatControl"] as SolidColorBrush)?.Color;
+			statusBar.BackgroundColor = (Current.Resources["HipstrAccent"] as SolidColorBrush)?.Color;
 			statusBar.ForegroundColor = Colors.White;
 			statusBar.BackgroundOpacity = 1;
 		}

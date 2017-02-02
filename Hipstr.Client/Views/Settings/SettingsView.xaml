@@ -29,7 +29,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<StackPanel Background="{ThemeResource HipChatBackground}" Padding="10">
+	<StackPanel Background="{ThemeResource HipstrAccent}" Padding="10">
 		<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
 			<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">Theme</TextBlock>
 			<StackPanel>

@@ -23,7 +23,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipChatBackground}">
+	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -44,7 +44,7 @@
 					<GroupStyle.HeaderTemplate>
 						<DataTemplate x:DataType="models:ObservableGroupedRoomsCollection">
 							<TextBlock Text="{x:Bind Header}"
-									   Foreground="White"
+									   Foreground="{ThemeResource HipstrHeaderText}"
 									   FontSize="24"
 									   Tapped="HeaderTextBlock_OnTapped" />
 						</DataTemplate>
@@ -55,9 +55,9 @@
 				<DataTemplate x:DataType="models:Room">
 					<StackPanel>
 						<TextBlock Text="{x:Bind Name}"
-								   Foreground="White" />
+								   Foreground="{ThemeResource HipstrText}" />
 						<TextBlock Text="{x:Bind Team.Name}"
-								   Foreground="LightGray"
+								   Foreground="{ThemeResource HipstrSubText}"
 								   FontSize="10" />
 					</StackPanel>
 				</DataTemplate>
@@ -65,15 +65,15 @@
 		</ListView>
 		<ProgressRing Grid.Row="0"
 					  IsActive="{x:Bind ViewModel.LoadingRooms, Mode=OneWay}"
-					  Foreground="White"
+					  Foreground="{ThemeResource HipstrText}"
 					  Width="50"
 					  Height="50" />
 		<CommandBar Grid.Row="1"
-					Background="{ThemeResource HipChatControl}"
-					Foreground="White">
+					Background="{ThemeResource HipstrAccentBright}"
+					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind ViewModel.RefreshRoomsCommand}" />
 		</CommandBar>
 	</Grid>

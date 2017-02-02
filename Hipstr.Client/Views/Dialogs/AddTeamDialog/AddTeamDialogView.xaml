@@ -48,7 +48,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<RelativePanel Background="{ThemeResource HipChatBackground}"
+		<RelativePanel Background="{ThemeResource HipstrAccent}"
 					   Grid.Row="0">
 			<TextBlock Name="PageTitle"
 					   Margin="10 10 10 5"
@@ -79,7 +79,7 @@
 						  IsActive="{x:Bind ViewModel.IsValidating, Mode=OneWay}" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
-					Background="{ThemeResource HipChatControl}"
+					Background="{ThemeResource HipstrAccentBright}"
 					Foreground="White">
 			<AppBarButton Icon="Cancel"
 						  Label="Cancel"
