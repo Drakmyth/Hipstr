@@ -8,7 +8,7 @@ namespace Hipstr.Core.Models.HipChat
 	public class HipChatUserProfile
 	{
 		[JsonProperty("xmpp_jid")]
-		public string XmppJid { get; set; }
+		public string JabberId { get; set; }
 
 		[JsonProperty("is_deleted")]
 		public bool IsDeleted { get; set; }

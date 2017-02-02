@@ -12,7 +12,7 @@ namespace Hipstr.Core.Models.HipChat
 		public Dictionary<string, Uri> Links { get; set; }
 
 		[JsonProperty("room")]
-		public HipChatRoom Room { get; set; }
+		public HipChatRoomSummary Room { get; set; }
 
 		[JsonProperty("id")]
 		public string Id { get; set; }

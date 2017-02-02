@@ -68,6 +68,10 @@
 		<CommandBar Grid.Row="1"
 					Background="{ThemeResource HipstrAccentBright}"
 					Foreground="{ThemeResource HipstrAccentText}">
+			<AppBarButton Icon="Add"
+						  Label="New Room"
+						  Foreground="{ThemeResource HipstrAccentText}"
+						  Command="{x:Bind ViewModel.NewRoomCommand}"/>
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="{ThemeResource HipstrAccentText}"

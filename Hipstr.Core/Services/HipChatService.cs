@@ -39,6 +39,38 @@ namespace Hipstr.Core.Services
 			_httpClient = httpClient;
 		}
 
+		public async Task<Room> CreateRoomForTeamAsync(Team team, RoomCreationRequest request)
+		{
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+
+			HipChatRoomCreationRequest creationRequest = await BuildCreationRequest(team.ApiKey, request);
+			HttpClientResponse<HipChatCreationResponse> creationResponse = await _httpClient.PostAsync<HipChatCreationResponse>(new Uri(_rootUri, "/v2/room"), creationRequest);
+			HttpClientResponse<HipChatRoom> createdRoom = await _httpClient.GetAsync<HipChatRoom>(new Uri(_rootUri, $"/v2/room/{creationResponse.Payload.Id}"));
+			return new Room
+			{
+				Id = createdRoom.Payload.Id,
+				IsArchived = createdRoom.Payload.IsArchived,
+				Name = createdRoom.Payload.Name,
+				Privacy = createdRoom.Payload.Privacy,
+				Team = team
+			};
+		}
+
+		private async Task<HipChatRoomCreationRequest> BuildCreationRequest(string apiKey, RoomCreationRequest request)
+		{
+			ApiKeyInfo keyInfo = await GetApiKeyInfoAsync(apiKey);
+
+			return new HipChatRoomCreationRequest
+			{
+				DelegateAdminVisibility = request.DelegateAdminVisibility,
+				GuestAccess = request.GuestAccess,
+				Name = request.Name,
+				OwnerUserId = keyInfo.Owner.Handle,
+				Privacy = request.Privacy,
+				Topic = request.Topic
+			};
+		}
+
 		public async Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache)
 		{
 			switch (cacheBehavior)
@@ -74,7 +106,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HipChatCollectionWrapper<HipChatRoom> roomWrapper = await GetPageOfRooms(_httpClient, rooms.Count);
+				HipChatCollectionWrapper<HipChatRoomSummary> roomWrapper = await GetPageOfRooms(_httpClient, rooms.Count);
 				rooms.AddRange(roomWrapper.Items.Select(hcRoom => new Room
 				{
 					Id = hcRoom.Id,
@@ -90,7 +122,7 @@ namespace Hipstr.Core.Services
 			return rooms;
 		}
 
-		private static async Task<HipChatCollectionWrapper<HipChatRoom>> GetPageOfRooms(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatRoomSummary>> GetPageOfRooms(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/room?"
 						   + $"start-index={startIndex}&"
@@ -98,7 +130,7 @@ namespace Hipstr.Core.Services
 						   + $"include-private={IncludePrivateRooms}&"
 						   + $"include-archived={IncludeArchivedRooms}";
 
-			HttpClientResponse<HipChatCollectionWrapper<HipChatRoom>> response = await httpClient.GetAsync<HipChatCollectionWrapper<HipChatRoom>>(new Uri(_rootUri, route));
+			HttpClientResponse<HipChatCollectionWrapper<HipChatRoomSummary>> response = await httpClient.GetAsync<HipChatCollectionWrapper<HipChatRoomSummary>>(new Uri(_rootUri, route));
 			return response.Payload;
 		}
 
@@ -443,7 +475,14 @@ namespace Hipstr.Core.Services
 				Id = hcSession.Id,
 				ApiKey = hcSession.AccessToken,
 				RefreshToken = hcSession.RefreshToken,
-				Scopes = hcSession.Scopes
+				Scopes = hcSession.Scopes,
+				Owner = new User
+				{
+					Handle = hcSession.Owner.MentionName,
+					Id = hcSession.Owner.Id,
+					Name = hcSession.Owner.Name,
+					Team = new Team("", apiKey) // TODO: Figure out a better way to build this object so the name isn't missing
+				}
 			};
 		}
 

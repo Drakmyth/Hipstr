@@ -29,6 +29,7 @@ namespace Hipstr.Client.Views.Rooms
 		public ICommand NavigateToMessagesViewCommand { get; }
 		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshRoomsCommand { get; }
+		public ICommand NewRoomCommand { get; }
 
 		private bool _loadingRooms;
 

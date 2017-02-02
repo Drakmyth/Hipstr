@@ -113,6 +113,12 @@
     <Compile Include="Messaging\RoomMessageSource.cs" />
     <Compile Include="Models\ApiKeyInfo.cs" />
     <Compile Include="Models\Emoticon.cs" />
+    <Compile Include="Models\RoomCreationRequest.cs" />
+    <Compile Include="Models\HipChat\HipChatPrivacyTypes.cs" />
+    <Compile Include="Models\HipChat\HipChatStatistics.cs" />
+    <Compile Include="Models\HipChat\HipChatCreationResponse.cs" />
+    <Compile Include="Models\HipChat\HipChatRoomCreationRequest.cs" />
+    <Compile Include="Models\HipChat\HipChatRoom.cs" />
     <Compile Include="Models\MessageFile.cs" />
     <Compile Include="Models\HipChat\HipChatMessageFile.cs" />
     <Compile Include="Models\HipChat\HipChatNotificationMessage.cs" />
@@ -143,7 +149,7 @@
     <Compile Include="Models\HipChat\HipChatCollectionWrapper.cs" />
     <Compile Include="Models\HipChat\HipChatMessage.cs" />
     <Compile Include="Models\HipChat\HipChatTopicMessage.cs" />
-    <Compile Include="Models\HipChat\HipChatRoom.cs" />
+    <Compile Include="Models\HipChat\HipChatRoomSummary.cs" />
     <Compile Include="Models\HipChat\HipChatUser.cs" />
     <Compile Include="Models\HipChat\HipChatUserProfile.cs" />
     <Compile Include="Models\Message.cs" />
