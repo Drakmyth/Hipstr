@@ -70,7 +70,8 @@ namespace Hipstr.Core.Services
 						throw new CommunicationException($"Reached HipChat rate limit. Please wait 5 minutes then try again.");
 					}
 
-					throw new CommunicationException($"Received an error response from the HipChat server. Code: {response.StatusCode} - Reason: {response.Content}");
+					string reason = await response.Content.ReadAsStringAsync();
+					throw new CommunicationException($"Received an error response from the HipChat server. Code: {response.StatusCode} - Reason: {reason}");
 				}
 
 				return response;

@@ -39,7 +39,7 @@ namespace Hipstr.Core.Models.HipChat
 		public Uri AvatarUri { get; set; }
 
 		[JsonProperty("delegate_admin_visibility")]
-		public bool DelegateAdminVisibility { get; set; }
+		public bool? DelegateAdminVisibility { get; set; }
 
 		[JsonProperty("topic")]
 		public string Topic { get; set; }

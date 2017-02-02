@@ -65,7 +65,7 @@ namespace Hipstr.Core.Services
 				DelegateAdminVisibility = request.DelegateAdminVisibility,
 				GuestAccess = request.GuestAccess,
 				Name = request.Name,
-				OwnerUserId = keyInfo.Owner.Handle,
+				OwnerUserId = keyInfo.Owner.Id.ToString(),
 				Privacy = request.Privacy,
 				Topic = request.Topic
 			};

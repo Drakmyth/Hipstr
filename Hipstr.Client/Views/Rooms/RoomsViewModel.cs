@@ -1,5 +1,6 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Client.Views.Dialogs;
+using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
@@ -16,7 +17,6 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -95,6 +95,13 @@ namespace Hipstr.Client.Views.Rooms
 			if (!roomCreation.Cancelled)
 			{
 				// TODO: Call HipChatService to create room, then navigate
+				Room room = await _hipChatService.CreateRoomAsync(roomCreation.Result);
+				_rooms.Add(room);
+
+				if (NavigateToMessagesViewCommand.CanExecute(room))
+				{
+					NavigateToMessagesViewCommand.Execute(room);
+				}
 			}
 		}
 
