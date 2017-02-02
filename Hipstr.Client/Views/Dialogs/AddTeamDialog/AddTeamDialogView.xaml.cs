@@ -40,6 +40,7 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
 			_popUp.BindToWindow();
+			ViewModel.Initialize();
 			SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
 		}
 
