@@ -47,7 +47,7 @@ namespace Hipstr.Client.Views.Dialogs.EditTeamDialog
 			}
 		}
 
-		public EditTeamDialogViewModel() : base("Edit Team")
+		public EditTeamDialogViewModel()
 		{
 			_teamName = string.Empty;
 

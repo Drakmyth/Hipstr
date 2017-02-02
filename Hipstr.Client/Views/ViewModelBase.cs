@@ -27,7 +27,7 @@ namespace Hipstr.Client.Views
 		private readonly string _title;
 		private readonly IMainPageService _mainPageService;
 
-		protected ViewModelBase(string title)
+		protected ViewModelBase(string title = null)
 		{
 			_title = title;
 			_mainPageService = IoCContainer.Resolve<IMainPageService>();
@@ -48,7 +48,10 @@ namespace Hipstr.Client.Views
 
 		protected void RefreshTitle()
 		{
-			_mainPageService.Title = _title;
+			if (_title != null)
+			{
+				_mainPageService.Title = _title;
+			}
 		}
 
 		private void OnCurrentThemeChange(object sender, ElementTheme theme)

@@ -55,7 +55,7 @@ namespace Hipstr.Client.Views.Dialogs.AddTeamDialog
 		private readonly ITeamService _teamService;
 		private readonly IHipChatService _hipChatService;
 
-		public AddTeamDialogViewModel(ITeamService teamService, IHipChatService hipChatService) : base("Add Team")
+		public AddTeamDialogViewModel(ITeamService teamService, IHipChatService hipChatService)
 		{
 			_teamService = teamService;
 			_hipChatService = hipChatService;

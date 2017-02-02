@@ -103,11 +103,17 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
     <Compile Include="Converters\BooleanToSolidColorBrushConverter.cs" />
+    <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\NullableBooleanToBooleanConverter.cs" />
     <Compile Include="Converters\UserToMessageSourceConverter.cs" />
     <Compile Include="Converters\RoomToMessageSourceConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
+    <Compile Include="Views\Dialogs\AddRoomDialog\AddRoomDialogValidationEventArgs.cs" />
+    <Compile Include="Views\Dialogs\AddRoomDialog\AddRoomDialogView.xaml.cs">
+      <DependentUpon>AddRoomDialogView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Dialogs\AddRoomDialog\AddRoomDialogViewModel.cs" />
     <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogValidationEventArgs.cs" />
     <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogViewModel.cs" />
     <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogValidationEventArgs.cs" />
@@ -256,6 +262,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Dialogs\AddRoomDialog\AddRoomDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

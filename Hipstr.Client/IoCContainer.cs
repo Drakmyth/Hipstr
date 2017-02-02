@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Builder;
 using Hipstr.Client.Services;
+using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 using Hipstr.Client.Views.Dialogs.AddTeamDialog;
 using Hipstr.Client.Views.Dialogs.EditTeamDialog;
 using Hipstr.Client.Views.MainPage;
@@ -47,6 +48,7 @@ namespace Hipstr.Client
 			builder.RegisterType<UserProfileViewModel, UserProfileViewModel>();
 			builder.RegisterType<AddTeamDialogViewModel, AddTeamDialogViewModel>();
 			builder.RegisterType<EditTeamDialogViewModel, EditTeamDialogViewModel>();
+			builder.RegisterType<AddRoomDialogViewModel, AddRoomDialogViewModel>();
 			builder.RegisterType<SettingsViewModel, SettingsViewModel>();
 		}
 

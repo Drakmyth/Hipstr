@@ -39,11 +39,11 @@ namespace Hipstr.Core.Services
 			_httpClient = httpClient;
 		}
 
-		public async Task<Room> CreateRoomForTeamAsync(Team team, RoomCreationRequest request)
+		public async Task<Room> CreateRoomAsync(RoomCreationRequest request)
 		{
-			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", team.ApiKey);
+			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.Team.ApiKey);
 
-			HipChatRoomCreationRequest creationRequest = await BuildCreationRequest(team.ApiKey, request);
+			HipChatRoomCreationRequest creationRequest = await BuildCreationRequest(request);
 			HttpClientResponse<HipChatCreationResponse> creationResponse = await _httpClient.PostAsync<HipChatCreationResponse>(new Uri(_rootUri, "/v2/room"), creationRequest);
 			HttpClientResponse<HipChatRoom> createdRoom = await _httpClient.GetAsync<HipChatRoom>(new Uri(_rootUri, $"/v2/room/{creationResponse.Payload.Id}"));
 			return new Room
@@ -52,13 +52,13 @@ namespace Hipstr.Core.Services
 				IsArchived = createdRoom.Payload.IsArchived,
 				Name = createdRoom.Payload.Name,
 				Privacy = createdRoom.Payload.Privacy,
-				Team = team
+				Team = request.Team
 			};
 		}
 
-		private async Task<HipChatRoomCreationRequest> BuildCreationRequest(string apiKey, RoomCreationRequest request)
+		private async Task<HipChatRoomCreationRequest> BuildCreationRequest(RoomCreationRequest request)
 		{
-			ApiKeyInfo keyInfo = await GetApiKeyInfoAsync(apiKey);
+			ApiKeyInfo keyInfo = await GetApiKeyInfoAsync(request.Team.ApiKey);
 
 			return new HipChatRoomCreationRequest
 			{

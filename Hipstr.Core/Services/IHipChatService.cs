@@ -6,7 +6,7 @@ namespace Hipstr.Core.Services
 {
 	public interface IHipChatService
 	{
-		Task<Room> CreateRoomForTeamAsync(Team team, RoomCreationRequest request);
+		Task<Room> CreateRoomAsync(RoomCreationRequest request);
 		Task<IReadOnlyList<Room>> GetRoomsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<IReadOnlyList<User>> GetUsersForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);
 		Task<IReadOnlyList<Emoticon>> GetEmoticonsForTeamAsync(Team team, HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.LoadFromCache);

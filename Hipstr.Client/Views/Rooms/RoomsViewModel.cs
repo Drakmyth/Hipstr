@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 
 namespace Hipstr.Client.Views.Rooms
 {
@@ -43,6 +44,8 @@ namespace Hipstr.Client.Views.Rooms
 			}
 		}
 
+		private IReadOnlyList<Team> _teams;
+
 		private readonly IHipChatService _hipChatService;
 		private readonly ITeamService _teamService;
 
@@ -55,10 +58,12 @@ namespace Hipstr.Client.Views.Rooms
 
 			_rooms = new ObservableCollection<Room>();
 			GroupedRooms = new ObservableCollection<ObservableGroupedRoomsCollection>();
+			_teams = new List<Team>();
 
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(room => room != null);
 			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
+			NewRoomCommand = new RelayCommandAsync(AddRoomAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
 		}
 
 		public override void Initialize()
@@ -83,14 +88,24 @@ namespace Hipstr.Client.Views.Rooms
 			GroupedRooms.AddRange(OrderAndGroupRooms(_rooms));
 		}
 
+		private async Task AddRoomAsync()
+		{
+			var dialog = new AddRoomDialogView();
+			DialogResult<RoomCreationRequest> roomCreation = await dialog.ShowAsync(_teams);
+			if (!roomCreation.Cancelled)
+			{
+				// TODO: Call HipChatService to create room, then navigate
+			}
+		}
+
 		private async Task RefreshRoomsAsync(HipChatCacheBehavior cacheBehavior = HipChatCacheBehavior.RefreshCache)
 		{
 			try
 			{
 				LoadingRooms = true;
-				IEnumerable<Team> teams = await _teamService.GetTeamsAsync();
+				_teams = await _teamService.GetTeamsAsync();
 				_rooms.Clear();
-				foreach (Team team in teams)
+				foreach (Team team in _teams)
 				{
 					IEnumerable<Room> rooms = await _hipChatService.GetRoomsForTeamAsync(team, cacheBehavior);
 
