@@ -56,9 +56,9 @@ namespace Hipstr.Client.Views.Settings
 
 			ElementTheme theme = CurrentTheme;
 
-			_isDarkTheme = theme == ElementTheme.Dark;
-			_isLightTheme = theme == ElementTheme.Light;
-			_isSystemTheme = theme == ElementTheme.Default;
+			IsDarkTheme = theme == ElementTheme.Dark;
+			IsLightTheme = theme == ElementTheme.Light;
+			IsSystemTheme = theme == ElementTheme.Default;
 		}
 
 		private void UpdateThemeSettings()

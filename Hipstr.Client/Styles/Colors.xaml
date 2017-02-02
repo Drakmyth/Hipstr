@@ -6,21 +6,21 @@
 			<SolidColorBrush x:Key="HipstrAccentBright" Color="#FF3572B0" />
 			<SolidColorBrush x:Key="HipstrAccentText" Color="White"/>
 			<SolidColorBrush x:Key="HipstrAccentSeparator" Color="Black"/>
-			<SolidColorBrush x:Key="HipstrBackground" Color="AliceBlue" />
+			<SolidColorBrush x:Key="HipstrBackground" Color="White" />
 			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="White" />
 			<SolidColorBrush x:Key="HipstrHeaderText" Color="#FF1E252B" />
 			<SolidColorBrush x:Key="HipstrText" Color="#FF1E252B" />
-			<SolidColorBrush x:Key="HipstrSubText" Color="LightGray" />
+			<SolidColorBrush x:Key="HipstrSubText" Color="#FF7A7C7F" />
 		</ResourceDictionary>
 		<ResourceDictionary x:Key="Dark">
 			<SolidColorBrush x:Key="HipstrAccent" Color="#FF205081" />
 			<SolidColorBrush x:Key="HipstrAccentBright" Color="#FF3572B0" />
 			<SolidColorBrush x:Key="HipstrAccentText" Color="White"/>
 			<SolidColorBrush x:Key="HipstrAccentSeparator" Color="Black"/>
-			<SolidColorBrush x:Key="HipstrBackground" Color="#FF1E252B" />
-			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="#FF333940" />
-			<SolidColorBrush x:Key="HipstrHeaderText" Color="AliceBlue" />
-			<SolidColorBrush x:Key="HipstrText" Color="AliceBlue" />
+			<SolidColorBrush x:Key="HipstrBackground" Color="#FF333940" />
+			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="#FF7A7C7F" />
+			<SolidColorBrush x:Key="HipstrHeaderText" Color="White" />
+			<SolidColorBrush x:Key="HipstrText" Color="White" />
 			<SolidColorBrush x:Key="HipstrSubText" Color="LightGray" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>

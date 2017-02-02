@@ -36,7 +36,7 @@ namespace Hipstr.Client.Views
 		public virtual void Initialize()
 		{
 			App.Settings.CurrentThemeChanged += OnCurrentThemeChange;
-			_currentTheme = App.Settings.CurrentTheme;
+			CurrentTheme = App.Settings.CurrentTheme;
 
 			RefreshTitle();
 		}

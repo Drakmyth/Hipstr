@@ -14,7 +14,7 @@
 				<ResourceDictionary Source="/Styles/Colors.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="RadioButton">
-				<Setter Property="Foreground" Value="White" />
+				<Setter Property="Foreground" Value="{ThemeResource HipstrText}" />
 				<Setter Property="IsThreeState" Value="False" />
 			</Style>
 			<converters:NullableBooleanToBooleanConverter x:Key="NBoolToBool" />
@@ -22,6 +22,7 @@
 				   x:Key="SettingSectionHeaderTextBlockStyle"
 				   BasedOn="{StaticResource SubheaderTextBlockStyle}">
 				<Setter Property="Margin" Value="0, 0, 0, 10" />
+				<Setter Property="Foreground" Value="{ThemeResource HipstrText}"/>
 			</Style>
 			<Style TargetType="StackPanel" x:Key="SettingSectionStackPanelStyle">
 				<Setter Property="Margin" Value="0, 0, 0, 20" />
@@ -29,7 +30,7 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<StackPanel Background="{ThemeResource HipstrAccent}" Padding="10">
+	<StackPanel Background="{ThemeResource HipstrBackground}" Padding="10">
 		<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
 			<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">Theme</TextBlock>
 			<StackPanel>
