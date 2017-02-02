@@ -118,7 +118,7 @@ namespace Hipstr.Client.Views.Users
 					// TODO: Stop modifying event subscriptions once we have a better way of handling this
 					User lastUser = users.Last();
 					_users.CollectionChanged -= UsersOnCollectionChanged;
-					_users.AddRange(users);
+					_users.AddRange(users.Take(users.Count() - 1));
 					_users.CollectionChanged += UsersOnCollectionChanged;
 					_users.Add(lastUser);
 				}

@@ -119,7 +119,7 @@ namespace Hipstr.Client.Views.Rooms
 					// TODO: Stop modifying event subscriptions once we have a better way of handling this
 					Room lastRoom = rooms.Last();
 					_rooms.CollectionChanged -= RoomsOnCollectionChanged;
-					_rooms.AddRange(rooms);
+					_rooms.AddRange(rooms.Take(rooms.Count() - 1));
 					_rooms.CollectionChanged += RoomsOnCollectionChanged;
 					_rooms.Add(lastRoom);
 				}
