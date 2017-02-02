@@ -15,15 +15,12 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
-			</ResourceDictionary.MergedDictionaries>
 			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<converters:BooleanToVisibilityConverter InvertResult="True" x:Key="InvertedBoolToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipstrAccent}">
+	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -54,18 +51,18 @@
 					<StackPanel Margin="0 10">
 						<RelativePanel>
 							<TextBlock Text="{x:Bind PostedBy.Name}"
-									   Foreground="White"
+									   Foreground="{ThemeResource HipstrText}"
 									   RelativePanel.AlignLeftWithPanel="True" />
 							<TextBlock Text="{x:Bind Date}"
-									   Foreground="White"
+									   Foreground="{ThemeResource HipstrText}"
 									   RelativePanel.AlignRightWithPanel="True" />
 						</RelativePanel>
 						<RichTextBlock TextWrapping="Wrap"
-									   Foreground="White"
+									   Foreground="{ThemeResource HipstrText}"
 									   Margin="15 5 0 5">
 							<interactivity:Interaction.Behaviors>
 								<behaviors:HipChatMessageParsingBehavior
-									Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}"/>
+									Team="{Binding ViewModel.MessageSource.Team, ElementName=MessagesViewPage}" />
 							</interactivity:Interaction.Behaviors>
 						</RichTextBlock>
 					</StackPanel>
@@ -74,11 +71,12 @@
 		</ListView>
 		<ProgressRing Grid.Row="0"
 					  IsActive="{x:Bind ViewModel.LoadingMessages, Mode=OneWay}"
-					  Foreground="White"
+					  Foreground="{ThemeResource HipstrText}"
 					  Width="50"
 					  Height="50" />
 		<TextBox Grid.Row="1"
-				 Background="White"
+				 Background="{ThemeResource HipstrTextBoxBackground}"
+				 Foreground="{ThemeResource HipstrTextBoxText}"
 				 Text="{x:Bind ViewModel.MessageDraft, Mode=TwoWay}"
 				 AcceptsReturn="True"
 				 PlaceholderText="Enter a message..."
@@ -112,9 +110,9 @@
 							</core:EventTriggerBehavior>
 						</interactivity:Interaction.Behaviors>
 						<StackPanel Orientation="Horizontal">
-							<TextBlock Text="(" Foreground="White" />
-							<TextBlock Text="{x:Bind Shortcut}" Foreground="White" />
-							<TextBlock Text=")" Foreground="White" />
+							<TextBlock Text="(" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text="{x:Bind Shortcut}" Foreground="{ThemeResource HipstrAccentText}" />
+							<TextBlock Text=")" Foreground="{ThemeResource HipstrAccentText}" />
 						</StackPanel>
 						<Image Width="30" Height="30">
 							<Image.Source>
@@ -129,26 +127,26 @@
 					  Height="50"
 					  RelativePanel.AlignHorizontalCenterWithPanel="True"
 					  RelativePanel.AlignVerticalCenterWithPanel="True"
-					  Foreground="White"
+					  Foreground="{ThemeResource HipstrAccentText}"
 					  IsActive="{x:Bind ViewModel.LoadingEmoticons, Mode=OneWay}"
 					  Visibility="{x:Bind ShowEmoticonPane, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
 	</Grid>
 	<Page.BottomAppBar>
 		<CommandBar Background="{ThemeResource HipstrAccentBright}"
-					Foreground="White">
+					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Emoji2"
 						  Label="Emoticons"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Visibility="{x:Bind IsInputPaneVisible, Mode=OneWay, Converter={StaticResource BoolToVis}}"
 						  Command="{x:Bind ToggleEmoticonPaneCommand}" />
 			<AppBarButton Icon="Send"
 						  Label="Send Message"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind ViewModel.SendMessageCommand}"
 						  CommandParameter="{x:Bind ViewModel.MessageDraft, Mode=OneWay}" />
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind ViewModel.ReloadMessagesCommand}"
 						  Visibility="{x:Bind IsInputPaneVisible, Mode=OneWay, Converter={StaticResource InvertedBoolToVis}}" />
 		</CommandBar>

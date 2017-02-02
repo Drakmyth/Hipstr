@@ -9,17 +9,14 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
-			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="TextBlock">
-				<Setter Property="Foreground" Value="White" />
+				<Setter Property="Foreground" Value="{ThemeResource HipstrText}" />
 			</Style>
 			<converters:NullToVisibilityConverter x:Key="NullToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<Grid Background="{ThemeResource HipstrAccent}">
+	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
@@ -51,9 +48,11 @@
 						Visibility="{x:Bind ViewModel.UserProfile, Mode=OneWay, Converter={StaticResource NullToVis}}">
 				<TextBlock Text="@"
 						   FontSize="16"
+						   Foreground="{ThemeResource HipstrAccentText}"
 						   Margin="2 0 0 1" />
 				<TextBlock Text="{x:Bind ViewModel.UserProfile.MentionName, Mode=OneWay}"
 						   FontSize="16"
+						   Foreground="{ThemeResource HipstrAccentText}"
 						   Margin="0 0 2 1" />
 			</StackPanel>
 			<TextBlock Name="UserTitleTextBlock"
@@ -82,7 +81,7 @@
 				<TextBlock Text="{x:Bind ViewModel.UserProfile.LastActive, Mode=OneWay}" Grid.Row="2" Grid.Column="1" />
 			</Grid>
 			<ProgressRing IsActive="{x:Bind ViewModel.LoadingUserProfile, Mode=OneWay}"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrText}"
 						  Width="50"
 						  Height="50"
 						  RelativePanel.AlignHorizontalCenterWithPanel="True"
@@ -90,10 +89,10 @@
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{ThemeResource HipstrAccentBright}"
-					Foreground="White">
+					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind ViewModel.ReloadUserProfileCommand}" />
 		</CommandBar>
 	</Grid>

@@ -13,9 +13,6 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
-			</ResourceDictionary.MergedDictionaries>
 			<CollectionViewSource x:Name="GroupedRoomsSource"
 								  Source="{x:Bind ViewModel.GroupedRooms, Mode=OneWay}"
 								  IsSourceGrouped="True" />

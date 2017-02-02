@@ -11,6 +11,13 @@
 			<SolidColorBrush x:Key="HipstrHeaderText" Color="#FF1E252B" />
 			<SolidColorBrush x:Key="HipstrText" Color="#FF1E252B" />
 			<SolidColorBrush x:Key="HipstrSubText" Color="#FF7A7C7F" />
+			<SolidColorBrush x:Key="HipstrTextBoxErrorBackground" Color="LavenderBlush"/>
+			<SolidColorBrush x:Key="HipstrTextBoxErrorBorder" Color="Red"/>
+			<SolidColorBrush x:Key="HipstrTextBoxErrorText" Color="Black"/>
+			<SolidColorBrush x:Key="HipstrTextBoxBackground" Color="White"/>
+			<SolidColorBrush x:Key="HipstrTextBoxText" Color="Black"/>
+			<SolidColorBrush x:Key="HipstrErrorBackground" Color="AntiqueWhite" />
+			<SolidColorBrush x:Key="HipstrErrorText" Color="Red" />
 		</ResourceDictionary>
 		<ResourceDictionary x:Key="Dark">
 			<SolidColorBrush x:Key="HipstrAccent" Color="#FF205081" />
@@ -22,6 +29,13 @@
 			<SolidColorBrush x:Key="HipstrHeaderText" Color="White" />
 			<SolidColorBrush x:Key="HipstrText" Color="White" />
 			<SolidColorBrush x:Key="HipstrSubText" Color="LightGray" />
+			<SolidColorBrush x:Key="HipstrTextBoxErrorBackground" Color="LavenderBlush"/>
+			<SolidColorBrush x:Key="HipstrTextBoxErrorBorder" Color="Red"/>
+			<SolidColorBrush x:Key="HipstrTextBoxErrorText" Color="Black"/>
+			<SolidColorBrush x:Key="HipstrTextBoxBackground" Color="White"/>
+			<SolidColorBrush x:Key="HipstrTextBoxText" Color="Black"/>
+			<SolidColorBrush x:Key="HipstrErrorBackground" Color="AntiqueWhite" />
+			<SolidColorBrush x:Key="HipstrErrorText" Color="Red" />
 		</ResourceDictionary>
 	</ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

@@ -12,7 +12,6 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
 				<ResourceDictionary Source="/Styles/Dialogs.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}" />
@@ -26,8 +25,9 @@
 				<VisualState x:Name="ApiKeyNormal" />
 				<VisualState x:Name="ApiKeyErrored">
 					<VisualState.Setters>
-						<Setter Target="ApiKeyTextBox.Background" Value="LavenderBlush" />
-						<Setter Target="ApiKeyTextBox.BorderBrush" Value="Red" />
+						<Setter Target="ApiKeyTextBox.Background" Value="{ThemeResource HipstrTextBoxErrorBackground}" />
+						<Setter Target="ApiKeyTextBox.BorderBrush" Value="{ThemeResource HipstrTextBoxErrorBorder}" />
+						<Setter Target="TeamNameTextBox.Foreground" Value="{ThemeResource HipstrTextBoxErrorText}" />
 						<Setter Target="ApiKeyErrorBorder.Visibility" Value="Visible" />
 					</VisualState.Setters>
 				</VisualState>
@@ -36,8 +36,9 @@
 				<VisualState x:Name="TeamNameNormal" />
 				<VisualState x:Name="TeamNameErrored">
 					<VisualState.Setters>
-						<Setter Target="TeamNameTextBox.Background" Value="LavenderBlush" />
-						<Setter Target="TeamNameTextBox.BorderBrush" Value="Red" />
+						<Setter Target="TeamNameTextBox.Background" Value="{ThemeResource HipstrTextBoxErrorBackground}" />
+						<Setter Target="TeamNameTextBox.BorderBrush" Value="{ThemeResource HipstrTextBoxErrorBorder}" />
+						<Setter Target="TeamNameTextBox.Foreground" Value="{ThemeResource HipstrTextBoxErrorText}" />
 						<Setter Target="TeamNameErrorBorder.Visibility" Value="Visible" />
 					</VisualState.Setters>
 				</VisualState>
@@ -48,12 +49,12 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<RelativePanel Background="{ThemeResource HipstrAccent}"
+		<RelativePanel Background="{ThemeResource HipstrBackground}"
 					   Grid.Row="0">
 			<TextBlock Name="PageTitle"
 					   Margin="10 10 10 5"
 					   FontSize="32"
-					   Foreground="White"
+					   Foreground="{ThemeResource HipstrText}"
 					   Text="Add Team" />
 			<TextBox Name="TeamNameTextBox"
 					 Header="Team Name"
@@ -75,20 +76,20 @@
 						  Height="50"
 						  RelativePanel.AlignHorizontalCenterWithPanel="True"
 						  RelativePanel.AlignVerticalCenterWithPanel="True"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrText}"
 						  IsActive="{x:Bind ViewModel.IsValidating, Mode=OneWay}" />
 		</RelativePanel>
 		<CommandBar Grid.Row="1"
 					Background="{ThemeResource HipstrAccentBright}"
-					Foreground="White">
+					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Cancel"
 						  Label="Cancel"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind CancelDialogCommand}" />
 			<AppBarButton Name="AcceptDialogButton"
 						  Icon="Accept"
 						  Label="Accept"
-						  Foreground="White"
+						  Foreground="{ThemeResource HipstrAccentText}"
 						  Command="{x:Bind ViewModel.ValidateDataCommand}" />
 		</CommandBar>
 	</Grid>

@@ -8,9 +8,6 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
-			</ResourceDictionary.MergedDictionaries>
 			<Style x:Key="HamburgerButtonStyle" TargetType="Button">
 				<Setter Property="Background" Value="{ThemeResource HipstrAccent}" />
 				<Setter Property="Foreground" Value="White" />

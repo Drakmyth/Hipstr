@@ -1,17 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<DataTemplate x:Key="DialogTextBoxHeaderTemplate">
-		<TextBlock Text="{Binding}" Foreground="White" />
+		<TextBlock Text="{Binding}" Foreground="{ThemeResource HipstrText}" />
 	</DataTemplate>
 	<Style x:Key="DialogTextBoxStyle" TargetType="TextBox">
 		<Setter Property="Margin" Value="10 5 10 0" />
-		<Setter Property="Background" Value="White" />
+		<Setter Property="Background" Value="{ThemeResource HipstrTextBoxBackground}" />
 		<Setter Property="RelativePanel.AlignLeftWithPanel" Value="True" />
 		<Setter Property="RelativePanel.AlignRightWithPanel" Value="True" />
 		<Setter Property="HeaderTemplate" Value="{StaticResource DialogTextBoxHeaderTemplate}" />
 	</Style>
 	<Style x:Key="DialogErrorBorderStyle" TargetType="Border">
-		<Setter Property="Background" Value="AntiqueWhite" />
+		<Setter Property="Background" Value="{ThemeResource HipstrErrorBackground}" />
 		<Setter Property="CornerRadius" Value="0 0 10 10" />
 		<Setter Property="BorderThickness" Value="0" />
 		<Setter Property="Margin" Value="12 0" />
@@ -21,7 +21,7 @@
 		<Setter Property="Visibility" Value="Collapsed" />
 	</Style>
 	<Style x:Key="DialogErrorTextBlockStyle" TargetType="TextBlock">
-		<Setter Property="Foreground" Value="Red" />
+		<Setter Property="Foreground" Value="{ThemeResource HipstrErrorText}" />
 		<Setter Property="TextWrapping" Value="WrapWholeWords" />
 		<Setter Property="Margin" Value="10 0" />
 		<Setter Property="Text" Value="ErrorText" /> <!-- Design data -->
