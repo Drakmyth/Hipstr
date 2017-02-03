@@ -85,7 +85,8 @@ namespace Hipstr.Client.Behaviors
 					NavigateUri = file.Uri,
 					Content = new Image
 					{
-						Source = new BitmapImage(file.ThumbnailUri)
+						Source = new BitmapImage(file.ThumbnailUri),
+						MaxWidth = 300
 					}
 				}
 			};
@@ -162,7 +163,8 @@ namespace Hipstr.Client.Behaviors
 						NavigateUri = image.ImageUri,
 						Content = new Image
 						{
-							Source = new BitmapImage(image.ImageUri)
+							Source = new BitmapImage(image.ImageUri),
+							MaxWidth = 300
 						}
 					}
 				};
