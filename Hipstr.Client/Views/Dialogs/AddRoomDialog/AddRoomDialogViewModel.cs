@@ -1,8 +1,12 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Core.Models;
+using Hipstr.Core.Services;
 using JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace Hipstr.Client.Views.Dialogs.AddRoomDialog
@@ -133,8 +137,12 @@ namespace Hipstr.Client.Views.Dialogs.AddRoomDialog
 			}
 		}
 
-		public AddRoomDialogViewModel()
+		private IHipChatService _hipChatService;
+
+		public AddRoomDialogViewModel(IHipChatService hipChatService)
 		{
+			_hipChatService = hipChatService;
+
 			_teams = new ObservableCollection<Team>();
 			_name = string.Empty;
 			_topic = string.Empty;
@@ -145,19 +153,19 @@ namespace Hipstr.Client.Views.Dialogs.AddRoomDialog
 			_isInvisibleToDelegateAdmin = false;
 			_isDelegateAdminVisibilityGroupDefault = true;
 
-			ValidateDataCommand = new RelayCommand(ValidateDataAsync, () => !IsValidating, this, nameof(IsValidating));
+			ValidateDataCommand = new RelayCommandAsync(ValidateDataAsync, () => !IsValidating, this, nameof(IsValidating));
 		}
 
-		private void ValidateDataAsync()
+		private async Task ValidateDataAsync()
 		{
 			IsValidating = true;
-			ValidationResult nameValidation = ValidateName(_name);
+			ValidationResult nameValidation = await ValidateName(_hipChatService, _name, SelectedTeam);
 			IsValidating = false;
 
 			Validation?.Invoke(this, new AddRoomDialogValidationEventArgs(nameValidation));
 		}
 
-		private static ValidationResult ValidateName(string teamName)
+		private static async Task<ValidationResult> ValidateName(IHipChatService hipChatService, string teamName, Team team)
 		{
 			const int nameMinLength = 1;
 			const int nameMaxLength = 50;
@@ -170,6 +178,13 @@ namespace Hipstr.Client.Views.Dialogs.AddRoomDialog
 			if (teamName.Length < nameMinLength || teamName.Length > nameMaxLength)
 			{
 				return ValidationResult.Invalid($"Name length must be between {nameMinLength} and {nameMaxLength} characters");
+			}
+
+			IReadOnlyList<Room> existingRooms = await hipChatService.GetRoomsForTeamAsync(team, HipChatCacheBehavior.RefreshCache);
+
+			if (existingRooms.Where(room => room.Name == teamName).SingleOrDefault() != null)
+			{
+				return ValidationResult.Invalid("Room with that name already exists");
 			}
 
 			return ValidationResult.Valid();
