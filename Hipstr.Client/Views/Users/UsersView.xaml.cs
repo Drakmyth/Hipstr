@@ -45,6 +45,7 @@ namespace Hipstr.Client.Views.Users
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.UserGroupScrollToHeaderRequest += OnUserGroupScrollToHeaderRequest;
+			UserList.SelectedItem = null;
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
