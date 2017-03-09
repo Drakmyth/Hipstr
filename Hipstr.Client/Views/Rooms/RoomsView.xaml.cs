@@ -20,6 +20,7 @@ namespace Hipstr.Client.Views.Rooms
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			ViewModel.RoomGroupScrollToHeaderRequest += OnRoomGroupScrollToHeaderRequest;
+			RoomList.SelectedItem = null;
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
