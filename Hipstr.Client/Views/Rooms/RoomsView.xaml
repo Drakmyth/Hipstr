@@ -19,6 +19,9 @@
 								  IsSourceGrouped="True" />
 			<converters:RoomToMessageSourceConverter x:Key="RoomToMsgSrc" />
 			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+			<converters:EnumerableToBrushConverter x:Key="EnumerableToBrush"
+												   EmptyColor="{ThemeResource HipstrSubText}"
+												   NotEmptyColor="{ThemeResource HipstrText}"/>
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -79,7 +82,7 @@
 					<GridView.ItemTemplate>
 						<DataTemplate x:DataType="ICollectionViewGroup">
 							<TextBlock Text="{x:Bind Group.(models:ObservableGroupedRoomsCollection.Header), Mode=OneWay}"
-									   Foreground="{ThemeResource HipstrText}"
+									   Foreground="{x:Bind GroupItems, Converter={StaticResource EnumerableToBrush}}"
 									   FontSize="36" />
 						</DataTemplate>
 					</GridView.ItemTemplate>

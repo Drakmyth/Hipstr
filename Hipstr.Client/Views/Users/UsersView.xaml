@@ -20,6 +20,9 @@
 								  IsSourceGrouped="True" />
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
 			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
+			<converters:EnumerableToBrushConverter x:Key="EnumerableToBrush"
+												   EmptyColor="{ThemeResource HipstrSubText}"
+												   NotEmptyColor="{ThemeResource HipstrText}"/>
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -29,7 +32,9 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<controls:TitleBar Grid.Row="0" Text="Users" />
+		<controls:TitleBar Grid.Row="0"
+						   Text="Users"
+						   Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}"/>
 		<SemanticZoom Grid.Row="1" x:Name="ListZoom">
 			<SemanticZoom.ZoomedInView>
 				<ListView x:Name="UserList" ItemsSource="{x:Bind UsersCVS.View}">
@@ -95,7 +100,7 @@
 					<GridView.ItemTemplate>
 						<DataTemplate x:DataType="ICollectionViewGroup">
 							<TextBlock Text="{x:Bind Group.(models:ObservableGroupedUsersCollection.Header), Mode=OneWay}"
-									   Foreground="{ThemeResource HipstrText}"
+									   Foreground="{x:Bind GroupItems, Converter={StaticResource EnumerableToBrush}}"
 									   FontSize="36" />
 						</DataTemplate>
 					</GridView.ItemTemplate>
@@ -109,7 +114,8 @@
 					  Height="50" />
 		<CommandBar Grid.Row="2"
 					Background="{ThemeResource HipstrAccentBright}"
-					Foreground="{ThemeResource HipstrAccentText}">
+					Foreground="{ThemeResource HipstrAccentText}"
+					Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}">
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="{ThemeResource HipstrAccentText}"
