@@ -217,19 +217,27 @@ namespace Hipstr.Core.Services
 		{
 			IEnumerable<JObject> jObjects = wrapper.Items.Cast<JObject>().ToList();
 
-			IList<Message> notifications = jObjects
+			IList<Message> addonNotifications = jObjects
 				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Notification)
-				.Select(jobj => jobj.ToObject<HipChatNotificationMessage>())
-				.Select(hcNotification => BuildMessage(team, hcNotification))
+				.Where(jobj => jobj["from"].Type == JTokenType.String)
+				.Select(jobj => jobj.ToObject<HipChatAddonNotificationMessage>())
+				.Select(hcAddonNotification => BuildMessage(team, hcAddonNotification))
+				.ToList();
+
+			IList<Message> userNotifications = jObjects
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Notification)
+				.Where(jobj => jobj["from"].Type == JTokenType.Object)
+				.Select(jobj => jobj.ToObject<HipChatUserNotificationMessage>())
+				.Select(hcUserNotification => BuildMessage(team, hcUserNotification))
 				.ToList();
 
 			IList<Message> messages = jObjects
-				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message) // TODO: Deserialize each message individually based on type
+				.Where(jobj => jobj.Value<string>("type") == HipChatMessageTypes.Message)
 				.Select(jobj => jobj.ToObject<HipChatMessage>())
 				.Select(hcMessage => BuildMessage(team, hcMessage))
 				.ToList();
 
-			return ParseMessages(messages.Concat(notifications).OrderBy(m => m.Date).ToList());
+			return ParseMessages(messages.Concat(addonNotifications).Concat(userNotifications).OrderBy(m => m.Date).ToList());
 		}
 
 		private static Message BuildMessage(Team team, HipChatMessage hcMessage)
@@ -331,7 +339,7 @@ namespace Hipstr.Core.Services
 				.WithVideos(videos);
 		}
 
-		private static Message BuildMessage(Team team, HipChatNotificationMessage hcMessage)
+		private static Message BuildMessage(Team team, HipChatAddonNotificationMessage hcMessage)
 		{
 			IMessageBuilder messageBuilder = Message.Builder(
 				new User
@@ -347,6 +355,22 @@ namespace Hipstr.Core.Services
 			return hcMessage.MessageLinks == null
 				? messageBuilder.Build()
 				: ParseMessageLinks(messageBuilder, hcMessage.MessageLinks.Cast<JObject>().ToList()).Build();
+		}
+
+		private static Message BuildMessage(Team team, HipChatUserNotificationMessage hcMessage)
+		{
+			IMessageBuilder messageBuilder = Message.Builder(
+				new User
+				{
+					Id = 0,
+					Handle = "",
+					Name = hcMessage.From.Name,
+					Team = team
+				},
+				hcMessage.Date,
+				hcMessage.Message);
+
+			return messageBuilder.Build();
 		}
 
 		private static IReadOnlyList<Message> ParseMessages(IList<Message> messages)

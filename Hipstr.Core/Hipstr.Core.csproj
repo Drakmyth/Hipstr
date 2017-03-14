@@ -113,6 +113,8 @@
     <Compile Include="Messaging\RoomMessageSource.cs" />
     <Compile Include="Models\ApiKeyInfo.cs" />
     <Compile Include="Models\Emoticon.cs" />
+    <Compile Include="Models\HipChat\HipChatUserNotificationMessage.cs" />
+    <Compile Include="Models\HipChat\HipChatNotificationSender.cs" />
     <Compile Include="Models\RoomCreationRequest.cs" />
     <Compile Include="Models\HipChat\HipChatPrivacyTypes.cs" />
     <Compile Include="Models\HipChat\HipChatStatistics.cs" />
@@ -121,7 +123,7 @@
     <Compile Include="Models\HipChat\HipChatRoom.cs" />
     <Compile Include="Models\MessageFile.cs" />
     <Compile Include="Models\HipChat\HipChatMessageFile.cs" />
-    <Compile Include="Models\HipChat\HipChatNotificationMessage.cs" />
+    <Compile Include="Models\HipChat\HipChatAddonNotificationMessage.cs" />
     <Compile Include="Models\HipChat\HipChatMessageLinkTypes.cs" />
     <Compile Include="Models\HipChat\HipChatMessageTypes.cs" />
     <Compile Include="Models\MessageImage.cs" />
