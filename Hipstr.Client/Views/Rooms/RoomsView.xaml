@@ -70,24 +70,17 @@
 				<GridView ItemsSource="{x:Bind RoomsCVS.View.CollectionGroups}">
 					<GridView.ItemsPanel>
 						<ItemsPanelTemplate>
-							<ItemsWrapGrid Orientation="Horizontal" />
+							<WrapGrid MaximumRowsOrColumns="4"
+					          Orientation="Horizontal"
+					          HorizontalChildrenAlignment="Stretch"
+					          VerticalChildrenAlignment="Stretch" />
 						</ItemsPanelTemplate>
 					</GridView.ItemsPanel>
 					<GridView.ItemTemplate>
 						<DataTemplate x:DataType="ICollectionViewGroup">
-							<Border Height="65"
-									Width="65"
-									Background="{ThemeResource HipstrAccent}"
-									HorizontalAlignment="Left"
-									Margin="4.5">
-								<TextBlock FontSize="40"
-										   FontWeight="SemiBold"
-										   Foreground="{ThemeResource HipstrAccentText}"
-										   HorizontalAlignment="Left"
-										   Padding="7,0"
-										   Text="{x:Bind Group.(models:ObservableGroupedRoomsCollection.Header), Mode=OneWay}"
-										   VerticalAlignment="Bottom" />
-							</Border>
+							<TextBlock Text="{x:Bind Group.(models:ObservableGroupedRoomsCollection.Header), Mode=OneWay}"
+									   Foreground="{ThemeResource HipstrText}"
+									   FontSize="36"/>
 						</DataTemplate>
 					</GridView.ItemTemplate>
 				</GridView>
