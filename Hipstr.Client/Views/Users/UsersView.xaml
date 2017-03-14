@@ -15,10 +15,11 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<CollectionViewSource x:Name="GroupedUsersSource"
+			<CollectionViewSource x:Name="UsersCVS"
 								  Source="{x:Bind ViewModel.GroupedUsers, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
+			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -28,64 +29,79 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<controls:TitleBar Grid.Row="0" Text="Users"/>
-		<ListView x:Name="UserList"
-				  Grid.Row="1"
-				  ItemsSource="{Binding Source={StaticResource GroupedUsersSource}}">
-			<interactivity:Interaction.Behaviors>
-				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
-					<core:EventTriggerBehavior.Actions>
-						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
-												  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
-					</core:EventTriggerBehavior.Actions>
-				</core:EventTriggerBehavior>
-			</interactivity:Interaction.Behaviors>
-			<ListView.GroupStyle>
-				<GroupStyle HidesIfEmpty="True">
-					<GroupStyle.HeaderTemplate>
-						<DataTemplate x:DataType="models:ObservableGroupedUsersCollection">
-							<TextBlock Text="{x:Bind Header}"
-									   Foreground="{ThemeResource HipstrHeaderText}"
-									   FontSize="24"
-									   Tapped="HeaderTextBlock_OnTapped" />
+		<controls:TitleBar Grid.Row="0" Text="Users" />
+		<SemanticZoom Grid.Row="1" x:Name="ListZoom">
+			<SemanticZoom.ZoomedInView>
+				<ListView x:Name="UserList" ItemsSource="{x:Bind UsersCVS.View}">
+					<interactivity:Interaction.Behaviors>
+						<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind UserList}">
+							<core:EventTriggerBehavior.Actions>
+								<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
+														  CommandParameter="{x:Bind UserList.SelectedItem, Mode=OneWay, Converter={StaticResource UserToMsgSrc}}" />
+							</core:EventTriggerBehavior.Actions>
+						</core:EventTriggerBehavior>
+					</interactivity:Interaction.Behaviors>
+					<ListView.GroupStyle>
+						<GroupStyle HidesIfEmpty="True">
+							<GroupStyle.HeaderTemplate>
+								<DataTemplate x:DataType="models:ObservableGroupedUsersCollection">
+									<TextBlock Text="{x:Bind Header}"
+											   Foreground="{ThemeResource HipstrHeaderText}"
+											   FontSize="24" />
+								</DataTemplate>
+							</GroupStyle.HeaderTemplate>
+						</GroupStyle>
+					</ListView.GroupStyle>
+					<ListView.ItemTemplate>
+						<DataTemplate x:DataType="models:User">
+							<StackPanel Holding="StackPanel_OnHolding"
+										RightTapped="StackPanel_OnRightTapped">
+								<TextBlock Text="{x:Bind Name}"
+										   Foreground="{ThemeResource HipstrText}" />
+								<TextBlock Text="{x:Bind Team.Name}"
+										   Foreground="{ThemeResource HipstrSubText}"
+										   FontSize="10" />
+								<FlyoutBase.AttachedFlyout>
+									<MenuFlyout>
+										<MenuFlyout.MenuFlyoutPresenterStyle>
+											<Style TargetType="MenuFlyoutPresenter">
+												<Setter Property="Background" Value="{ThemeResource HipstrBackgroundBright}" />
+											</Style>
+										</MenuFlyout.MenuFlyoutPresenterStyle>
+										<MenuFlyout.Items>
+											<MenuFlyoutItem Text="View User Profile"
+															Background="{ThemeResource HipstrBackgroundBright}"
+															Foreground="{ThemeResource HipstrText}"
+															Command="{Binding ViewModel.NavigateToUserProfileViewCommand, Mode=OneTime, ElementName=UsersViewPage}"
+															CommandParameter="{Binding ViewModel.TappedUser, ElementName=UsersViewPage}" />
+										</MenuFlyout.Items>
+									</MenuFlyout>
+								</FlyoutBase.AttachedFlyout>
+							</StackPanel>
 						</DataTemplate>
-					</GroupStyle.HeaderTemplate>
-				</GroupStyle>
-			</ListView.GroupStyle>
-			<ListView.ItemContainerStyle>
-				<Style TargetType="ListViewItem">
-					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
-				</Style>
-			</ListView.ItemContainerStyle>
-			<ListView.ItemTemplate>
-				<DataTemplate x:DataType="models:User">
-					<StackPanel Holding="StackPanel_OnHolding"
-								RightTapped="StackPanel_OnRightTapped">
-						<TextBlock Text="{x:Bind Name}"
-								   Foreground="{ThemeResource HipstrText}" />
-						<TextBlock Text="{x:Bind Team.Name}"
-								   Foreground="{ThemeResource HipstrSubText}"
-								   FontSize="10" />
-						<FlyoutBase.AttachedFlyout>
-							<MenuFlyout>
-								<MenuFlyout.MenuFlyoutPresenterStyle>
-									<Style TargetType="MenuFlyoutPresenter">
-										<Setter Property="Background" Value="{ThemeResource HipstrBackgroundBright}" />
-									</Style>
-								</MenuFlyout.MenuFlyoutPresenterStyle>
-								<MenuFlyout.Items>
-									<MenuFlyoutItem Text="View User Profile"
-													Background="{ThemeResource HipstrBackgroundBright}"
-													Foreground="{ThemeResource HipstrText}"
-													Command="{Binding ViewModel.NavigateToUserProfileViewCommand, Mode=OneTime, ElementName=UsersViewPage}"
-													CommandParameter="{Binding ViewModel.TappedUser, ElementName=UsersViewPage}" />
-								</MenuFlyout.Items>
-							</MenuFlyout>
-						</FlyoutBase.AttachedFlyout>
-					</StackPanel>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
+					</ListView.ItemTemplate>
+				</ListView>
+			</SemanticZoom.ZoomedInView>
+			<SemanticZoom.ZoomedOutView>
+				<GridView ItemsSource="{x:Bind UsersCVS.View.CollectionGroups}">
+					<GridView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapGrid MaximumRowsOrColumns="4"
+									  Orientation="Horizontal"
+									  HorizontalChildrenAlignment="Stretch"
+									  VerticalChildrenAlignment="Stretch" />
+						</ItemsPanelTemplate>
+					</GridView.ItemsPanel>
+					<GridView.ItemTemplate>
+						<DataTemplate x:DataType="ICollectionViewGroup">
+							<TextBlock Text="{x:Bind Group.(models:ObservableGroupedUsersCollection.Header), Mode=OneWay}"
+									   Foreground="{ThemeResource HipstrText}"
+									   FontSize="36" />
+						</DataTemplate>
+					</GridView.ItemTemplate>
+				</GridView>
+			</SemanticZoom.ZoomedOutView>
+		</SemanticZoom>
 		<ProgressRing Grid.Row="1"
 					  IsActive="{x:Bind ViewModel.LoadingUsers, Mode=OneWay}"
 					  Foreground="{ThemeResource HipstrText}"

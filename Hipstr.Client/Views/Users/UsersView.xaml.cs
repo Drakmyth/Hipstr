@@ -1,6 +1,4 @@
 ﻿using Hipstr.Core.Models;
-using Hipstr.Core.Services;
-using System.Linq;
 using Windows.Devices.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -44,26 +42,7 @@ namespace Hipstr.Client.Views.Users
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			ViewModel.UserGroupScrollToHeaderRequest += OnUserGroupScrollToHeaderRequest;
 			UserList.SelectedItem = null;
-		}
-
-		protected override void OnNavigatedFrom(NavigationEventArgs e)
-		{
-			ViewModel.UserGroupScrollToHeaderRequest -= OnUserGroupScrollToHeaderRequest;
-		}
-
-		private void OnUserGroupScrollToHeaderRequest(object sender, ObservableGroupedUsersCollection userGroup)
-		{
-			UserList.ScrollIntoView(userGroup, ScrollIntoViewAlignment.Leading);
-		}
-
-		private void HeaderTextBlock_OnTapped(object sender, TappedRoutedEventArgs e)
-		{
-			if (ViewModel.JumpToHeaderCommand.CanExecute(null))
-			{
-				ViewModel.JumpToHeaderCommand.Execute(null);
-			}
 		}
 	}
 }

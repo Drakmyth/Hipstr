@@ -71,16 +71,16 @@
 					<GridView.ItemsPanel>
 						<ItemsPanelTemplate>
 							<WrapGrid MaximumRowsOrColumns="4"
-					          Orientation="Horizontal"
-					          HorizontalChildrenAlignment="Stretch"
-					          VerticalChildrenAlignment="Stretch" />
+									  Orientation="Horizontal"
+									  HorizontalChildrenAlignment="Stretch"
+									  VerticalChildrenAlignment="Stretch" />
 						</ItemsPanelTemplate>
 					</GridView.ItemsPanel>
 					<GridView.ItemTemplate>
 						<DataTemplate x:DataType="ICollectionViewGroup">
 							<TextBlock Text="{x:Bind Group.(models:ObservableGroupedRoomsCollection.Header), Mode=OneWay}"
 									   Foreground="{ThemeResource HipstrText}"
-									   FontSize="36"/>
+									   FontSize="36" />
 						</DataTemplate>
 					</GridView.ItemTemplate>
 				</GridView>

@@ -1,6 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Views.Dialogs;
-using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Messaging;
@@ -8,7 +6,6 @@ using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -22,13 +19,10 @@ namespace Hipstr.Client.Views.Users
 	[UsedImplicitly]
 	public class UsersViewModel : ViewModelBase
 	{
-		public event EventHandler<ObservableGroupedUsersCollection> UserGroupScrollToHeaderRequest;
-
 		private readonly ObservableCollection<User> _users;
 		public ObservableCollection<ObservableGroupedUsersCollection> GroupedUsers { get; }
 		public ICommand NavigateToUserProfileViewCommand { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
-		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshUsersCommand { get; }
 
 		private User _tappedUser;
@@ -71,7 +65,6 @@ namespace Hipstr.Client.Views.Users
 			NavigateToUserProfileViewCommand = new NavigateToViewCommand<UserProfileView, User>(user => user != null, this, nameof(TappedUser));
 			// TODO: Disallow navigating to a 1-on-1 chat with yourself
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(user => user != null);
-			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshUsersCommand = new RelayCommandAsync(() => RefreshUsersAsync(), () => !LoadingUsers, this, nameof(LoadingUsers));
 		}
 
@@ -160,16 +153,6 @@ namespace Hipstr.Client.Views.Users
 
 			var numRegex = new Regex("^[0-9]$");
 			return numRegex.IsMatch(nameFirstChar) ? "#" : "?";
-		}
-
-		private async Task JumpToHeaderAsync()
-		{
-			var dialog = new ListGroupJumpDialogView();
-			DialogResult<string> headerText = await dialog.ShowAsync(GroupedUsers.Select(ug => new JumpHeader(ug.Header, ug.Any())));
-			if (!headerText.Cancelled)
-			{
-				UserGroupScrollToHeaderRequest?.Invoke(this, GroupedUsers.Where(ug => ug.Header == headerText.Result).Single());
-			}
 		}
 	}
 }

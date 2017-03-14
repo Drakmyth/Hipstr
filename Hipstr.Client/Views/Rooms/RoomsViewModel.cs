@@ -1,7 +1,6 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Client.Views.Dialogs;
 using Hipstr.Client.Views.Dialogs.AddRoomDialog;
-using Hipstr.Client.Views.Dialogs.ListGroupJumpDialog;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Core.Comparers;
 using Hipstr.Core.Messaging;

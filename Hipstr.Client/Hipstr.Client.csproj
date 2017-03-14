@@ -127,10 +127,6 @@
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
-    <Compile Include="Views\Dialogs\ListGroupJumpDialog\JumpHeader.cs" />
-    <Compile Include="Views\Dialogs\ListGroupJumpDialog\ListGroupJumpDialogView.xaml.cs">
-      <DependentUpon>ListGroupJumpDialogView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
@@ -271,10 +267,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Dialogs\AddRoomDialog\AddRoomDialogView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Dialogs\ListGroupJumpDialog\ListGroupJumpDialogView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
