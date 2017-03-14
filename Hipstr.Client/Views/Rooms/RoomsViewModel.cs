@@ -23,12 +23,9 @@ namespace Hipstr.Client.Views.Rooms
 	[UsedImplicitly]
 	public class RoomsViewModel : ViewModelBase
 	{
-		public event EventHandler<ObservableGroupedRoomsCollection> RoomGroupScrollToHeaderRequest;
-
 		private readonly ObservableCollection<Room> _rooms;
 		public ObservableCollection<ObservableGroupedRoomsCollection> GroupedRooms { get; }
 		public ICommand NavigateToMessagesViewCommand { get; }
-		public ICommand JumpToHeaderCommand { get; }
 		public ICommand RefreshRoomsCommand { get; }
 		public ICommand NewRoomCommand { get; }
 
@@ -61,7 +58,6 @@ namespace Hipstr.Client.Views.Rooms
 			_teams = new List<Team>();
 
 			NavigateToMessagesViewCommand = new NavigateToViewCommand<MessagesView, IMessageSource>(room => room != null);
-			JumpToHeaderCommand = new RelayCommandAsync(JumpToHeaderAsync);
 			RefreshRoomsCommand = new RelayCommandAsync(() => RefreshRoomsAsync(), () => !LoadingRooms, this, nameof(LoadingRooms));
 			NewRoomCommand = new RelayCommandAsync(AddRoomAsync, () => !LoadingRooms, this, nameof(LoadingRooms));
 		}
@@ -168,16 +164,6 @@ namespace Hipstr.Client.Views.Rooms
 
 			var numRegex = new Regex("^[0-9]$");
 			return numRegex.IsMatch(nameFirstChar) ? "#" : "?";
-		}
-
-		private async Task JumpToHeaderAsync()
-		{
-			var dialog = new ListGroupJumpDialogView();
-			DialogResult<string> headerText = await dialog.ShowAsync(GroupedRooms.Select(rg => new JumpHeader(rg.Header, rg.Any())));
-			if (!headerText.Cancelled)
-			{
-				RoomGroupScrollToHeaderRequest?.Invoke(this, GroupedRooms.Where(rg => rg.Header == headerText.Result).Single());
-			}
 		}
 	}
 }

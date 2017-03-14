@@ -14,10 +14,11 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<CollectionViewSource x:Name="GroupedRoomsSource"
+			<CollectionViewSource x:Name="RoomsCVS"
 								  Source="{x:Bind ViewModel.GroupedRooms, Mode=OneWay}"
 								  IsSourceGrouped="True" />
 			<converters:RoomToMessageSourceConverter x:Key="RoomToMsgSrc" />
+			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -27,42 +28,71 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<controls:TitleBar Grid.Row="0" Text="Rooms"/>
-		<ListView x:Name="RoomList"
-				  Grid.Row="1"
-				  ItemsSource="{Binding Source={StaticResource GroupedRoomsSource}}">
-			<interactivity:Interaction.Behaviors>
-				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind RoomList}">
-					<core:EventTriggerBehavior.Actions>
-						<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
-												  CommandParameter="{x:Bind RoomList.SelectedItem, Mode=OneWay, Converter={StaticResource RoomToMsgSrc}}" />
-					</core:EventTriggerBehavior.Actions>
-				</core:EventTriggerBehavior>
-			</interactivity:Interaction.Behaviors>
-			<ListView.GroupStyle>
-				<GroupStyle HidesIfEmpty="True">
-					<GroupStyle.HeaderTemplate>
-						<DataTemplate x:DataType="models:ObservableGroupedRoomsCollection">
-							<TextBlock Text="{x:Bind Header}"
-									   Foreground="{ThemeResource HipstrHeaderText}"
-									   FontSize="24"
-									   Tapped="HeaderTextBlock_OnTapped" />
+		<controls:TitleBar Grid.Row="0"
+						   Text="Rooms"
+						   Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
+		<SemanticZoom Grid.Row="1" x:Name="ListZoom">
+			<SemanticZoom.ZoomedInView>
+				<ListView x:Name="RoomList" ItemsSource="{x:Bind RoomsCVS.View}">
+					<interactivity:Interaction.Behaviors>
+						<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind RoomList}">
+							<core:EventTriggerBehavior.Actions>
+								<core:InvokeCommandAction Command="{x:Bind ViewModel.NavigateToMessagesViewCommand}"
+														  CommandParameter="{x:Bind RoomList.SelectedItem, Mode=OneWay, Converter={StaticResource RoomToMsgSrc}}" />
+							</core:EventTriggerBehavior.Actions>
+						</core:EventTriggerBehavior>
+					</interactivity:Interaction.Behaviors>
+					<ListView.GroupStyle>
+						<GroupStyle HidesIfEmpty="True">
+							<GroupStyle.HeaderTemplate>
+								<DataTemplate x:DataType="models:ObservableGroupedRoomsCollection">
+									<TextBlock Text="{x:Bind Header}"
+											   Foreground="{ThemeResource HipstrHeaderText}"
+											   FontSize="24" />
+								</DataTemplate>
+							</GroupStyle.HeaderTemplate>
+						</GroupStyle>
+					</ListView.GroupStyle>
+					<ListView.ItemTemplate>
+						<DataTemplate x:DataType="models:Room">
+							<StackPanel>
+								<TextBlock Text="{x:Bind Name}"
+										   Foreground="{ThemeResource HipstrText}" />
+								<TextBlock Text="{x:Bind Team.Name}"
+										   Foreground="{ThemeResource HipstrSubText}"
+										   FontSize="10" />
+							</StackPanel>
 						</DataTemplate>
-					</GroupStyle.HeaderTemplate>
-				</GroupStyle>
-			</ListView.GroupStyle>
-			<ListView.ItemTemplate>
-				<DataTemplate x:DataType="models:Room">
-					<StackPanel>
-						<TextBlock Text="{x:Bind Name}"
-								   Foreground="{ThemeResource HipstrText}" />
-						<TextBlock Text="{x:Bind Team.Name}"
-								   Foreground="{ThemeResource HipstrSubText}"
-								   FontSize="10" />
-					</StackPanel>
-				</DataTemplate>
-			</ListView.ItemTemplate>
-		</ListView>
+					</ListView.ItemTemplate>
+				</ListView>
+			</SemanticZoom.ZoomedInView>
+			<SemanticZoom.ZoomedOutView>
+				<GridView ItemsSource="{x:Bind RoomsCVS.View.CollectionGroups}">
+					<GridView.ItemsPanel>
+						<ItemsPanelTemplate>
+							<ItemsWrapGrid Orientation="Horizontal" />
+						</ItemsPanelTemplate>
+					</GridView.ItemsPanel>
+					<GridView.ItemTemplate>
+						<DataTemplate x:DataType="ICollectionViewGroup">
+							<Border Height="65"
+									Width="65"
+									Background="{ThemeResource HipstrAccent}"
+									HorizontalAlignment="Left"
+									Margin="4.5">
+								<TextBlock FontSize="40"
+										   FontWeight="SemiBold"
+										   Foreground="{ThemeResource HipstrAccentText}"
+										   HorizontalAlignment="Left"
+										   Padding="7,0"
+										   Text="{x:Bind Group.(models:ObservableGroupedRoomsCollection.Header), Mode=OneWay}"
+										   VerticalAlignment="Bottom" />
+							</Border>
+						</DataTemplate>
+					</GridView.ItemTemplate>
+				</GridView>
+			</SemanticZoom.ZoomedOutView>
+		</SemanticZoom>
 		<ProgressRing Grid.Row="1"
 					  IsActive="{x:Bind ViewModel.LoadingRooms, Mode=OneWay}"
 					  Foreground="{ThemeResource HipstrText}"
@@ -70,11 +100,12 @@
 					  Height="50" />
 		<CommandBar Grid.Row="2"
 					Background="{ThemeResource HipstrAccentBright}"
-					Foreground="{ThemeResource HipstrAccentText}">
+					Foreground="{ThemeResource HipstrAccentText}"
+					Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}">
 			<AppBarButton Icon="Add"
 						  Label="New Room"
 						  Foreground="{ThemeResource HipstrAccentText}"
-						  Command="{x:Bind ViewModel.NewRoomCommand}"/>
+						  Command="{x:Bind ViewModel.NewRoomCommand}" />
 			<AppBarButton Icon="Refresh"
 						  Label="Refresh"
 						  Foreground="{ThemeResource HipstrAccentText}"

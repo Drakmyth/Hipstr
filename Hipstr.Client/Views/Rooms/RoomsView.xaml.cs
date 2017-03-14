@@ -19,26 +19,7 @@ namespace Hipstr.Client.Views.Rooms
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
-			ViewModel.RoomGroupScrollToHeaderRequest += OnRoomGroupScrollToHeaderRequest;
 			RoomList.SelectedItem = null;
-		}
-
-		protected override void OnNavigatedFrom(NavigationEventArgs e)
-		{
-			ViewModel.RoomGroupScrollToHeaderRequest -= OnRoomGroupScrollToHeaderRequest;
-		}
-
-		private void OnRoomGroupScrollToHeaderRequest(object sender, ObservableGroupedRoomsCollection observableGroupedCollection)
-		{
-			RoomList.ScrollIntoView(observableGroupedCollection, ScrollIntoViewAlignment.Leading);
-		}
-
-		private void HeaderTextBlock_OnTapped(object sender, TappedRoutedEventArgs e)
-		{
-			if (ViewModel.JumpToHeaderCommand.CanExecute(null))
-			{
-				ViewModel.JumpToHeaderCommand.Execute(null);
-			}
 		}
 	}
 }
