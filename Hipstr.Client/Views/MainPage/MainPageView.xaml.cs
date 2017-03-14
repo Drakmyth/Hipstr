@@ -10,18 +10,18 @@ namespace Hipstr.Client.Views.MainPage
 		public MainPageView(UIElement frame)
 		{
 			InitializeComponent();
-			MenuSplitView.Content = frame;
+			((Grid)MenuSplitView.Content)?.Children.Add(frame);
 			DataContext = IoCContainer.Resolve<MainPageViewModel>();
 		}
 
 		private void HamburgerButton_Click(object sender, RoutedEventArgs e)
 		{
-			MenuSplitView.IsPaneOpen = !MenuSplitView.IsPaneOpen;
+			ViewModel.MenuIsOpen = !ViewModel.MenuIsOpen;
 		}
 
 		private void MenuButton_Click(object sender, RoutedEventArgs e)
 		{
-			MenuSplitView.IsPaneOpen = false;
+			ViewModel.MenuIsOpen = false;
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Services;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
 using JetBrains.Annotations;
@@ -64,20 +63,13 @@ namespace Hipstr.Client.Views.Users
 		}
 
 		private readonly IHipChatService _hipChatService;
-		private readonly IMainPageService _mainPageService;
 
-		public UserProfileViewModel(IHipChatService hipChatService, IMainPageService mainPageService) : base("User Profile")
+		public UserProfileViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
-			_mainPageService = mainPageService;
 			_loadingUserProfile = false;
 
 			ReloadUserProfileCommand = new RelayCommandAsync(ReloadUserProfileAsync, () => !LoadingUserProfile, this, nameof(LoadingUserProfile));
-		}
-
-		public override void Initialize()
-		{
-			_mainPageService.Title = _user.Name;
 		}
 
 		public override async Task InitializeAsync()

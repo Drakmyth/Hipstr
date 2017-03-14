@@ -4,6 +4,7 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:converters="using:Hipstr.Client.Converters"
+	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
@@ -18,10 +19,12 @@
 
 	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<RelativePanel>
+		<controls:TitleBar Grid.Row="0" Text="{x:Bind ViewModel.User.Name, FallbackValue='User Profile'}" />
+		<RelativePanel Grid.Row="1">
 			<Ellipse Name="Avatar"
 					 Width="180"
 					 Height="180"
@@ -87,7 +90,7 @@
 						  RelativePanel.AlignHorizontalCenterWithPanel="True"
 						  RelativePanel.AlignVerticalCenterWithPanel="True" />
 		</RelativePanel>
-		<CommandBar Grid.Row="1"
+		<CommandBar Grid.Row="2"
 					Background="{ThemeResource HipstrAccentBright}"
 					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Refresh"

@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Builder;
-using Hipstr.Client.Services;
 using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 using Hipstr.Client.Views.Dialogs.AddTeamDialog;
 using Hipstr.Client.Views.Dialogs.EditTeamDialog;
@@ -35,7 +34,6 @@ namespace Hipstr.Client
 			builder.RegisterType<IDataService, DataService>();
 			builder.RegisterType<IToastService, ToastService>();
 			builder.RegisterType<IHttpClient, HipstrHttpClient>();
-			builder.RegisterType<IMainPageService, MainPageService>().SingleInstance();
 			builder.RegisterType<IAppSettings, AppSettings>();
 
 			// XAML binding breaks when using an interface as the DataContext, so we

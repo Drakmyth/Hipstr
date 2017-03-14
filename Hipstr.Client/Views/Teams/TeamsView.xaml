@@ -5,15 +5,18 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:models="using:Hipstr.Core.Models"
+	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
 	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<ListView Grid.Row="0" ItemsSource="{x:Bind ViewModel.Teams}">
+		<controls:TitleBar Grid.Row="0" Text="Teams"/>
+		<ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Teams}">
 			<ListView.ItemContainerStyle>
 				<Style TargetType="ListViewItem">
 					<Setter Property="HorizontalContentAlignment" Value="Stretch" />
@@ -54,7 +57,7 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
-		<CommandBar Grid.Row="1"
+		<CommandBar Grid.Row="2"
 					Background="{ThemeResource HipstrAccentBright}"
 					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Add"

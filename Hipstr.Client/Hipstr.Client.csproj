@@ -102,6 +102,9 @@
     <Compile Include="Commands\RelayCommandAsync.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
+    <Compile Include="Controls\TitleBar.xaml.cs">
+      <DependentUpon>TitleBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BooleanToSolidColorBrushConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -121,9 +124,7 @@
     <Compile Include="Views\Dialogs\ParentPopupManager.cs" />
     <Compile Include="Views\Dialogs\ParentPopupTransitionType.cs" />
     <Compile Include="Views\Dialogs\ValidationResult.cs" />
-    <Compile Include="Services\IMainPageService.cs" />
     <Compile Include="IoCContainer.cs" />
-    <Compile Include="Services\MainPageService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
     <Compile Include="Views\Dialogs\ListGroupJumpDialog\JumpHeader.cs" />
@@ -257,6 +258,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\TitleBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Styles\Dialogs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

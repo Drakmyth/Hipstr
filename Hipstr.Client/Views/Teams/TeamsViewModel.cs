@@ -35,7 +35,7 @@ namespace Hipstr.Client.Views.Teams
 
 		private readonly ITeamService _teamService;
 
-		public TeamsViewModel(ITeamService teamService) : base("Teams")
+		public TeamsViewModel(ITeamService teamService)
 		{
 			_teamService = teamService;
 

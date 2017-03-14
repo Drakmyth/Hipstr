@@ -58,7 +58,7 @@ namespace Hipstr.Client.Views.Users
 		private readonly IHipChatService _hipChatService;
 		private readonly ITeamService _teamService;
 
-		public UsersViewModel(IHipChatService hipChatService, ITeamService teamService) : base("Users")
+		public UsersViewModel(IHipChatService hipChatService, ITeamService teamService)
 		{
 			_hipChatService = hipChatService;
 			_teamService = teamService;
@@ -80,7 +80,6 @@ namespace Hipstr.Client.Views.Users
 			base.Initialize();
 
 			_users.CollectionChanged += UsersOnCollectionChanged;
-			RefreshTitle();
 		}
 
 		public override async Task InitializeAsync()

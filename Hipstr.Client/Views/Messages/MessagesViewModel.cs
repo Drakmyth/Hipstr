@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Services;
 using Hipstr.Core.Messaging;
 using Hipstr.Core.Models;
 using Hipstr.Core.Services;
@@ -85,12 +84,10 @@ namespace Hipstr.Client.Views.Messages
 
 		private bool _pollingForMessages;
 		private readonly IHipChatService _hipChatService;
-		private readonly IMainPageService _mainPageService;
 
-		public MessagesViewModel(IHipChatService hipChatService, IMainPageService mainPageService) : base("Messages")
+		public MessagesViewModel(IHipChatService hipChatService)
 		{
 			_hipChatService = hipChatService;
-			_mainPageService = mainPageService;
 
 			Messages = new ObservableCollection<Message>();
 			Emoticons = new ObservableCollection<Emoticon>();
@@ -102,11 +99,6 @@ namespace Hipstr.Client.Views.Messages
 			ReloadMessagesCommand = new RelayCommandAsync(ReloadMessagesAsync, () => !LoadingMessages, this, nameof(LoadingMessages));
 			SendMessageCommand = new RelayCommandAsync(SendMessageAsync, () => !SendingMessage && !string.IsNullOrWhiteSpace(MessageDraft), this, nameof(SendingMessage), nameof(MessageDraft));
 			SelectEmoticonCommand = new RelayCommand<Emoticon>(SelectEmoticon);
-		}
-
-		public override void Initialize()
-		{
-			_mainPageService.Title = _messageSource.Name;
 		}
 
 		public override async Task InitializeAsync()

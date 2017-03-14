@@ -49,7 +49,7 @@ namespace Hipstr.Client.Views.Rooms
 		private readonly IHipChatService _hipChatService;
 		private readonly ITeamService _teamService;
 
-		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService) : base("Rooms")
+		public RoomsViewModel(IHipChatService hipChatService, ITeamService teamService)
 		{
 			_hipChatService = hipChatService;
 			_teamService = teamService;
@@ -71,7 +71,6 @@ namespace Hipstr.Client.Views.Rooms
 			base.Initialize();
 
 			_rooms.CollectionChanged += RoomsOnCollectionChanged;
-			RefreshTitle();
 		}
 
 		public override async Task InitializeAsync()

@@ -43,7 +43,7 @@ namespace Hipstr.Client.Views.Settings
 			}
 		}
 
-		public SettingsViewModel() : base("Settings")
+		public SettingsViewModel()
 		{
 			_isDarkTheme = false;
 			_isLightTheme = false;

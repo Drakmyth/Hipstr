@@ -5,6 +5,7 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:converters="using:Hipstr.Client.Converters"
+	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
@@ -22,7 +23,7 @@
 				   x:Key="SettingSectionHeaderTextBlockStyle"
 				   BasedOn="{StaticResource SubheaderTextBlockStyle}">
 				<Setter Property="Margin" Value="0, 0, 0, 10" />
-				<Setter Property="Foreground" Value="{ThemeResource HipstrText}"/>
+				<Setter Property="Foreground" Value="{ThemeResource HipstrText}" />
 			</Style>
 			<Style TargetType="StackPanel" x:Key="SettingSectionStackPanelStyle">
 				<Setter Property="Margin" Value="0, 0, 0, 20" />
@@ -30,32 +31,39 @@
 		</ResourceDictionary>
 	</Page.Resources>
 
-	<StackPanel Background="{ThemeResource HipstrBackground}" Padding="10">
-		<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
-			<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">Theme</TextBlock>
-			<StackPanel>
-				<RadioButton GroupName="Theme"
-							 Content="Dark"
-							 IsChecked="{x:Bind ViewModel.IsDarkTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
-				<RadioButton GroupName="Theme"
-							 Content="Light"
-							 IsChecked="{x:Bind ViewModel.IsLightTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
-				<RadioButton GroupName="Theme"
-							 Content="System"
-							 IsChecked="{x:Bind ViewModel.IsSystemTheme, Mode=TwoWay, FallbackValue='True', Converter={StaticResource NBoolToBool}}" />
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		<controls:TitleBar Grid.Row="0" Text="Settings" />
+		<StackPanel Grid.Row="1" Background="{ThemeResource HipstrBackground}" Padding="10">
+			<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
+				<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">Theme</TextBlock>
+				<StackPanel>
+					<RadioButton GroupName="Theme"
+								 Content="Dark"
+								 IsChecked="{x:Bind ViewModel.IsDarkTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
+					<RadioButton GroupName="Theme"
+								 Content="Light"
+								 IsChecked="{x:Bind ViewModel.IsLightTheme, Mode=TwoWay, Converter={StaticResource NBoolToBool}}" />
+					<RadioButton GroupName="Theme"
+								 Content="System"
+								 IsChecked="{x:Bind ViewModel.IsSystemTheme, Mode=TwoWay, FallbackValue=True, Converter={StaticResource NBoolToBool}}" />
+				</StackPanel>
+			</StackPanel>
+			<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
+				<StackPanel.Resources>
+					<Style TargetType="TextBlock">
+						<Setter Property="FontSize" Value="18" />
+					</Style>
+				</StackPanel.Resources>
+				<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">About this app</TextBlock>
+				<TextBlock>Hipstr v1.0.0.0</TextBlock>
+				<TextBlock>© 2017 Shaun Hamman</TextBlock>
+				<TextBlock>All rights reserved</TextBlock>
+				<HyperlinkButton NavigateUri="https://github.com/Drakmyth/Hipstr">Visit Homepage</HyperlinkButton>
 			</StackPanel>
 		</StackPanel>
-		<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
-			<StackPanel.Resources>
-				<Style TargetType="TextBlock">
-					<Setter Property="FontSize" Value="18" />
-				</Style>
-			</StackPanel.Resources>
-			<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">About this app</TextBlock>
-			<TextBlock>Hipstr v1.0.0.0</TextBlock>
-			<TextBlock>© 2017 Shaun Hamman</TextBlock>
-			<TextBlock>All rights reserved</TextBlock>
-			<HyperlinkButton NavigateUri="https://github.com/Drakmyth/Hipstr">Visit Homepage</HyperlinkButton>
-		</StackPanel>
-	</StackPanel>
+	</Grid>
 </Page>

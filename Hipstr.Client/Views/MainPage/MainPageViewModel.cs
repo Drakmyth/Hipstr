@@ -1,5 +1,4 @@
 ﻿using Hipstr.Client.Commands;
-using Hipstr.Client.Services;
 using Hipstr.Client.Views.Rooms;
 using Hipstr.Client.Views.Settings;
 using Hipstr.Client.Views.Teams;
@@ -17,24 +16,22 @@ namespace Hipstr.Client.Views.MainPage
 		public ICommand NavigateToUsersViewCommand { get; }
 		public ICommand NavigateToSettingsViewCommand { get; }
 
-		private string _title;
+		private bool _menuIsOpen;
 
-		public string Title
+		public bool MenuIsOpen
 		{
-			get { return _title; }
-			private set
+			get { return _menuIsOpen; }
+			set
 			{
-				_title = value;
+				_menuIsOpen = value;
 				OnPropertyChanged();
 			}
 		}
 
-		private readonly IMainPageService _mainPageService;
 
-		public MainPageViewModel(IMainPageService mainPageService) : base("Hipstr")
+		public MainPageViewModel()
 		{
-			_mainPageService = mainPageService;
-			_title = "Hipstr";
+			_menuIsOpen = false;
 
 			NavigateToTeamsViewCommand = new NavigateToViewCommand<TeamsView>
 			{
@@ -53,18 +50,6 @@ namespace Hipstr.Client.Views.MainPage
 				ClearNavigationCache = true
 			};
 			NavigateToSettingsViewCommand = new NavigateToViewCommand<SettingsView>();
-		}
-
-		public override void Initialize()
-		{
-			base.Initialize();
-
-			_mainPageService.TitleChanged += OnTitleChanged;
-		}
-
-		private void OnTitleChanged(object sender, string title)
-		{
-			Title = title;
 		}
 	}
 }

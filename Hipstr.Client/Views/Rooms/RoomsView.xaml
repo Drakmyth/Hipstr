@@ -7,6 +7,7 @@
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:converters="using:Hipstr.Client.Converters"
+	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
 	  NavigationCacheMode="Enabled">
@@ -22,11 +23,13 @@
 
 	<Grid Background="{ThemeResource HipstrBackground}">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
+		<controls:TitleBar Grid.Row="0" Text="Rooms"/>
 		<ListView x:Name="RoomList"
-				  Grid.Row="0"
+				  Grid.Row="1"
 				  ItemsSource="{Binding Source={StaticResource GroupedRoomsSource}}">
 			<interactivity:Interaction.Behaviors>
 				<core:EventTriggerBehavior EventName="SelectionChanged" SourceObject="{x:Bind RoomList}">
@@ -60,12 +63,12 @@
 				</DataTemplate>
 			</ListView.ItemTemplate>
 		</ListView>
-		<ProgressRing Grid.Row="0"
+		<ProgressRing Grid.Row="1"
 					  IsActive="{x:Bind ViewModel.LoadingRooms, Mode=OneWay}"
 					  Foreground="{ThemeResource HipstrText}"
 					  Width="50"
 					  Height="50" />
-		<CommandBar Grid.Row="1"
+		<CommandBar Grid.Row="2"
 					Background="{ThemeResource HipstrAccentBright}"
 					Foreground="{ThemeResource HipstrAccentText}">
 			<AppBarButton Icon="Add"

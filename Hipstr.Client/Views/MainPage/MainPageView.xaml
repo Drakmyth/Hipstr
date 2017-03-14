@@ -93,32 +93,33 @@
 	</Page.Resources>
 
 	<Grid Background="{ThemeResource HipstrAccent}">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
-		<RelativePanel Grid.Row="0">
-			<Button Name="MenuButton"
-					Width="40"
-					Style="{StaticResource HamburgerButtonStyle}"
-					Click="HamburgerButton_Click">
-				<StackPanel Width="15" HorizontalAlignment="Center" Padding="0 10">
-					<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
-					<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
-					<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
-				</StackPanel>
-			</Button>
-			<TextBlock RelativePanel.RightOf="MenuButton"
-					   RelativePanel.AlignVerticalCenterWith="MenuButton"
-					   Margin="10 0 0 0"
-					   FontWeight="Bold"
-					   Foreground="{ThemeResource HipstrAccentText}"
-					   Text="{x:Bind ViewModel.Title, Mode=OneWay}" />
-		</RelativePanel>
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup x:Name="HamburgerButtonOverlay">
+				<VisualState x:Name="Default" />
+				<VisualState x:Name="MenuIsOpen">
+					<VisualState.StateTriggers>
+						<StateTrigger IsActive="{x:Bind ViewModel.MenuIsOpen, Mode=OneWay}" />
+					</VisualState.StateTriggers>
+					<VisualState.Storyboard>
+						<Storyboard>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetName="HamburgerOverlayButton"
+														   Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+								<DiscreteDoubleKeyFrame KeyTime="0:0:0" Value="0" />
+								<SplineDoubleKeyFrame KeyTime="0:0:0.35"
+													  KeySpline="0.1,0.9 0.2,1.0"
+													  Value="{x:Bind MenuSplitView.OpenPaneLength}" />
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</VisualState.Storyboard>
+					<VisualState.Setters>
+						<Setter Target="HamburgerOverlayButton.Visibility" Value="Visible" />
+					</VisualState.Setters>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
 		<SplitView Name="MenuSplitView"
-				   Grid.Row="1"
 				   DisplayMode="Overlay"
-				   IsPaneOpen="False"
+				   IsPaneOpen="{x:Bind ViewModel.MenuIsOpen, Mode=TwoWay}"
 				   OpenPaneLength="150"
 				   PaneBackground="{ThemeResource HipstrAccentBright}">
 			<SplitView.Pane>
@@ -173,6 +174,27 @@
 					</Button>
 				</StackPanel>
 			</SplitView.Pane>
+			<SplitView.Content>
+				<Grid>
+					<Button Name="HamburgerOverlayButton"
+							Width="40"
+							Background="{ThemeResource HipstrAccentBright}"
+							Padding="0"
+							Click="HamburgerButton_Click"
+							Canvas.ZIndex="1"
+							Visibility="Collapsed"
+							VerticalAlignment="Top">
+						<Button.RenderTransform>
+							<TranslateTransform X="0" />
+						</Button.RenderTransform>
+						<StackPanel Width="15" HorizontalAlignment="Center" Padding="0 10">
+							<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
+							<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
+							<Rectangle Height="2" Margin="0 1.5" Fill="{ThemeResource HipstrAccentText}" />
+						</StackPanel>
+					</Button>
+				</Grid>
+			</SplitView.Content>
 		</SplitView>
 	</Grid>
 </Page>
