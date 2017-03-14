@@ -15,6 +15,7 @@ namespace Hipstr.Client.Views.MainPage
 		public ICommand NavigateToRoomsViewCommand { get; }
 		public ICommand NavigateToUsersViewCommand { get; }
 		public ICommand NavigateToSettingsViewCommand { get; }
+		public ICommand ToggleMenuCommand { get; }
 
 		private bool _menuIsOpen;
 
@@ -50,6 +51,7 @@ namespace Hipstr.Client.Views.MainPage
 				ClearNavigationCache = true
 			};
 			NavigateToSettingsViewCommand = new NavigateToViewCommand<SettingsView>();
+			ToggleMenuCommand = new RelayCommand(() => { MenuIsOpen = !MenuIsOpen; });
 		}
 	}
 }

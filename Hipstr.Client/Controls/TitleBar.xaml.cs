@@ -9,10 +9,9 @@ namespace Hipstr.Client.Controls
 {
 	public sealed partial class TitleBar : UserControl
 	{
-		public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TitleBar), new PropertyMetadata(""));
-		public static readonly DependencyProperty FiltersSourceProperty = DependencyProperty.Register("FiltersSource", typeof(object), typeof(TitleBar), new PropertyMetadata(null));
-		public static readonly DependencyProperty SelectedFilterProperty = DependencyProperty.Register("SelectedFilter", typeof(object), typeof(TitleBar), new PropertyMetadata(null));
-		private readonly ICommand _toggleMenuPaneCommand;
+		private static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(TitleBar), new PropertyMetadata("Hipstr"));
+		private static readonly DependencyProperty FiltersSourceProperty = DependencyProperty.Register("FiltersSource", typeof(object), typeof(TitleBar), new PropertyMetadata(null));
+		private static readonly DependencyProperty SelectedFilterProperty = DependencyProperty.Register("SelectedFilter", typeof(object), typeof(TitleBar), new PropertyMetadata(null));
 
 		public string Text
 		{
@@ -32,14 +31,16 @@ namespace Hipstr.Client.Controls
 			set { SetValue(SelectedFilterProperty, value); }
 		}
 
+		private ICommand ToggleMenuPaneCommand { get; }
+
 		public TitleBar()
 		{
 			InitializeComponent();
 
-			_toggleMenuPaneCommand = new RelayCommand(() =>
+			ToggleMenuPaneCommand = new RelayCommand(() =>
 			{
-				bool menuIsOpen = this.GetFirstAncestorOfType<MainPageView>().ViewModel.MenuIsOpen;
-				this.GetFirstAncestorOfType<MainPageView>().ViewModel.MenuIsOpen = !menuIsOpen;
+				bool isMenuOpen = this.GetFirstAncestorOfType<MainPageView>().ViewModel.MenuIsOpen;
+				this.GetFirstAncestorOfType<MainPageView>().ViewModel.MenuIsOpen = !isMenuOpen;
 			});
 		}
 	}

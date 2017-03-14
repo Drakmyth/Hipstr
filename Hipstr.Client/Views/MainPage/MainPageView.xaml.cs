@@ -14,11 +14,6 @@ namespace Hipstr.Client.Views.MainPage
 			DataContext = IoCContainer.Resolve<MainPageViewModel>();
 		}
 
-		private void HamburgerButton_Click(object sender, RoutedEventArgs e)
-		{
-			ViewModel.MenuIsOpen = !ViewModel.MenuIsOpen;
-		}
-
 		private void MenuButton_Click(object sender, RoutedEventArgs e)
 		{
 			ViewModel.MenuIsOpen = false;

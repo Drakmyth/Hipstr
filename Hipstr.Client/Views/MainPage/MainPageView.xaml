@@ -180,7 +180,7 @@
 							Width="40"
 							Background="{ThemeResource HipstrAccentBright}"
 							Padding="0"
-							Click="HamburgerButton_Click"
+							Command="{x:Bind ViewModel.ToggleMenuCommand}"
 							Canvas.ZIndex="1"
 							Visibility="Collapsed"
 							VerticalAlignment="Top">
