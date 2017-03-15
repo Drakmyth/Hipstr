@@ -1,8 +1,4 @@
-﻿using Hipstr.Core.Models;
-using Hipstr.Core.Services;
-using System.Linq;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
+﻿using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace Hipstr.Client.Views.Rooms

@@ -125,14 +125,14 @@ namespace Hipstr.Client.Views.Dialogs.AddRoomDialog
 			}
 		}
 
-		private bool guestAccessEnabled;
+		private bool _guestAccessEnabled;
 
 		public bool GuestAccessEnabled
 		{
-			get { return guestAccessEnabled; }
+			get { return _guestAccessEnabled; }
 			set
 			{
-				guestAccessEnabled = value;
+				_guestAccessEnabled = value;
 				OnPropertyChanged();
 			}
 		}
@@ -159,13 +159,13 @@ namespace Hipstr.Client.Views.Dialogs.AddRoomDialog
 		private async Task ValidateDataAsync()
 		{
 			IsValidating = true;
-			ValidationResult nameValidation = await ValidateName(_hipChatService, _name, SelectedTeam);
+			ValidationResult nameValidation = await ValidateNameAsync(_hipChatService, _name, SelectedTeam);
 			IsValidating = false;
 
 			Validation?.Invoke(this, new AddRoomDialogValidationEventArgs(nameValidation));
 		}
 
-		private static async Task<ValidationResult> ValidateName(IHipChatService hipChatService, string teamName, Team team)
+		private static async Task<ValidationResult> ValidateNameAsync(IHipChatService hipChatService, string teamName, Team team)
 		{
 			const int nameMinLength = 1;
 			const int nameMaxLength = 50;

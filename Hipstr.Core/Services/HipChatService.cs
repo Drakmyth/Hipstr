@@ -43,7 +43,7 @@ namespace Hipstr.Core.Services
 		{
 			_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", request.Team.ApiKey);
 
-			HipChatRoomCreationRequest creationRequest = await BuildCreationRequest(request);
+			HipChatRoomCreationRequest creationRequest = await BuildCreationRequestAsync(request);
 			HttpClientResponse<HipChatCreationResponse> creationResponse = await _httpClient.PostAsync<HipChatCreationResponse>(new Uri(_rootUri, "/v2/room"), creationRequest);
 			HttpClientResponse<HipChatRoom> createdRoom = await _httpClient.GetAsync<HipChatRoom>(new Uri(_rootUri, $"/v2/room/{creationResponse.Payload.Id}"));
 			return new Room
@@ -56,7 +56,7 @@ namespace Hipstr.Core.Services
 			};
 		}
 
-		private async Task<HipChatRoomCreationRequest> BuildCreationRequest(RoomCreationRequest request)
+		private async Task<HipChatRoomCreationRequest> BuildCreationRequestAsync(RoomCreationRequest request)
 		{
 			ApiKeyInfo keyInfo = await GetApiKeyInfoAsync(request.Team.ApiKey);
 
@@ -106,7 +106,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HipChatCollectionWrapper<HipChatRoomSummary> roomWrapper = await GetPageOfRooms(_httpClient, rooms.Count);
+				HipChatCollectionWrapper<HipChatRoomSummary> roomWrapper = await GetPageOfRoomsAsync(_httpClient, rooms.Count);
 				rooms.AddRange(roomWrapper.Items.Select(hcRoom => new Room
 				{
 					Id = hcRoom.Id,
@@ -122,7 +122,7 @@ namespace Hipstr.Core.Services
 			return rooms;
 		}
 
-		private static async Task<HipChatCollectionWrapper<HipChatRoomSummary>> GetPageOfRooms(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatRoomSummary>> GetPageOfRoomsAsync(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/room?"
 						   + $"start-index={startIndex}&"
@@ -169,7 +169,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HipChatCollectionWrapper<HipChatUser> userWrapper = await GetPageOfUsers(_httpClient, users.Count);
+				HipChatCollectionWrapper<HipChatUser> userWrapper = await GetPageOfUsersAsync(_httpClient, users.Count);
 				users.AddRange(userWrapper.Items.Select(hcUser => new User
 				{
 					Id = hcUser.Id,
@@ -184,7 +184,7 @@ namespace Hipstr.Core.Services
 			return users;
 		}
 
-		private static async Task<HipChatCollectionWrapper<HipChatUser>> GetPageOfUsers(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatUser>> GetPageOfUsersAsync(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/user?"
 						   + $"start-index={startIndex}&"
@@ -608,7 +608,7 @@ namespace Hipstr.Core.Services
 
 			while (loadAnotherPage)
 			{
-				HipChatCollectionWrapper<HipChatEmoticonSummary> emoticonWrapper = await GetPageOfEmoticons(_httpClient, emoticons.Count);
+				HipChatCollectionWrapper<HipChatEmoticonSummary> emoticonWrapper = await GetPageOfEmoticonsAsync(_httpClient, emoticons.Count);
 				emoticons.AddRange(emoticonWrapper.Items.Select(hcEmoticon => new Emoticon
 				{
 					Id = hcEmoticon.Id,
@@ -627,7 +627,7 @@ namespace Hipstr.Core.Services
 			return emoticons;
 		}
 
-		private static async Task<HipChatCollectionWrapper<HipChatEmoticonSummary>> GetPageOfEmoticons(IHttpClient httpClient, int startIndex)
+		private static async Task<HipChatCollectionWrapper<HipChatEmoticonSummary>> GetPageOfEmoticonsAsync(IHttpClient httpClient, int startIndex)
 		{
 			string route = "/v2/emoticon?"
 						   + $"start-index={startIndex}&"

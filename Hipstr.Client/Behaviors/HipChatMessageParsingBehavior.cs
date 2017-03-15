@@ -52,10 +52,10 @@ namespace Hipstr.Client.Behaviors
 		private async void AssociatedObject_OnDataContextChanged(FrameworkElement sender, DataContextChangedEventArgs args)
 		{
 			if (args.NewValue == null) return;
-			await ParseMessage((Message)args.NewValue);
+			await ParseMessageAsync((Message)args.NewValue);
 		}
 
-		private async Task ParseMessage(Message message)
+		private async Task ParseMessageAsync(Message message)
 		{
 			AssociatedObject.Blocks.Clear();
 

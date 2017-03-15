@@ -48,33 +48,30 @@ namespace Hipstr.Core.Services
 					throw new CommunicationException($"The request to the HipChat server was intercepted, possibly by a Web Filter. Please allow {requestUri.DnsSafeHost} as an exception in the filter's whitelist.");
 				}
 
-				if (!response.IsSuccessStatusCode)
+				if (response.IsSuccessStatusCode) return response;
+
+				// HipChat returned a non-200 range status code. We shouldn't have given the user an action that
+				// wasn't valid, so we report the error.
+
+				// TODO: Add automatic error reporting
+				/*
+				 * string errorMessage = "Received an error response from the HipChat server.";
+				 * 
+				 * if (telemetryEnabled) {
+				 *	   sendErrorReport(response);
+				 *     errorMessage += " An error report has been sent to the developer.";
+				 * }
+				 * 
+				 * errorMessage = " Please go back, refresh the page, and try again.";
+				 */
+				IEnumerable<string> rateLimitHeader;
+				if (response.Headers.TryGetValues("X - Ratelimit - Remaining", out rateLimitHeader) && int.Parse(rateLimitHeader.First()) <= 0)
 				{
-					// HipChat returned a non-200 range status code. We shouldn't have given the user an action that
-					// wasn't valid, so we report the error.
-
-					// TODO: Add automatic error reporting
-					/*
-					 * string errorMessage = "Received an error response from the HipChat server.";
-					 * 
-					 * if (telemetryEnabled) {
-					 *	   sendErrorReport(response);
-					 *     errorMessage += " An error report has been sent to the developer.";
-					 * }
-					 * 
-					 * errorMessage = " Please go back, refresh the page, and try again.";
-					 */
-					IEnumerable<string> rateLimitHeader;
-					if (response.Headers.TryGetValues("X - Ratelimit - Remaining", out rateLimitHeader) && int.Parse(rateLimitHeader.First()) <= 0)
-					{
-						throw new CommunicationException($"Reached HipChat rate limit. Please wait 5 minutes then try again.");
-					}
-
-					string reason = await response.Content.ReadAsStringAsync();
-					throw new CommunicationException($"Received an error response from the HipChat server. Code: {response.StatusCode} - Reason: {reason}");
+					throw new CommunicationException("Reached HipChat rate limit. Please wait 5 minutes then try again.");
 				}
 
-				return response;
+				string reason = await response.Content.ReadAsStringAsync();
+				throw new CommunicationException($"Received an error response from the HipChat server. Code: {response.StatusCode} - Reason: {reason}");
 			}
 			catch (HttpRequestException e)
 			{

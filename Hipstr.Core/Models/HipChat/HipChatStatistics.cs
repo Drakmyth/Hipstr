@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using JetBrains.Annotations;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
 namespace Hipstr.Core.Models.HipChat
 {
+	[UsedImplicitly]
 	public class HipChatStatistics
 	{
 		[JsonProperty("links")]

@@ -1,12 +1,9 @@
 ﻿using Hipstr.Client.Commands;
 using Hipstr.Core.Messaging;
 using JetBrains.Annotations;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;

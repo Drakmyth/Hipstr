@@ -104,12 +104,12 @@ namespace Hipstr.Client.Views.Messages
 		public override async Task InitializeAsync()
 		{
 			await ReloadMessagesAsync();
-			await LoadEmoticons();
+			await LoadEmoticonsAsync();
 
 			while (_pollingForMessages)
 			{
 				await Task.Delay(TimeSpan.FromSeconds(30));
-				await CheckForNewMessages();
+				await CheckForNewMessagesAsync();
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace Hipstr.Client.Views.Messages
 			MessageDraft += $"({emoticon.Shortcut})";
 		}
 
-		private async Task CheckForNewMessages()
+		private async Task CheckForNewMessagesAsync()
 		{
 			IEnumerable<Message> messages = await _messageSource.GetMessagesAsync();
 
@@ -167,7 +167,7 @@ namespace Hipstr.Client.Views.Messages
 			Messages.AddRange(messages);
 		}
 
-		private async Task LoadEmoticons()
+		private async Task LoadEmoticonsAsync()
 		{
 			try
 			{

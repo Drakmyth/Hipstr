@@ -6,7 +6,7 @@ namespace Hipstr.Client.Converters
 {
 	public class BooleanToVisibilityConverter : IValueConverter
 	{
-		public bool InvertResult { get; set; } = false;
+		public bool InvertResult { get; set; }
 
 		public object Convert(object value, Type targetType, object parameter, string language)
 		{
