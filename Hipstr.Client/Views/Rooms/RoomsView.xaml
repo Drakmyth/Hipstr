@@ -20,8 +20,8 @@
 			<converters:RoomToMessageSourceConverter x:Key="RoomToMsgSrc" />
 			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<converters:EnumerableToBrushConverter x:Key="EnumerableToBrush"
-												   EmptyColor="{ThemeResource HipstrSubText}"
-												   NotEmptyColor="{ThemeResource HipstrText}"/>
+												   EmptyColor="{ThemeResource HipstrSemanticZoomEmptyGroup}"
+												   NotEmptyColor="{ThemeResource HipstrSemanticZoomNotEmptyGroup}"/>
 		</ResourceDictionary>
 	</Page.Resources>
 

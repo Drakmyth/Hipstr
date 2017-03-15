@@ -21,8 +21,8 @@
 			<converters:UserToMessageSourceConverter x:Key="UserToMsgSrc" />
 			<converters:BooleanToVisibilityConverter x:Key="BoolToVis" />
 			<converters:EnumerableToBrushConverter x:Key="EnumerableToBrush"
-												   EmptyColor="{ThemeResource HipstrSubText}"
-												   NotEmptyColor="{ThemeResource HipstrText}"/>
+												   EmptyColor="{ThemeResource HipstrSemanticZoomEmptyGroup}"
+												   NotEmptyColor="{ThemeResource HipstrSemanticZoomNotEmptyGroup}" />
 		</ResourceDictionary>
 	</Page.Resources>
 
@@ -34,7 +34,7 @@
 		</Grid.RowDefinitions>
 		<controls:TitleBar Grid.Row="0"
 						   Text="Users"
-						   Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}"/>
+						   Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
 		<SemanticZoom Grid.Row="1" x:Name="ListZoom">
 			<SemanticZoom.ZoomedInView>
 				<ListView x:Name="UserList" ItemsSource="{x:Bind UsersCVS.View}">
