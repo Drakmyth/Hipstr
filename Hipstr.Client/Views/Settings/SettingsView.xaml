@@ -11,9 +11,6 @@
 
 	<Page.Resources>
 		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Colors.xaml" />
-			</ResourceDictionary.MergedDictionaries>
 			<Style TargetType="RadioButton">
 				<Setter Property="Foreground" Value="{ThemeResource HipstrText}" />
 				<Setter Property="IsThreeState" Value="False" />
