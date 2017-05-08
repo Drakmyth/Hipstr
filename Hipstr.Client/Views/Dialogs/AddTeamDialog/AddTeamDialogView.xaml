@@ -1,96 +1,117 @@
 ﻿<UserControl Name="AddTeamDialog"
-			 x:Class="Hipstr.Client.Views.Dialogs.AddTeamDialog.AddTeamDialogView"
-			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 mc:Ignorable="d"
-			 RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
-			 Loaded="OnLoaded"
-			 Unloaded="OnUnloaded">
+             x:Class="Hipstr.Client.Views.Dialogs.AddTeamDialog.AddTeamDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
+             Loaded="OnLoaded"
+             Unloaded="OnUnloaded">
 
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="/Styles/Dialogs.xaml" />
-			</ResourceDictionary.MergedDictionaries>
-			<Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}" />
-			<Style TargetType="Border" BasedOn="{StaticResource DialogErrorBorderStyle}" />
-		</ResourceDictionary>
-	</UserControl.Resources>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Dialogs.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}" />
+            <Style TargetType="Border" BasedOn="{StaticResource DialogErrorBorderStyle}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
 
-	<Grid HorizontalAlignment="Stretch" PointerPressed="Grid_OnPointerPressed">
-		<VisualStateManager.VisualStateGroups>
-			<VisualStateGroup x:Name="ApiKeyStates">
-				<VisualState x:Name="ApiKeyNormal" />
-				<VisualState x:Name="ApiKeyErrored">
-					<VisualState.Setters>
-						<Setter Target="ApiKeyTextBox.Background" Value="{ThemeResource HipstrTextBoxErrorBackground}" />
-						<Setter Target="ApiKeyTextBox.BorderBrush" Value="{ThemeResource HipstrTextBoxErrorBorder}" />
-						<Setter Target="TeamNameTextBox.Foreground" Value="{ThemeResource HipstrTextBoxErrorText}" />
-						<Setter Target="ApiKeyErrorBorder.Visibility" Value="Visible" />
-					</VisualState.Setters>
-				</VisualState>
-			</VisualStateGroup>
-			<VisualStateGroup x:Name="TeamNameStates">
-				<VisualState x:Name="TeamNameNormal" />
-				<VisualState x:Name="TeamNameErrored">
-					<VisualState.Setters>
-						<Setter Target="TeamNameTextBox.Background" Value="{ThemeResource HipstrTextBoxErrorBackground}" />
-						<Setter Target="TeamNameTextBox.BorderBrush" Value="{ThemeResource HipstrTextBoxErrorBorder}" />
-						<Setter Target="TeamNameTextBox.Foreground" Value="{ThemeResource HipstrTextBoxErrorText}" />
-						<Setter Target="TeamNameErrorBorder.Visibility" Value="Visible" />
-					</VisualState.Setters>
-				</VisualState>
-			</VisualStateGroup>
-		</VisualStateManager.VisualStateGroups>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />
-			<RowDefinition Height="Auto" />
-		</Grid.RowDefinitions>
+    <Grid HorizontalAlignment="Stretch" PointerPressed="Grid_OnPointerPressed">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="ApiKeyStates">
+                <VisualState x:Name="ApiKeyNormal" />
+                <VisualState x:Name="ApiKeyErrored">
+                    <VisualState.Setters>
+                        <Setter Target="ApiKeyTextBox.Background" Value="{ThemeResource HipstrTextBoxErrorBackground}" />
+                        <Setter Target="ApiKeyTextBox.BorderBrush" Value="{ThemeResource HipstrTextBoxErrorBorder}" />
+                        <Setter Target="TeamNameTextBox.Foreground" Value="{ThemeResource HipstrTextBoxErrorText}" />
+                        <Setter Target="ApiKeyErrorBorder.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+            <VisualStateGroup x:Name="TeamNameStates">
+                <VisualState x:Name="TeamNameNormal" />
+                <VisualState x:Name="TeamNameErrored">
+                    <VisualState.Setters>
+                        <Setter Target="TeamNameTextBox.Background"
+                                Value="{ThemeResource HipstrTextBoxErrorBackground}" />
+                        <Setter Target="TeamNameTextBox.BorderBrush" Value="{ThemeResource HipstrTextBoxErrorBorder}" />
+                        <Setter Target="TeamNameTextBox.Foreground" Value="{ThemeResource HipstrTextBoxErrorText}" />
+                        <Setter Target="TeamNameErrorBorder.Visibility" Value="Visible" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-		<RelativePanel Background="{ThemeResource HipstrBackground}"
-					   Grid.Row="0">
-			<TextBlock Name="PageTitle"
-					   Margin="10 10 10 5"
-					   FontSize="32"
-					   Foreground="{ThemeResource HipstrText}"
-					   Text="Add Team" />
-			<TextBox Name="TeamNameTextBox"
-					 Header="Team Name"
-					 RelativePanel.Below="PageTitle"
-					 Text="{x:Bind ViewModel.TeamName, Mode=TwoWay}"
-					 KeyUp="TeamNameTextBox_OnKeyUp" />
-			<Border Name="TeamNameErrorBorder" RelativePanel.Below="TeamNameTextBox">
-				<TextBlock Name="TeamNameErrorTextBlock" Style="{StaticResource DialogErrorTextBlockStyle}" />
-			</Border>
-			<TextBox Name="ApiKeyTextBox"
-					 Header="API Key"
-					 RelativePanel.Below="TeamNameErrorBorder"
-					 Text="{x:Bind ViewModel.ApiKey, Mode=TwoWay}"
-					 KeyUp="ApiKeyTextBox_OnKeyUp" />
-			<Border Name="ApiKeyErrorBorder" RelativePanel.Below="ApiKeyTextBox">
-				<TextBlock Name="ApiKeyErrorTextBlock" Style="{StaticResource DialogErrorTextBlockStyle}" />
-			</Border>
-			<ProgressRing Width="50"
-						  Height="50"
-						  RelativePanel.AlignHorizontalCenterWithPanel="True"
-						  RelativePanel.AlignVerticalCenterWithPanel="True"
-						  Foreground="{ThemeResource HipstrText}"
-						  IsActive="{x:Bind ViewModel.IsValidating, Mode=OneWay}" />
-		</RelativePanel>
-		<CommandBar Grid.Row="1"
-					Background="{ThemeResource HipstrAccentBright}"
-					Foreground="{ThemeResource HipstrAccentText}">
-			<AppBarButton Icon="Cancel"
-						  Label="Cancel"
-						  Foreground="{ThemeResource HipstrAccentText}"
-						  Command="{x:Bind CancelDialogCommand}" />
-			<AppBarButton Name="AcceptDialogButton"
-						  Icon="Accept"
-						  Label="Accept"
-						  Foreground="{ThemeResource HipstrAccentText}"
-						  Command="{x:Bind ViewModel.ValidateDataCommand}" />
-		</CommandBar>
-	</Grid>
+        <RelativePanel Background="{ThemeResource HipstrBackground}"
+                       Grid.Row="0">
+            <TextBlock Name="PageTitle"
+                       Margin="10 10 10 5"
+                       FontSize="32"
+                       Foreground="{ThemeResource HipstrText}"
+                       Text="Add Team" />
+            <TextBox Name="TeamNameTextBox"
+                     Header="Team Name"
+                     RelativePanel.Below="PageTitle"
+                     Text="{x:Bind ViewModel.TeamName, Mode=TwoWay}"
+                     KeyUp="TeamNameTextBox_OnKeyUp" />
+            <Border Name="TeamNameErrorBorder" RelativePanel.Below="TeamNameTextBox">
+                <TextBlock Name="TeamNameErrorTextBlock" Style="{StaticResource DialogErrorTextBlockStyle}" />
+            </Border>
+            <TextBox Name="ApiKeyTextBox"
+                     Header="API Key"
+                     RelativePanel.Below="TeamNameErrorBorder"
+                     Text="{x:Bind ViewModel.ApiKey, Mode=TwoWay}"
+                     KeyUp="ApiKeyTextBox_OnKeyUp" />
+            <Border Name="ApiKeyErrorBorder" RelativePanel.Below="ApiKeyTextBox">
+                <TextBlock Name="ApiKeyErrorTextBlock" Style="{StaticResource DialogErrorTextBlockStyle}" />
+            </Border>
+            <StackPanel RelativePanel.Below="ApiKeyErrorBorder"
+                        Margin="10 20 0 0">
+                <StackPanel.Resources>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="TextWrapping" Value="Wrap" />
+                    </Style>
+                </StackPanel.Resources>
+                <TextBlock FontWeight="Bold" Margin="0 0 0 10">Where do I get an API key?</TextBlock>
+                <StackPanel Margin="15 0 0 0">
+                    <TextBlock>From the HipChat web portal:</TextBlock>
+                    <StackPanel Margin="15 0 0 0">
+                        <TextBlock>1. Access "Account Settings"</TextBlock>
+                        <TextBlock>2. Select "API access" and provide your password</TextBlock>
+                        <TextBlock>3. Select all Scopes</TextBlock>
+                        <TextBlock>4. Click "Create"</TextBlock>
+                    </StackPanel>
+                    <TextBlock>The long string of letters and numbers that appears under "Token" is your API key</TextBlock>
+
+                </StackPanel>
+            </StackPanel>
+            <ProgressRing Width="50"
+                          Height="50"
+                          RelativePanel.AlignHorizontalCenterWithPanel="True"
+                          RelativePanel.AlignVerticalCenterWithPanel="True"
+                          Foreground="{ThemeResource HipstrText}"
+                          IsActive="{x:Bind ViewModel.IsValidating, Mode=OneWay}" />
+        </RelativePanel>
+        <CommandBar Grid.Row="1"
+                    Background="{ThemeResource HipstrAccentBright}"
+                    Foreground="{ThemeResource HipstrAccentText}">
+            <AppBarButton Icon="Cancel"
+                          Label="Cancel"
+                          Foreground="{ThemeResource HipstrAccentText}"
+                          Command="{x:Bind CancelDialogCommand}" />
+            <AppBarButton Name="AcceptDialogButton"
+                          Icon="Accept"
+                          Label="Accept"
+                          Foreground="{ThemeResource HipstrAccentText}"
+                          Command="{x:Bind ViewModel.ValidateDataCommand}" />
+        </CommandBar>
+    </Grid>
 </UserControl>
