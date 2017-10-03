@@ -1,33 +1,15 @@
-﻿using Hipstr.Core.Messaging;
+﻿using Hipstr.Client.Utility;
+using Hipstr.Core.Messaging;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Hipstr.Client.Views.Subscriptions
 {
-	public class MessageSourceGroup : IGrouping<string, IMessageSource>
-	{
-		private readonly List<IMessageSource> _messageSources;
-		public string Key { get; }
-
-		public MessageSourceGroup(string key, IEnumerable<IMessageSource> messageSources)
-		{
-			Key = key;
-			_messageSources = new List<IMessageSource>(messageSources);
-		}
-
-		public IEnumerator<IMessageSource> GetEnumerator() => _messageSources.GetEnumerator();
-
-		IEnumerator IEnumerable.GetEnumerator() => _messageSources.GetEnumerator();
-	}
-
 	[UsedImplicitly]
 	public class SubscriptionsViewModel : ViewModelBase
 	{
@@ -44,31 +26,35 @@ namespace Hipstr.Client.Views.Subscriptions
 			GroupedSubscriptions = new ObservableCollection<MessageSourceGroup>();
 		}
 
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			Eventing.RoomJoined += OnRoomJoined;
+		}
+
+		private async void OnRoomJoined(object sender, RoomJoinedEventArgs roomJoinedEventArgs)
+		{
+			await RefreshSubscriptionsAsync();
+		}
+
 		public override async Task InitializeAsync()
 		{
 			if (GroupedSubscriptions.Any()) return;
 
+			await RefreshSubscriptionsAsync();
+		}
+
+		private async Task RefreshSubscriptionsAsync()
+		{
 			IReadOnlyList<IMessageSource> subscriptions = await _subscriptionService.GetSubscriptionsAsync(_hipChatService);
 
 			IEnumerable<MessageSourceGroup> groupedSources =
 				subscriptions.GroupBy(
-					GroupNameSelector,
+					GroupNameSelectors.StandardGroupNameSelector,
 					(key, sources) => new MessageSourceGroup(key, sources.OrderBy(ums => ums.Name)));
 			GroupedSubscriptions.Clear();
 			GroupedSubscriptions.AddRange(groupedSources.OrderBy(msg => msg.Key));
-		}
-
-		private static string GroupNameSelector(IMessageSource s)
-		{
-			string name = s.Name.Normalize(NormalizationForm.FormD);
-			char key = name.FirstOrDefault(char.IsLetterOrDigit);
-
-			if (!char.IsLetterOrDigit(key))
-			{
-				return "\U0001F310";
-			}
-
-			return char.IsLetter(key) ? char.ToUpper(key).ToString() : "#";
 		}
 	}
 }

@@ -2,6 +2,7 @@
 using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 using Hipstr.Client.Views.Dialogs.AddTeamDialog;
 using Hipstr.Client.Views.Dialogs.EditTeamDialog;
+using Hipstr.Client.Views.Dialogs.JoinChatDialog;
 using Hipstr.Client.Views.MainPage;
 using Hipstr.Client.Views.Messages;
 using Hipstr.Client.Views.Rooms;
@@ -51,6 +52,7 @@ namespace Hipstr.Client
 			builder.RegisterType<AddTeamDialogViewModel, AddTeamDialogViewModel>();
 			builder.RegisterType<EditTeamDialogViewModel, EditTeamDialogViewModel>();
 			builder.RegisterType<AddRoomDialogViewModel, AddRoomDialogViewModel>();
+			builder.RegisterType<JoinChatDialogViewModel, JoinChatDialogViewModel>();
 			builder.RegisterType<SettingsViewModel, SettingsViewModel>();
 		}
 

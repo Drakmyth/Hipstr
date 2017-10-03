@@ -4,7 +4,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="using:Hipstr.Core.Messaging"
-      xmlns:subscriptions="using:Hipstr.Client.Views.Subscriptions"
       mc:Ignorable="d"
       RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
       NavigationCacheMode="Enabled">
@@ -41,7 +40,7 @@
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>
-                                <DataTemplate x:DataType="subscriptions:MessageSourceGroup">
+                                <DataTemplate x:DataType="messaging:MessageSourceGroup">
                                     <TextBlock Text="{x:Bind Key}" />
                                 </DataTemplate>
                             </GroupStyle.HeaderTemplate>
@@ -53,7 +52,7 @@
                 <GridView ItemsSource="{x:Bind SubscriptionsCVS.View.CollectionGroups, Mode=OneWay}">
                     <GridView.ItemTemplate>
                         <DataTemplate x:DataType="ICollectionViewGroup">
-                            <TextBlock Text="{x:Bind Group.(subscriptions:MessageSourceGroup.Key)}" />
+                            <TextBlock Text="{x:Bind Group.(messaging:MessageSourceGroup.Key)}" />
                         </DataTemplate>
                     </GridView.ItemTemplate>
                 </GridView>

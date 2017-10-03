@@ -1,6 +1,8 @@
 ﻿using Hipstr.Core.Messaging;
+using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace Hipstr.Core.Services
@@ -9,7 +11,7 @@ namespace Hipstr.Core.Services
 	public class SubscriptionService : ISubscriptionService
 	{
 		private readonly IDataService _dataService;
-		private readonly List<IMessageSource> _subscriptions;
+		private readonly IList<IMessageSource> _subscriptions;
 
 		public SubscriptionService(IDataService dataService)
 		{
@@ -31,7 +33,9 @@ namespace Hipstr.Core.Services
 
 		public async Task<IReadOnlyList<IMessageSource>> GetSubscriptionsAsync(IHipChatService hipChatService)
 		{
-			return await _dataService.LoadSubscriptionsAsync(hipChatService);
+			_subscriptions.Clear();
+			_subscriptions.AddRange(await _dataService.LoadSubscriptionsAsync(hipChatService));
+			return new ReadOnlyCollection<IMessageSource>(_subscriptions);
 		}
 	}
 }

@@ -89,6 +89,8 @@ namespace Hipstr.Core.Services
 			Subscription subscription = subscriptionTask.Result;
 			IReadOnlyList<Team> teams = teamsTask.Result;
 
+			if (subscription == null) return Enumerable.Empty<IMessageSource>().ToList().AsReadOnly();
+
 			var messageSources = new List<IMessageSource>();
 
 			foreach (KeyValuePair<string, IEnumerable<Room>> kvp in subscription.Rooms)

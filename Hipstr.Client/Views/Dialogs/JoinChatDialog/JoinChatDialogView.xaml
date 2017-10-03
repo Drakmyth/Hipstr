@@ -1,0 +1,89 @@
+﻿<UserControl Name="JoinChatDialog"
+             x:Class="Hipstr.Client.Views.Dialogs.JoinChatDialog.JoinChatDialogView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:messaging="using:Hipstr.Core.Messaging"
+             xmlns:subscriptions="using:Hipstr.Client.Views.Subscriptions"
+             mc:Ignorable="d"
+             RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
+             Loaded="OnLoaded"
+             Unloaded="OnUnloaded">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/Dialogs.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DialogTextBoxStyle}" />
+            <Style TargetType="CheckBox" BasedOn="{StaticResource DialogControlStyle}" />
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="{ThemeResource HipstrBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.Resources>
+            <CollectionViewSource x:Name="MessageSourcesCVS"
+                                  Source="{x:Bind ViewModel.MessageSources, Mode=OneWay}"
+                                  IsSourceGrouped="True" />
+        </Grid.Resources>
+        <TextBlock Grid.Row="0"
+                   Margin="10 10 10 5"
+                   FontSize="32"
+                   Foreground="{ThemeResource HipstrText}"
+                   Text="New Room" />
+        <SemanticZoom x:Name="GroupZoom" Grid.Row="1">
+            <SemanticZoom.ZoomedInView>
+                <ListView ItemsSource="{x:Bind MessageSourcesCVS.View, Mode=OneWay}"
+                          ShowsScrollingPlaceholders="True"
+                          SelectionMode="Single"
+                          SelectedItem="{x:Bind ViewModel.SelectedMessageSource, Mode=TwoWay}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="messaging:IMessageSource">
+                            <RelativePanel>
+                                <Image />
+                                <TextBlock Text="{x:Bind Name}" />
+                            </RelativePanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate x:DataType="messaging:MessageSourceGroup">
+                                    <TextBlock Text="{x:Bind Key}" />
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+            <SemanticZoom.ZoomedOutView>
+                <GridView ItemsSource="{x:Bind MessageSourcesCVS.View.CollectionGroups, Mode=OneWay}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="ICollectionViewGroup">
+                            <TextBlock Text="{x:Bind Group.(messaging:MessageSourceGroup.Key)}" />
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </SemanticZoom.ZoomedOutView>
+        </SemanticZoom>
+        <CommandBar Grid.Row="2"
+                    Background="{ThemeResource HipstrAccentBright}"
+                    Foreground="{ThemeResource HipstrAccentText}">
+            <AppBarButton Icon="Cancel"
+                          Label="Cancel"
+                          Foreground="{ThemeResource HipstrAccentText}"
+                          Command="{x:Bind CancelDialogCommand}" />
+            <AppBarButton Name="AcceptDialogButton"
+                          Icon="Accept"
+                          Label="Accept"
+                          Foreground="{ThemeResource HipstrAccentText}"
+                          Command="{x:Bind ConfirmDialogCommand}"/>
+        </CommandBar>
+    </Grid>
+</UserControl>

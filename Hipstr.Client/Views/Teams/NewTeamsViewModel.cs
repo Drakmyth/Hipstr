@@ -7,6 +7,7 @@ using Hipstr.Core.Utility.Extensions;
 using JetBrains.Annotations;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
@@ -39,10 +40,15 @@ namespace Hipstr.Client.Views.Teams
 
 			Teams = new ObservableCollection<Team>();
 
-			Eventing.TeamAdded += OnTeamAdded;
-
 			EditTeamCommand = new RelayCommandAsync<Team>(EditTeamAsync, team => team != null, this, nameof(TappedTeam));
 			DeleteTeamCommand = new RelayCommandAsync<Team>(DeleteTeamAsync, team => team != null, this, nameof(TappedTeam));
+		}
+
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			Eventing.TeamAdded += OnTeamAdded;
 		}
 
 		private void OnTeamAdded(object sender, TeamAddedEventArgs teamAddedEventArgs)

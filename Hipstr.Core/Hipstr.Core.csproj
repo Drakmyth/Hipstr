@@ -112,6 +112,7 @@
     <Compile Include="Models\Emoticon.cs" />
     <Compile Include="Models\HipChat\HipChatUserNotificationMessage.cs" />
     <Compile Include="Models\HipChat\HipChatNotificationSender.cs" />
+    <Compile Include="Messaging\MessageSourceGroup.cs" />
     <Compile Include="Models\RoomCreationRequest.cs" />
     <Compile Include="Models\HipChat\HipChatPrivacyTypes.cs" />
     <Compile Include="Models\HipChat\HipChatStatistics.cs" />

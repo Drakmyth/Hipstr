@@ -20,7 +20,9 @@
                               Icon="People"
                               Command="{x:Bind ViewModel.AddTeamCommand}" />
                 <AppBarSeparator />
-                <AppBarButton Label="Join Room" Icon="People" />
+                <AppBarButton Label="Join Room"
+                              Icon="People"
+                              Command="{x:Bind ViewModel.JoinRoomCommand}"/>
                 <AppBarButton Label="Chat With User" Icon="People" />
                 <AppBarSeparator />
                 <AppBarButton Label="Create Room" Icon="People" />
