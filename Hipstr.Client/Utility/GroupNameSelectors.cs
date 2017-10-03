@@ -7,14 +7,7 @@ namespace Hipstr.Client.Utility
 {
 	public static class GroupNameSelectors
 	{
-		public static readonly Func<IMessageSource, string> StandardGroupNameSelector;
-
-		static GroupNameSelectors()
-		{
-			StandardGroupNameSelector = StandardGroupNameSelectorFunc;
-		}
-
-		private static string StandardGroupNameSelectorFunc(IMessageSource s)
+		public static string StandardGroupNameSelector(IMessageSource s)
 		{
 			string name = s.Name.Normalize(NormalizationForm.FormD);
 			char key = name.FirstOrDefault(char.IsLetterOrDigit);
