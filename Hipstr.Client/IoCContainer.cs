@@ -41,13 +41,10 @@ namespace Hipstr.Client
 			// XAML binding breaks when using an interface as the DataContext, so we
 			// need to request implementations rather than interfaces for the view models
 			builder.RegisterType<NewMainPageViewModel, NewMainPageViewModel>();
-			builder.RegisterType<MainPageViewModel, MainPageViewModel>();
-			builder.RegisterType<TeamsViewModel, TeamsViewModel>();
 			builder.RegisterType<NewTeamsViewModel, NewTeamsViewModel>();
 			builder.RegisterType<RoomsViewModel, RoomsViewModel>();
 			builder.RegisterType<SubscriptionsViewModel, SubscriptionsViewModel>();
 			builder.RegisterType<MessagesViewModel, MessagesViewModel>();
-			builder.RegisterType<UsersViewModel, UsersViewModel>();
 			builder.RegisterType<UserProfileViewModel, UserProfileViewModel>();
 			builder.RegisterType<AddTeamDialogViewModel, AddTeamDialogViewModel>();
 			builder.RegisterType<EditTeamDialogViewModel, EditTeamDialogViewModel>();

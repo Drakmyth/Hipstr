@@ -7,7 +7,6 @@
 	  xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
 	  xmlns:converters="using:Hipstr.Client.Converters"
-	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
 	  NavigationCacheMode="Enabled">
@@ -31,9 +30,6 @@
 			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<controls:TitleBar Grid.Row="0"
-						   Text="Rooms"
-						   Visibility="{x:Bind ListZoom.IsZoomedInViewActive, Mode=OneWay, Converter={StaticResource BoolToVis}}" />
 		<SemanticZoom Grid.Row="1" x:Name="ListZoom">
 			<SemanticZoom.ZoomedInView>
 				<ListView x:Name="RoomList" ItemsSource="{x:Bind RoomsCVS.View}">

@@ -5,7 +5,6 @@
 	  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	  xmlns:converters="using:Hipstr.Client.Converters"
-	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
@@ -33,7 +32,6 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="*" />
 		</Grid.RowDefinitions>
-		<controls:TitleBar Grid.Row="0" Text="Settings" />
 		<StackPanel Grid.Row="1" Background="{ThemeResource HipstrBackground}" Padding="10">
 			<StackPanel Style="{StaticResource SettingSectionStackPanelStyle}">
 				<TextBlock Style="{StaticResource SettingSectionHeaderTextBlockStyle}">Theme</TextBlock>

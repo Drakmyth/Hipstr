@@ -10,7 +10,6 @@
 	  xmlns:attachments="using:Hipstr.Client.Attachments"
 	  xmlns:converters="using:Hipstr.Client.Converters"
 	  xmlns:core="using:Microsoft.Xaml.Interactions.Core"
-	  xmlns:controls="using:Hipstr.Client.Controls"
 	  mc:Ignorable="d"
 	  RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
@@ -31,7 +30,6 @@
 		<interactivity:Interaction.Behaviors>
 			<behaviors:KeepAboveInputBehavior />
 		</interactivity:Interaction.Behaviors>
-		<controls:TitleBar Grid.Row="0" Text="{x:Bind ViewModel.MessageSource.Name, FallbackValue='Messages'}"/>
 		<ListView Name="MessagesListView"
 				  Grid.Row="1"
 				  ItemsSource="{x:Bind ViewModel.Messages}"

@@ -107,9 +107,6 @@
     <Compile Include="Commands\RelayCommandAsync.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
-    <Compile Include="Controls\TitleBar.xaml.cs">
-      <DependentUpon>TitleBar.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Converters\EnumerableToBrushConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -140,12 +137,8 @@
     <Compile Include="Views\MainPage\NewMainPageView.xaml.cs">
       <DependentUpon>NewMainPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainPage\MainPageView.xaml.cs">
-      <DependentUpon>MainPageView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainPage\NewMainPageViewModel.cs" />
-    <Compile Include="Views\MainPage\MainPageViewModel.cs" />
     <Compile Include="Views\Messages\MessagesViewModel.cs" />
     <Compile Include="Views\Messages\MessagesView.xaml.cs">
       <DependentUpon>MessagesView.xaml</DependentUpon>
@@ -177,14 +170,6 @@
       <DependentUpon>UserProfileView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Users\UserProfileViewModel.cs" />
-    <Compile Include="Views\Users\UsersView.xaml.cs">
-      <DependentUpon>UsersView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Users\UsersViewModel.cs" />
-    <Compile Include="Views\Teams\TeamsView.xaml.cs">
-      <DependentUpon>TeamsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Teams\TeamsViewModel.cs" />
     <Compile Include="Views\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -277,10 +262,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\TitleBar.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\Dialogs.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -298,10 +279,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainPage\NewMainPageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\MainPage\MainPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -336,14 +313,6 @@
     <Page Include="Views\Users\UserProfileView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Users\UsersView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Teams\TeamsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
