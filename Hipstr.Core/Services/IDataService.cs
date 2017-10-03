@@ -1,4 +1,5 @@
-﻿using Hipstr.Core.Models;
+﻿using Hipstr.Core.Messaging;
+using Hipstr.Core.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,5 +16,7 @@ namespace Hipstr.Core.Services
 		Task SaveEmoticonsForTeamAsync(IEnumerable<Emoticon> emoticons, Team team);
 		Task<Emoticon> UpdateSingleEmoticonAsync(Emoticon emoticon, Team team);
 		Task<IReadOnlyList<Emoticon>> LoadEmoticonsForTeamAsync(Team team);
+		Task SaveSubscriptionsAsync(IEnumerable<IMessageSource> subscriptions);
+		Task<IReadOnlyList<IMessageSource>> LoadSubscriptionsAsync(IHipChatService hipChatService);
 	}
 }

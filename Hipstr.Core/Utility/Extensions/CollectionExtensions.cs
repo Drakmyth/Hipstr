@@ -21,11 +21,6 @@ namespace Hipstr.Core.Utility.Extensions
 		{
 			IEnumerable<T> enumerable = collection as IList<T> ?? collection.ToList();
 
-			if (!enumerable.Any())
-			{
-				return;
-			}
-
 			const string EVENT_NAME = nameof(list.CollectionChanged);
 			Type ocType = typeof(ObservableCollection<T>);
 			FieldInfo eventField = ocType.GetField(EVENT_NAME, BindingFlags.Instance | BindingFlags.NonPublic);

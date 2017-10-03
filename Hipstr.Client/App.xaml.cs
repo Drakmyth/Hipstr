@@ -64,8 +64,8 @@ namespace Hipstr.Client
 			{
 				Settings = IoCContainer.Resolve<IAppSettings>();
 
-				// Create a Frame to act as the navigation context and navigate to the first page
-				Frame = new Frame();
+				var mainPage = new NewMainPageView();
+				Frame = mainPage.Frame;
 
 				Frame.NavigationFailed += OnNavigationFailed;
 				Frame.Navigating += OnNavigating;
@@ -77,8 +77,8 @@ namespace Hipstr.Client
 				}
 
 				// Create a MainPageView to hold the frame and place it in the current Window
-				Window.Current.Content = new MainPageView(Frame);
-				((MainPageViewModel)((MainPageView)Window.Current.Content).DataContext).Initialize();
+				Window.Current.Content = mainPage;
+				mainPage.ViewModel.Initialize();
 
 				// Register a handler for BackRequested events and set the visibility of the Back button
 				SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
@@ -90,7 +90,7 @@ namespace Hipstr.Client
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				Frame.Navigate(typeof(TeamsView), e.Arguments);
+				Frame.Navigate(typeof(NewTeamsView), e.Arguments);
 			}
 			// Ensure the current window is active
 			Window.Current.Activate();

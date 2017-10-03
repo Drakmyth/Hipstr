@@ -132,10 +132,14 @@
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
+    <Compile Include="Views\MainPage\NewMainPageView.xaml.cs">
+      <DependentUpon>NewMainPageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\MainPage\NewMainPageViewModel.cs" />
     <Compile Include="Views\MainPage\MainPageViewModel.cs" />
     <Compile Include="Views\Messages\MessagesViewModel.cs" />
     <Compile Include="Views\Messages\MessagesView.xaml.cs">
@@ -156,6 +160,14 @@
       <DependentUpon>SettingsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Settings\SettingsViewModel.cs" />
+    <Compile Include="Views\Subscriptions\SubscriptionsView.xaml.cs">
+      <DependentUpon>SubscriptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Subscriptions\SubscriptionsViewModel.cs" />
+    <Compile Include="Views\Teams\NewTeamsView.xaml.cs">
+      <DependentUpon>NewTeamsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Teams\NewTeamsViewModel.cs" />
     <Compile Include="Views\Users\UserProfileView.xaml.cs">
       <DependentUpon>UserProfileView.xaml</DependentUpon>
     </Compile>
@@ -276,6 +288,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\MainPage\NewMainPageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\MainPage\MainPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -297,6 +313,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Settings\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Subscriptions\SubscriptionsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Teams\NewTeamsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
