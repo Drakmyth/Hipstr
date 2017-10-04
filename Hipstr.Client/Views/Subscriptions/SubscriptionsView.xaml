@@ -10,8 +10,8 @@
 
     <Grid Background="{ThemeResource HipstrBackground}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.Resources>
             <CollectionViewSource x:Name="SubscriptionsCVS"
@@ -28,13 +28,30 @@
         <SemanticZoom x:Name="GroupZoom" Grid.Row="1">
             <SemanticZoom.ZoomedInView>
                 <ListView ItemsSource="{x:Bind SubscriptionsCVS.View, Mode=OneWay}"
-                          ShowsScrollingPlaceholders="True">
+                          ShowsScrollingPlaceholders="True"
+                          ItemContainerStyle="{StaticResource HipstrStretchList}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="messaging:IMessageSource">
-                            <RelativePanel>
-                                <Image/>
-                                <TextBlock Text="{x:Bind Name}" />
-                            </RelativePanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Image Grid.Column="0" />
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="{x:Bind Name}"
+                                               Foreground="{ThemeResource HipstrText}" />
+                                    <TextBlock Text="{x:Bind Team.Name}"
+                                               Foreground="{ThemeResource HipstrSubText}"
+                                               FontSize="14" />
+                                </StackPanel>
+                                <Button Grid.Column="2"
+                                        Style="{StaticResource HipstrListButton}"
+                                        HorizontalAlignment="Right">
+                                    <SymbolIcon Symbol="Delete" />
+                                </Button>
+                            </Grid>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                     <ListView.GroupStyle>

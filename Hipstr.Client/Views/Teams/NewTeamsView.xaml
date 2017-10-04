@@ -27,19 +27,12 @@
                    VerticalAlignment="Top"
                    Padding="13"
                    Visibility="{x:Bind ShowEmptyCollectionMessage(ViewModel.Teams.Count), Mode=OneWay}" />
-        <ListView Grid.Row="1" ItemsSource="{x:Bind ViewModel.Teams}">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                    <Setter Property="VerticalContentAlignment" Value="Stretch" />
-                    <Setter Property="Padding" Value="0" />
-                    <Setter Property="Margin" Value="0" />
-                    <Setter Property="BorderThickness" Value="0" />
-                </Style>
-            </ListView.ItemContainerStyle>
+        <ListView Grid.Row="1"
+                  ItemsSource="{x:Bind ViewModel.Teams}"
+                  ItemContainerStyle="{StaticResource HipstrStretchList}">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="models:Team">
-                    <Grid Padding="12">
+                    <Grid Padding="0 0 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
@@ -47,17 +40,16 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0"
                                    Text="{x:Bind Name}"
+                                   VerticalAlignment="Center"
                                    Foreground="{ThemeResource HipstrText}" />
                         <Button Grid.Column="1"
-                                Background="{ThemeResource HipstrBackground}"
-                                Foreground="{ThemeResource HipstrText}"
+                                Style="{StaticResource HipstrListButton}"
                                 Command="{Binding ViewModel.EditTeamCommand, Mode=OneTime, ElementName=NewTeamsViewPage}"
                                 CommandParameter="{Binding ViewModel.TappedTeam, ElementName=NewTeamsViewPage}">
                             <SymbolIcon Symbol="Edit" />
                         </Button>
                         <Button Grid.Column="2"
-                                Background="{ThemeResource HipstrBackground}"
-                                Foreground="{ThemeResource HipstrText}"
+                                Style="{StaticResource HipstrListButton}"
                                 Command="{Binding ViewModel.DeleteTeamCommand, Mode=OneTime, ElementName=NewTeamsViewPage}"
                                 CommandParameter="{Binding ViewModel.TappedTeam, ElementName=NewTeamsViewPage}">
                             <SymbolIcon Symbol="Delete" />

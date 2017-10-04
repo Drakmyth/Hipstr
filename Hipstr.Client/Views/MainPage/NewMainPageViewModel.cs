@@ -40,7 +40,7 @@ namespace Hipstr.Client.Views.MainPage
 			NavigateToSubscriptionsCommand = new NavigateToViewCommand<SubscriptionsView>();
 		}
 
-		private async Task AddTeamAsync()
+        private async Task AddTeamAsync()
 		{
 			var dialog = new AddTeamDialogView();
 			DialogResult<Team> team = await dialog.ShowAsync();

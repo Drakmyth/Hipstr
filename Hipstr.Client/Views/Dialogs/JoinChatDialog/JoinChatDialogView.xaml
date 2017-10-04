@@ -42,15 +42,8 @@
                 <ListView ItemsSource="{x:Bind MessageSourcesCVS.View, Mode=OneWay}"
                           ShowsScrollingPlaceholders="True"
                           SelectionMode="Single"
-                          SelectedItem="{x:Bind ViewModel.SelectedMessageSource, Mode=TwoWay}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="messaging:IMessageSource">
-                            <RelativePanel>
-                                <Image />
-                                <TextBlock Text="{x:Bind Name}" />
-                            </RelativePanel>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                          SelectedItem="{x:Bind ViewModel.SelectedMessageSource, Mode=TwoWay}"
+                          ItemTemplate="{StaticResource HipstrMessageSourceListItemTemplate}">
                     <ListView.GroupStyle>
                         <GroupStyle>
                             <GroupStyle.HeaderTemplate>

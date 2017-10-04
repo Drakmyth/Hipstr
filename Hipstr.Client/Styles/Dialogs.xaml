@@ -1,38 +1,39 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<DataTemplate x:Key="DialogControlHeaderTemplate">
-		<TextBlock Text="{Binding}" Foreground="{ThemeResource HipstrText}" />
-	</DataTemplate>
-	<Style x:Key="DialogControlStyle" TargetType="FrameworkElement">
-		<Setter Property="Margin" Value="10 5 10 0" />
-		<Setter Property="RelativePanel.AlignLeftWithPanel" Value="True" />
-		<Setter Property="RelativePanel.AlignRightWithPanel" Value="True" />
-	</Style>
-	<Style x:Key="DialogTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource DialogControlStyle}">
-		<Setter Property="Background" Value="{ThemeResource HipstrTextBoxBackground}" />
-		<Setter Property="Foreground" Value="{ThemeResource HipstrTextBoxText}"/>
-		<Setter Property="HeaderTemplate" Value="{StaticResource DialogControlHeaderTemplate}" />
-	</Style>
-	<Style x:Key="DialogComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource DialogControlStyle}">
-		<Setter Property="Background" Value="{ThemeResource HipstrTextBoxBackground}" />
-		<Setter Property="Foreground" Value="{ThemeResource HipstrTextBoxText}"/>
-		<Setter Property="HeaderTemplate" Value="{StaticResource DialogControlHeaderTemplate}" />
-	</Style>
-	<Style x:Key="DialogToggleSwitchStyle" TargetType="ToggleSwitch" BasedOn="{StaticResource DialogControlStyle}">
-		<Setter Property="HeaderTemplate" Value="{StaticResource DialogControlHeaderTemplate}" />
-	</Style>
-	<Style x:Key="DialogErrorBorderStyle" TargetType="Border" BasedOn="{StaticResource DialogControlStyle}">
-		<Setter Property="Background" Value="{ThemeResource HipstrErrorBackground}" />
-		<Setter Property="CornerRadius" Value="0 0 10 10" />
-		<Setter Property="BorderThickness" Value="0" />
-		<Setter Property="Margin" Value="12 0" />
-		<Setter Property="Padding" Value="2" />
-		<Setter Property="Visibility" Value="Collapsed" />
-	</Style>
-	<Style x:Key="DialogErrorTextBlockStyle" TargetType="TextBlock">
-		<Setter Property="Foreground" Value="{ThemeResource HipstrErrorText}" />
-		<Setter Property="TextWrapping" Value="WrapWholeWords" />
-		<Setter Property="Margin" Value="10 0" />
-		<Setter Property="Text" Value="ErrorText" /> <!-- Design data -->
-	</Style>
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:messaging="using:Hipstr.Core.Messaging">
+    <DataTemplate x:Key="DialogControlHeaderTemplate">
+        <TextBlock Text="{Binding}" Foreground="{ThemeResource HipstrText}" />
+    </DataTemplate>
+    <Style x:Key="DialogControlStyle" TargetType="FrameworkElement">
+        <Setter Property="Margin" Value="10 5 10 0" />
+        <Setter Property="RelativePanel.AlignLeftWithPanel" Value="True" />
+        <Setter Property="RelativePanel.AlignRightWithPanel" Value="True" />
+    </Style>
+    <Style x:Key="DialogTextBoxStyle" TargetType="TextBox" BasedOn="{StaticResource DialogControlStyle}">
+        <Setter Property="Background" Value="{ThemeResource HipstrTextBoxBackground}" />
+        <Setter Property="Foreground" Value="{ThemeResource HipstrTextBoxText}"/>
+        <Setter Property="HeaderTemplate" Value="{StaticResource DialogControlHeaderTemplate}" />
+    </Style>
+    <Style x:Key="DialogComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource DialogControlStyle}">
+        <Setter Property="Background" Value="{ThemeResource HipstrTextBoxBackground}" />
+        <Setter Property="Foreground" Value="{ThemeResource HipstrTextBoxText}"/>
+        <Setter Property="HeaderTemplate" Value="{StaticResource DialogControlHeaderTemplate}" />
+    </Style>
+    <Style x:Key="DialogToggleSwitchStyle" TargetType="ToggleSwitch" BasedOn="{StaticResource DialogControlStyle}">
+        <Setter Property="HeaderTemplate" Value="{StaticResource DialogControlHeaderTemplate}" />
+    </Style>
+    <Style x:Key="DialogErrorBorderStyle" TargetType="Border" BasedOn="{StaticResource DialogControlStyle}">
+        <Setter Property="Background" Value="{ThemeResource HipstrErrorBackground}" />
+        <Setter Property="CornerRadius" Value="0 0 10 10" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="12 0" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="Visibility" Value="Collapsed" />
+    </Style>
+    <Style x:Key="DialogErrorTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="{ThemeResource HipstrErrorText}" />
+        <Setter Property="TextWrapping" Value="WrapWholeWords" />
+        <Setter Property="Margin" Value="10 0" />
+        <Setter Property="Text" Value="ErrorText" />
+    </Style>
 </ResourceDictionary>

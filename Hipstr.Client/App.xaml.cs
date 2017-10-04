@@ -49,7 +49,7 @@ namespace Hipstr.Client
 		/// will be used such as when the application is launched to open a specific file.
 		/// </summary>
 		/// <param name="e">Details about the launch request and process.</param>
-		protected override void OnLaunched(LaunchActivatedEventArgs e)
+		protected override async void OnLaunched(LaunchActivatedEventArgs e)
 		{
 #if DEBUG
 			if (Debugger.IsAttached)
@@ -65,6 +65,9 @@ namespace Hipstr.Client
 				Settings = IoCContainer.Resolve<IAppSettings>();
 
 				var mainPage = new NewMainPageView();
+                mainPage.ViewModel.Initialize();
+                await mainPage.ViewModel.InitializeAsync();
+
 				Frame = mainPage.Frame;
 
 				Frame.NavigationFailed += OnNavigationFailed;
@@ -147,7 +150,6 @@ namespace Hipstr.Client
 
 			var dataContext = (Frame.Content as Page)?.DataContext as ViewModelBase;
 			dataContext?.Initialize();
-			// ReSharper disable once PossibleNullReferenceException
 			await dataContext?.InitializeAsync();
 		}
 

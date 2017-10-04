@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Autofac.Builder;
 using Hipstr.Client.Views.Dialogs.AddRoomDialog;
 using Hipstr.Client.Views.Dialogs.AddTeamDialog;
 using Hipstr.Client.Views.Dialogs.EditTeamDialog;
@@ -30,10 +31,10 @@ namespace Hipstr.Client
 
 		private static void InitializeInjectionMappings(ContainerBuilder builder)
 		{
-			builder.RegisterType<ITeamService, TeamService>();
+			builder.RegisterType<ITeamService, TeamService>().SingleInstance();
 			builder.RegisterType<IHipChatService, HipChatService>();
 			builder.RegisterType<IDataService, DataService>();
-			builder.RegisterType<ISubscriptionService, SubscriptionService>();
+			builder.RegisterType<ISubscriptionService, SubscriptionService>().SingleInstance();
 			builder.RegisterType<IToastService, ToastService>();
 			builder.RegisterType<IHttpClient, HipstrHttpClient>();
 			builder.RegisterType<IAppSettings, AppSettings>();
@@ -53,9 +54,9 @@ namespace Hipstr.Client
 			builder.RegisterType<SettingsViewModel, SettingsViewModel>();
 		}
 
-		private static void RegisterType<TInterface, TInstanceType>(this ContainerBuilder builder) where TInstanceType : TInterface
+		private static IRegistrationBuilder<TInstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<TInterface, TInstanceType>(this ContainerBuilder builder) where TInstanceType : TInterface
 		{
-			builder.RegisterType<TInstanceType>().As<TInterface>();
+			return builder.RegisterType<TInstanceType>().As<TInterface>();
 		}
 
 		public static TInterface Resolve<TInterface>()
