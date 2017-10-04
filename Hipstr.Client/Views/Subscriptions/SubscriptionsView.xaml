@@ -5,8 +5,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:messaging="using:Hipstr.Core.Messaging"
       mc:Ignorable="d"
-      RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}"
-      NavigationCacheMode="Enabled">
+      RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">
 
     <Grid Background="{ThemeResource HipstrBackground}">
         <Grid.RowDefinitions>
