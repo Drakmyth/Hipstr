@@ -57,7 +57,7 @@ namespace Hipstr.Client.Views.MainPage
 
 		private async Task JoinRoomAsync()
 		{
-			var dialog = new JoinChatDialogView();
+			var dialog = new JoinChatDialogView("Join Room");
 
 			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
 

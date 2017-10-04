@@ -36,7 +36,7 @@
                    Margin="10 10 10 5"
                    FontSize="32"
                    Foreground="{ThemeResource HipstrText}"
-                   Text="New Room" />
+                   Text="{x:Bind Title}" />
         <SemanticZoom x:Name="GroupZoom" Grid.Row="1">
             <SemanticZoom.ZoomedInView>
                 <ListView ItemsSource="{x:Bind MessageSourcesCVS.View, Mode=OneWay}"

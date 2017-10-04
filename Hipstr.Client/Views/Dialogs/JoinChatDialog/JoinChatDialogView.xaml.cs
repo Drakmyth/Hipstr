@@ -21,11 +21,14 @@ namespace Hipstr.Client.Views.Dialogs.JoinChatDialog
 
 		public JoinChatDialogViewModel ViewModel => (JoinChatDialogViewModel)DataContext;
 
+        private string Title { get; }
 		private ICommand ConfirmDialogCommand { get; }
 		private ICommand CancelDialogCommand { get; }
 
-		public JoinChatDialogView()
+		public JoinChatDialogView(string title)
 		{
+            Title = title;
+
 			InitializeComponent();
 			DataContext = IoCContainer.Resolve<JoinChatDialogViewModel>();
 
