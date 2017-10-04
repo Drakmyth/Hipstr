@@ -31,9 +31,21 @@ namespace Hipstr.Client.Views.Subscriptions
 			base.Initialize();
 
 			Eventing.RoomJoined += OnRoomJoined;
+            Eventing.TeamDeleted += OnTeamDeleted;
 		}
 
-		private async void OnRoomJoined(object sender, RoomJoinedEventArgs roomJoinedEventArgs)
+        public override void Dispose()
+        {
+            Eventing.RoomJoined -= OnRoomJoined;
+            Eventing.TeamDeleted -= OnTeamDeleted;
+        }
+
+        private async void OnTeamDeleted(object sender, TeamDeletedEventArgs e)
+        {
+            await RefreshSubscriptionsAsync();
+        }
+
+        private async void OnRoomJoined(object sender, RoomJoinedEventArgs roomJoinedEventArgs)
 		{
 			await RefreshSubscriptionsAsync();
 		}
