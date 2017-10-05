@@ -21,13 +21,16 @@ namespace Hipstr.Client.Views.Dialogs.JoinChatDialog
 
 		public JoinChatDialogViewModel ViewModel => (JoinChatDialogViewModel)DataContext;
 
-        private string Title { get; }
+		private string Title { get; }
 		private ICommand ConfirmDialogCommand { get; }
 		private ICommand CancelDialogCommand { get; }
 
-		public JoinChatDialogView(string title)
+		private IReadOnlyList<IMessageSource> _subscriptions;
+
+		public JoinChatDialogView(string title, IReadOnlyList<IMessageSource> subscriptions)
 		{
-            Title = title;
+			Title = title;
+			_subscriptions = subscriptions;
 
 			InitializeComponent();
 			DataContext = IoCContainer.Resolve<JoinChatDialogViewModel>();
@@ -40,12 +43,28 @@ namespace Hipstr.Client.Views.Dialogs.JoinChatDialog
 		private void OnLoaded(object sender, RoutedEventArgs e)
 		{
 			_popUp.BindToWindow();
+			MessageSourceList.ContainerContentChanging += MessageSourceList_OnContainerContentChanging;
+
 			ViewModel.Initialize();
+			MessageSourceList.SelectedItem = null;
 			SystemNavigationManager.GetForCurrentView().BackRequested += OnBackRequested;
+		}
+
+		private void MessageSourceList_OnContainerContentChanging(ListViewBase sender, ContainerContentChangingEventArgs args)
+		{
+			var messageSource = args.Item as IMessageSource;
+			if (messageSource == null) return;
+
+			args.ItemContainer.IsEnabled = !_subscriptions
+				.Where(s => s.GetType() == messageSource.GetType())
+				.Where(s => s.Team == messageSource.Team)
+				.Where(s => s.Name == messageSource.Name)
+				.Any();
 		}
 
 		private void OnUnloaded(object sender, RoutedEventArgs e)
 		{
+			MessageSourceList.ContainerContentChanging -= MessageSourceList_OnContainerContentChanging;
 			_popUp.UnbindFromWindow();
 			SystemNavigationManager.GetForCurrentView().BackRequested -= OnBackRequested;
 			ViewModel.Dispose();

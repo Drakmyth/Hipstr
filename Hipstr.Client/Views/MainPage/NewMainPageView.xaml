@@ -22,12 +22,14 @@
                 <AppBarSeparator />
                 <AppBarButton Label="Join Room"
                               Icon="People"
-                              Command="{x:Bind ViewModel.JoinRoomCommand}"/>
+                              Command="{x:Bind ViewModel.JoinRoomCommand}" />
                 <AppBarButton Label="Chat With User"
                               Icon="People"
-                              Command="{x:Bind ViewModel.JoinUserCommand}"/>
+                              Command="{x:Bind ViewModel.JoinUserCommand}" />
                 <AppBarSeparator />
-                <AppBarButton Label="Create Room" Icon="People" />
+                <AppBarButton Label="Create Room"
+                              Icon="People"
+                              IsEnabled="False" />
             </CommandBar.SecondaryCommands>
             <CommandBar.Content>
                 <StackPanel Orientation="Horizontal">

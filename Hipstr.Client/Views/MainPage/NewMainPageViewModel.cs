@@ -100,7 +100,8 @@ namespace Hipstr.Client.Views.MainPage
 
 		private async Task JoinRoomAsync()
 		{
-			var dialog = new JoinChatDialogView("Join Room");
+			IReadOnlyList<IMessageSource> subscriptions = await _subscriptionService.GetSubscriptionsAsync(_hipChatService);
+			var dialog = new JoinChatDialogView("Join Room", subscriptions);
 
 			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
 
@@ -131,7 +132,8 @@ namespace Hipstr.Client.Views.MainPage
 
 		private async Task JoinUserAsync()
 		{
-			var dialog = new JoinChatDialogView("Chat With User");
+			IReadOnlyList<IMessageSource> subscriptions = await _subscriptionService.GetSubscriptionsAsync(_hipChatService);
+			var dialog = new JoinChatDialogView("Chat With User", subscriptions);
 
 			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
 

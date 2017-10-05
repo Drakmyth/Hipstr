@@ -39,7 +39,8 @@
                    Text="{x:Bind Title}" />
         <SemanticZoom x:Name="GroupZoom" Grid.Row="1">
             <SemanticZoom.ZoomedInView>
-                <ListView ItemsSource="{x:Bind MessageSourcesCVS.View, Mode=OneWay}"
+                <ListView Name="MessageSourceList"
+                          ItemsSource="{x:Bind MessageSourcesCVS.View, Mode=OneWay}"
                           ShowsScrollingPlaceholders="True"
                           SelectionMode="Single"
                           SelectedItem="{x:Bind ViewModel.SelectedMessageSource, Mode=TwoWay}"
@@ -76,7 +77,7 @@
                           Icon="Accept"
                           Label="Accept"
                           Foreground="{ThemeResource HipstrAccentText}"
-                          Command="{x:Bind ConfirmDialogCommand}"/>
+                          Command="{x:Bind ConfirmDialogCommand}" />
         </CommandBar>
     </Grid>
 </UserControl>

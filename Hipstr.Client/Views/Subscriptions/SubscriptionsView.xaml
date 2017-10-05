@@ -35,7 +35,8 @@
             <SemanticZoom.ZoomedInView>
                 <ListView ItemsSource="{x:Bind SubscriptionsCVS.View, Mode=OneWay}"
                           ShowsScrollingPlaceholders="True"
-                          ItemContainerStyle="{StaticResource HipstrStretchList}">
+                          ItemContainerStyle="{StaticResource HipstrStretchList}"
+                          SelectionMode="None">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="messaging:IMessageSource">
                             <Grid>

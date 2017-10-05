@@ -5,6 +5,16 @@
 		public string Name { get; set; }
 		public string ApiKey { get; }
 
+		public static bool operator ==(Team left, Team right)
+		{
+			return Equals(left, right);
+		}
+
+		public static bool operator !=(Team left, Team right)
+		{
+			return !Equals(left, right);
+		}
+
 		public Team(string name, string apiKey)
 		{
 			Name = name;
