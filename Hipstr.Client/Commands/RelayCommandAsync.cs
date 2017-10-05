@@ -31,6 +31,11 @@ namespace Hipstr.Client.Commands
 		{
 			if (!_propertyNames.Contains(e.PropertyName)) return;
 
+			EvaluateCanExecute(sender);
+		}
+
+		public void EvaluateCanExecute(object sender)
+		{
 			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
 
@@ -71,6 +76,11 @@ namespace Hipstr.Client.Commands
 		{
 			if (!_propertyNames.Contains(e.PropertyName)) return;
 
+			EvaluateCanExecute(sender);
+		}
+
+		public void EvaluateCanExecute(object sender)
+		{
 			CanExecuteChanged?.Invoke(sender, EventArgs.Empty);
 		}
 

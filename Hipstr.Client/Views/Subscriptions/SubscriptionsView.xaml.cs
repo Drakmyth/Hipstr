@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 
 namespace Hipstr.Client.Views.Subscriptions
@@ -18,6 +19,11 @@ namespace Hipstr.Client.Views.Subscriptions
 			base.OnNavigatedFrom(e);
 
 			GroupZoom.IsZoomedInViewActive = true;
+		}
+
+		public Visibility ShowEmptyCollectionMessage(int collectionCount)
+		{
+			return collectionCount > 0 ? Visibility.Collapsed : Visibility.Visible;
 		}
 	}
 }

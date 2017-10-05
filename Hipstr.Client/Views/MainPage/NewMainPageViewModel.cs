@@ -21,6 +21,7 @@ namespace Hipstr.Client.Views.MainPage
 	{
 		public ICommand AddTeamCommand { get; }
 		public ICommand JoinRoomCommand { get; }
+		public ICommand JoinUserCommand { get; }
 		public ICommand NavigateToTeamsCommand { get; }
 		public ICommand NavigateToSubscriptionsCommand { get; }
 
@@ -28,19 +29,57 @@ namespace Hipstr.Client.Views.MainPage
 		private readonly IHipChatService _hipChatService;
 		private readonly ISubscriptionService _subscriptionService;
 
+		// TODO: this list exists to evaluate 'AreTeamsJoined' on Add/Remove Team.
+		// See if we can find a better way of doing this that doesn't involve storing data we don't need.
+		private readonly List<Team> _teams;
+
 		public NewMainPageViewModel(ITeamService teamService, IHipChatService hipChatService, ISubscriptionService subscriptionService)
 		{
 			_teamService = teamService;
 			_hipChatService = hipChatService;
 			_subscriptionService = subscriptionService;
+			_teams = new List<Team>();
 
 			AddTeamCommand = new RelayCommandAsync(AddTeamAsync);
-			JoinRoomCommand = new RelayCommandAsync(JoinRoomAsync);
+			JoinUserCommand = new RelayCommandAsync(JoinUserAsync, AreTeamsJoined);
+			JoinRoomCommand = new RelayCommandAsync(JoinRoomAsync, AreTeamsJoined);
 			NavigateToTeamsCommand = new NavigateToViewCommand<NewTeamsView>();
 			NavigateToSubscriptionsCommand = new NavigateToViewCommand<SubscriptionsView>();
 		}
 
-        private async Task AddTeamAsync()
+		public override void Initialize()
+		{
+			base.Initialize();
+
+			Eventing.TeamDeleted += OnTeamDeleted;
+		}
+
+		public override async Task InitializeAsync()
+		{
+			_teams.AddRange(await _teamService.GetTeamsAsync());
+		}
+
+		public override void Dispose()
+		{
+			Eventing.TeamDeleted -= OnTeamDeleted;
+
+			base.Dispose();
+		}
+
+		private bool AreTeamsJoined()
+		{
+			return _teams.Count > 0;
+		}
+
+		private void OnTeamDeleted(object sender, TeamDeletedEventArgs teamDeletedEventArgs)
+		{
+			_teams.Remove(teamDeletedEventArgs.Team);
+
+			((RelayCommandAsync)JoinRoomCommand).EvaluateCanExecute(this);
+			((RelayCommandAsync)JoinUserCommand).EvaluateCanExecute(this);
+		}
+
+		private async Task AddTeamAsync()
 		{
 			var dialog = new AddTeamDialogView();
 			DialogResult<Team> team = await dialog.ShowAsync();
@@ -52,6 +91,10 @@ namespace Hipstr.Client.Views.MainPage
 				var team2 = new Team(teamName, apiKey);
 				await _teamService.AddTeamAsync(team2);
 				Eventing.FireTeamAddedEvent(this, team2);
+				_teams.Add(team2);
+
+				((RelayCommandAsync)JoinRoomCommand).EvaluateCanExecute(this);
+				((RelayCommandAsync)JoinUserCommand).EvaluateCanExecute(this);
 			}
 		}
 
@@ -83,6 +126,37 @@ namespace Hipstr.Client.Views.MainPage
 				var roomMessageSource = (RoomMessageSource)roomResult.Result;
 				await _subscriptionService.AddSubscriptionAsync(roomMessageSource);
 				Eventing.FireRoomJoinedEvent(this, roomMessageSource.Room);
+			}
+		}
+
+		private async Task JoinUserAsync()
+		{
+			var dialog = new JoinChatDialogView("Chat With User");
+
+			IReadOnlyList<Team> teams = await _teamService.GetTeamsAsync();
+
+			var userTasks = new List<Task<IReadOnlyList<User>>>();
+
+			foreach (Team team in teams)
+			{
+				Task<IReadOnlyList<User>> task = _hipChatService.GetUsersForTeamAsync(team);
+				userTasks.Add(task);
+			}
+
+			await Task.WhenAll(userTasks);
+
+			var users = new List<IMessageSource>();
+			foreach (Task<IReadOnlyList<User>> userTask in userTasks)
+			{
+				users.AddRange(userTask.Result.Select(user => new UserMessageSource(_hipChatService, user)));
+			}
+
+			DialogResult<IMessageSource> userResult = await dialog.ShowAsync(users);
+			if (!userResult.Cancelled)
+			{
+				var userMessageSource = (UserMessageSource)userResult.Result;
+				await _subscriptionService.AddSubscriptionAsync(userMessageSource);
+				Eventing.FireUserJoinedEvent(this, userMessageSource.User);
 			}
 		}
 	}

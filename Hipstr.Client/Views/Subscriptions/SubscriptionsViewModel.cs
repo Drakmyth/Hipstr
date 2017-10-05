@@ -7,36 +7,44 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Hipstr.Client.Commands;
 
 namespace Hipstr.Client.Views.Subscriptions
 {
-	[UsedImplicitly]
-	public class SubscriptionsViewModel : ViewModelBase
-	{
-		public ObservableCollection<MessageSourceGroup> GroupedSubscriptions { get; }
+    [UsedImplicitly]
+    public class SubscriptionsViewModel : ViewModelBase
+    {
+        public ObservableCollection<MessageSourceGroup> GroupedSubscriptions { get; }
 
-		private readonly IHipChatService _hipChatService;
-		private readonly ISubscriptionService _subscriptionService;
+        private readonly IHipChatService _hipChatService;
+        private readonly ISubscriptionService _subscriptionService;
 
-		public SubscriptionsViewModel(IHipChatService hipChatService, ISubscriptionService subscriptionService)
-		{
-			_hipChatService = hipChatService;
-			_subscriptionService = subscriptionService;
+        public ICommand DeleteSubscriptionCommand { get; }
 
-			GroupedSubscriptions = new ObservableCollection<MessageSourceGroup>();
-		}
+        public SubscriptionsViewModel(IHipChatService hipChatService, ISubscriptionService subscriptionService)
+        {
+            _hipChatService = hipChatService;
+            _subscriptionService = subscriptionService;
 
-		public override void Initialize()
-		{
-			base.Initialize();
+            GroupedSubscriptions = new ObservableCollection<MessageSourceGroup>();
 
-			Eventing.RoomJoined += OnRoomJoined;
+            DeleteSubscriptionCommand = new RelayCommandAsync<IMessageSource>(DeleteSubscriptionAsync, subscription => subscription != null);
+        }
+
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            Eventing.RoomJoined += OnRoomJoined;
+            Eventing.UserJoined += OnUserJoined;
             Eventing.TeamDeleted += OnTeamDeleted;
-		}
+        }
 
         public override void Dispose()
         {
             Eventing.RoomJoined -= OnRoomJoined;
+            Eventing.UserJoined -= OnUserJoined;
             Eventing.TeamDeleted -= OnTeamDeleted;
         }
 
@@ -46,27 +54,38 @@ namespace Hipstr.Client.Views.Subscriptions
         }
 
         private async void OnRoomJoined(object sender, RoomJoinedEventArgs roomJoinedEventArgs)
-		{
-			await RefreshSubscriptionsAsync();
-		}
+        {
+            await RefreshSubscriptionsAsync();
+        }
 
-		public override async Task InitializeAsync()
-		{
-			if (GroupedSubscriptions.Any()) return;
+        private async void OnUserJoined(object sender, UserJoinedEventArgs userJoinedEventArgs)
+        {
+            await RefreshSubscriptionsAsync();
+        }
 
-			await RefreshSubscriptionsAsync();
-		}
+        public override async Task InitializeAsync()
+        {
+            if (GroupedSubscriptions.Any()) return;
 
-		private async Task RefreshSubscriptionsAsync()
-		{
-			IReadOnlyList<IMessageSource> subscriptions = await _subscriptionService.GetSubscriptionsAsync(_hipChatService);
+            await RefreshSubscriptionsAsync();
+        }
 
-			IEnumerable<MessageSourceGroup> groupedSources =
-				subscriptions.GroupBy(
-					GroupNameSelectors.StandardGroupNameSelector,
-					(key, sources) => new MessageSourceGroup(key, sources.OrderBy(ums => ums.Name)));
-			GroupedSubscriptions.Clear();
-			GroupedSubscriptions.AddRange(groupedSources.OrderBy(msg => msg.Key));
-		}
-	}
+        private async Task DeleteSubscriptionAsync(IMessageSource subscription)
+        {
+            await _subscriptionService.RemoveSubscriptionAsync(subscription);
+            await RefreshSubscriptionsAsync();
+        }
+
+        private async Task RefreshSubscriptionsAsync()
+        {
+            IReadOnlyList<IMessageSource> subscriptions = await _subscriptionService.GetSubscriptionsAsync(_hipChatService);
+
+            IEnumerable<MessageSourceGroup> groupedSources =
+                subscriptions.GroupBy(
+                    GroupNameSelectors.StandardGroupNameSelector,
+                    (key, sources) => new MessageSourceGroup(key, sources.OrderBy(ums => ums.Name)));
+            GroupedSubscriptions.Clear();
+            GroupedSubscriptions.AddRange(groupedSources.OrderBy(msg => msg.Key));
+        }
+    }
 }

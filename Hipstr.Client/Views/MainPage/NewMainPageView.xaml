@@ -23,7 +23,9 @@
                 <AppBarButton Label="Join Room"
                               Icon="People"
                               Command="{x:Bind ViewModel.JoinRoomCommand}"/>
-                <AppBarButton Label="Chat With User" Icon="People" />
+                <AppBarButton Label="Chat With User"
+                              Icon="People"
+                              Command="{x:Bind ViewModel.JoinUserCommand}"/>
                 <AppBarSeparator />
                 <AppBarButton Label="Create Room" Icon="People" />
             </CommandBar.SecondaryCommands>
