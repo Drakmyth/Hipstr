@@ -100,15 +100,13 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Behaviors\HipChatMessageParsingBehavior.cs" />
     <Compile Include="Attachments\ImmediateSourceUpdate.cs" />
     <Compile Include="Behaviors\StickyScrollBehavior.cs" />
-    <Compile Include="Behaviors\KeepAboveInputBehavior.cs" />
     <Compile Include="Commands\RelayCommandAsync.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Commands\NavigateToViewCommand.cs" />
-    <Compile Include="Controls\TitleBar.xaml.cs">
-      <DependentUpon>TitleBar.xaml</DependentUpon>
+    <Compile Include="Controls\MDLIcon.xaml.cs">
+      <DependentUpon>MDLIcon.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\EnumerableToBrushConverter.cs" />
     <Compile Include="Converters\IdentityConverter.cs" />
@@ -117,61 +115,14 @@
     <Compile Include="Converters\UserToMessageSourceConverter.cs" />
     <Compile Include="Converters\RoomToMessageSourceConverter.cs" />
     <Compile Include="Converters\NullToVisibilityConverter.cs" />
-    <Compile Include="Views\Dialogs\AddRoomDialog\AddRoomDialogValidationEventArgs.cs" />
-    <Compile Include="Views\Dialogs\AddRoomDialog\AddRoomDialogView.xaml.cs">
-      <DependentUpon>AddRoomDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\AddRoomDialog\AddRoomDialogViewModel.cs" />
-    <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogValidationEventArgs.cs" />
-    <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogViewModel.cs" />
-    <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogValidationEventArgs.cs" />
-    <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogViewModel.cs" />
-    <Compile Include="Views\Dialogs\ParentPopupManager.cs" />
-    <Compile Include="Views\Dialogs\ParentPopupTransitionType.cs" />
-    <Compile Include="Views\Dialogs\ValidationResult.cs" />
     <Compile Include="IoCContainer.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Utility\VisualTreeHelperExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainPage\MainPageView.xaml.cs">
       <DependentUpon>MainPageView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\MainPage\MainPageViewModel.cs" />
-    <Compile Include="Views\Messages\MessagesViewModel.cs" />
-    <Compile Include="Views\Messages\MessagesView.xaml.cs">
-      <DependentUpon>MessagesView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\DialogResult.cs" />
-    <Compile Include="Views\NewMainPage\NewMainPageView.xaml.cs">
-      <DependentUpon>NewMainPageView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\NewMainPage\NewMainPageViewModel.cs" />
-    <Compile Include="Views\Rooms\RoomsView.xaml.cs">
-      <DependentUpon>RoomsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Rooms\RoomsViewModel.cs" />
-    <Compile Include="Views\Dialogs\EditTeamDialog\EditTeamDialogView.xaml.cs">
-      <DependentUpon>EditTeamDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Dialogs\AddTeamDialog\AddTeamDialogView.xaml.cs">
-      <DependentUpon>AddTeamDialogView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\SettingsView.xaml.cs">
-      <DependentUpon>SettingsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Settings\SettingsViewModel.cs" />
-    <Compile Include="Views\Users\UserProfileView.xaml.cs">
-      <DependentUpon>UserProfileView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Users\UserProfileViewModel.cs" />
-    <Compile Include="Views\Users\UsersView.xaml.cs">
-      <DependentUpon>UsersView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Users\UsersViewModel.cs" />
-    <Compile Include="Views\Teams\TeamsView.xaml.cs">
-      <DependentUpon>TeamsView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Teams\TeamsViewModel.cs" />
     <Compile Include="Views\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -264,7 +215,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="Controls\TitleBar.xaml">
+    <Page Include="Controls\MDLIcon.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -276,49 +227,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\Dialogs\AddRoomDialog\AddRoomDialogView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="Views\MainPage\MainPageView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Messages\MessagesView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\NewMainPage\NewMainPageView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Rooms\RoomsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Dialogs\EditTeamDialog\EditTeamDialogView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Dialogs\AddTeamDialog\AddTeamDialogView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\Settings\SettingsView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Users\UserProfileView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Users\UsersView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\Teams\TeamsView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -346,6 +257,7 @@
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

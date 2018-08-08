@@ -1,14 +1,6 @@
 ﻿using Autofac;
 using Autofac.Builder;
-using Hipstr.Client.Views.Dialogs.AddRoomDialog;
-using Hipstr.Client.Views.Dialogs.AddTeamDialog;
-using Hipstr.Client.Views.Dialogs.EditTeamDialog;
 using Hipstr.Client.Views.MainPage;
-using Hipstr.Client.Views.Messages;
-using Hipstr.Client.Views.Rooms;
-using Hipstr.Client.Views.Settings;
-using Hipstr.Client.Views.Teams;
-using Hipstr.Client.Views.Users;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility;
 
@@ -39,15 +31,6 @@ namespace Hipstr.Client
 			// XAML binding breaks when using an interface as the DataContext, so we
 			// need to request implementations rather than interfaces for the view models
 			builder.RegisterType<MainPageViewModel, MainPageViewModel>();
-			builder.RegisterType<TeamsViewModel, TeamsViewModel>();
-			builder.RegisterType<RoomsViewModel, RoomsViewModel>();
-			builder.RegisterType<MessagesViewModel, MessagesViewModel>();
-			builder.RegisterType<UsersViewModel, UsersViewModel>();
-			builder.RegisterType<UserProfileViewModel, UserProfileViewModel>();
-			builder.RegisterType<AddTeamDialogViewModel, AddTeamDialogViewModel>();
-			builder.RegisterType<EditTeamDialogViewModel, EditTeamDialogViewModel>();
-			builder.RegisterType<AddRoomDialogViewModel, AddRoomDialogViewModel>();
-			builder.RegisterType<SettingsViewModel, SettingsViewModel>();
 		}
 
 		private static IRegistrationBuilder<TInstanceType, ConcreteReflectionActivatorData, SingleRegistrationStyle> RegisterType<TInterface, TInstanceType>(this ContainerBuilder builder) where TInstanceType : TInterface

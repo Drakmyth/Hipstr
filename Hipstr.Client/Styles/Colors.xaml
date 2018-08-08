@@ -1,45 +1,29 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<ResourceDictionary.ThemeDictionaries>
-		<ResourceDictionary x:Key="Light">
-			<SolidColorBrush x:Key="HipstrAccent" Color="#FF205081" />
-			<SolidColorBrush x:Key="HipstrAccentBright" Color="#FF3572B0" />
-			<SolidColorBrush x:Key="HipstrAccentText" Color="White" />
-			<SolidColorBrush x:Key="HipstrAccentSeparator" Color="Black" />
-			<SolidColorBrush x:Key="HipstrBackground" Color="White" />
-			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="White" />
-			<SolidColorBrush x:Key="HipstrHeaderText" Color="#FF1E252B" />
-			<SolidColorBrush x:Key="HipstrText" Color="#FF1E252B" />
-			<SolidColorBrush x:Key="HipstrSubText" Color="#FF7A7C7F" />
-			<SolidColorBrush x:Key="HipstrTextBoxErrorBackground" Color="LavenderBlush" />
-			<SolidColorBrush x:Key="HipstrTextBoxErrorBorder" Color="Red" />
-			<SolidColorBrush x:Key="HipstrTextBoxErrorText" Color="Black" />
-			<SolidColorBrush x:Key="HipstrTextBoxBackground" Color="White" />
-			<SolidColorBrush x:Key="HipstrTextBoxText" Color="Black" />
-			<SolidColorBrush x:Key="HipstrErrorBackground" Color="AntiqueWhite" />
-			<SolidColorBrush x:Key="HipstrErrorText" Color="Red" />
-			<SolidColorBrush x:Key="HipstrSemanticZoomEmptyGroup" Color="DimGray" />
-			<SolidColorBrush x:Key="HipstrSemanticZoomNotEmptyGroup" Color="White" />
-		</ResourceDictionary>
-		<ResourceDictionary x:Key="Dark">
-			<SolidColorBrush x:Key="HipstrAccent" Color="#FF205081" />
-			<SolidColorBrush x:Key="HipstrAccentBright" Color="#FF3572B0" />
-			<SolidColorBrush x:Key="HipstrAccentText" Color="White" />
-			<SolidColorBrush x:Key="HipstrAccentSeparator" Color="Black" />
-			<SolidColorBrush x:Key="HipstrBackground" Color="#FF333940" />
-			<SolidColorBrush x:Key="HipstrBackgroundBright" Color="#FF7A7C7F" />
-			<SolidColorBrush x:Key="HipstrHeaderText" Color="White" />
-			<SolidColorBrush x:Key="HipstrText" Color="White" />
-			<SolidColorBrush x:Key="HipstrSubText" Color="LightGray" />
-			<SolidColorBrush x:Key="HipstrTextBoxErrorBackground" Color="LavenderBlush" />
-			<SolidColorBrush x:Key="HipstrTextBoxErrorBorder" Color="Red" />
-			<SolidColorBrush x:Key="HipstrTextBoxErrorText" Color="Black" />
-			<SolidColorBrush x:Key="HipstrTextBoxBackground" Color="White" />
-			<SolidColorBrush x:Key="HipstrTextBoxText" Color="Black" />
-			<SolidColorBrush x:Key="HipstrErrorBackground" Color="AntiqueWhite" />
-			<SolidColorBrush x:Key="HipstrErrorText" Color="Red" />
-			<SolidColorBrush x:Key="HipstrSemanticZoomEmptyGroup" Color="DimGray" />
-			<SolidColorBrush x:Key="HipstrSemanticZoomNotEmptyGroup" Color="White" />
-		</ResourceDictionary>
-	</ResourceDictionary.ThemeDictionaries>
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="HipstrBackground" Color="#FF205081" />
+            <SolidColorBrush x:Key="HipstrPanel" Color="#FFF5F5F5"/>
+            <SolidColorBrush x:Key="HipstrChat" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="HipstrHeaderText" Color="#FF707070" />
+            <SolidColorBrush x:Key="HipstrText" Color="#FF333333" />
+            <SolidColorBrush x:Key="HipstrSubText" Color="#FF9D9D9D" />
+            <SolidColorBrush x:Key="HipstrPanelBorder" Color="#FFCCCCCC"/>
+            <SolidColorBrush x:Key="HipstrHighlight" Color="#FF3572B0"/>
+            <SolidColorBrush x:Key="HipstrHighlightText" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="HipstrPlaceholderText" Color="#FF9CACBD"/>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="HipstrBackground" Color="#FF205081" />
+            <SolidColorBrush x:Key="HipstrPanel" Color="#FFF5F5F5"/>
+            <SolidColorBrush x:Key="HipstrChat" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="HipstrHeaderText" Color="#FF707070" />
+            <SolidColorBrush x:Key="HipstrText" Color="#FF333333" />
+            <SolidColorBrush x:Key="HipstrSubText" Color="#FF9D9D9D" />
+            <SolidColorBrush x:Key="HipstrPanelBorder" Color="#FFCCCCCC"/>
+            <SolidColorBrush x:Key="HipstrHighlight" Color="#FF3572B0"/>
+            <SolidColorBrush x:Key="HipstrHighlightText" Color="#FFFFFFFF"/>
+            <SolidColorBrush x:Key="HipstrPlaceholderText" Color="#FF9CACBD"/>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
 </ResourceDictionary>

@@ -1,6 +1,5 @@
 ﻿using Hipstr.Client.Views;
 using Hipstr.Client.Views.MainPage;
-using Hipstr.Client.Views.Teams;
 using Hipstr.Core.Services;
 using Hipstr.Core.Utility;
 using System;
@@ -54,7 +53,7 @@ namespace Hipstr.Client
 #if DEBUG
 			if (Debugger.IsAttached)
 			{
-				DebugSettings.EnableFrameRateCounter = true;
+				//DebugSettings.EnableFrameRateCounter = true;
 			}
 #endif
 
@@ -77,7 +76,7 @@ namespace Hipstr.Client
 				}
 
 				// Create a MainPageView to hold the frame and place it in the current Window
-				Window.Current.Content = new MainPageView(Frame);
+				Window.Current.Content = new MainPageView();
 				((MainPageViewModel)((MainPageView)Window.Current.Content).DataContext).Initialize();
 
 				// Register a handler for BackRequested events and set the visibility of the Back button
@@ -90,7 +89,7 @@ namespace Hipstr.Client
 				// When the navigation stack isn't restored navigate to the first page,
 				// configuring the new page by passing required information as a navigation
 				// parameter
-				Frame.Navigate(typeof(TeamsView), e.Arguments);
+				//Frame.Navigate(typeof(TeamsView), e.Arguments);
 			}
 			// Ensure the current window is active
 			Window.Current.Activate();
