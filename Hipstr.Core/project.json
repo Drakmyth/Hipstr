@@ -1,12 +1,11 @@
 ﻿{
   "dependencies": {
-    "JetBrains.Annotations": "10.2.1",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-    "Microsoft.Toolkit.Uwp.Notifications": "1.2.0",
-    "Newtonsoft.Json": "9.0.1"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.1.7",
+    "Microsoft.Toolkit.Uwp.Notifications": "4.0.0",
+    "Newtonsoft.Json": "11.0.2"
   },
   "frameworks": {
-    "uap10.0": {}
+    "uap10.0.10240": {}
   },
   "runtimes": {
     "win10-arm": {},
