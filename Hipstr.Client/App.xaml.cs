@@ -1,7 +1,5 @@
 ﻿using Hipstr.Client.Views;
 using Hipstr.Client.Views.MainPage;
-using Hipstr.Core.Services;
-using Hipstr.Core.Utility;
 using System;
 using System.Diagnostics;
 using System.ServiceModel;
@@ -21,12 +19,9 @@ namespace Hipstr.Client
 	/// <summary>
 	/// Provides application-specific behavior to supplement the default Application class.
 	/// </summary>
-	sealed partial class App : Application
+	public sealed partial class App : Application
 	{
 		public static Frame Frame { get; private set; }
-		public static IAppSettings Settings { get; private set; }
-
-		private readonly IToastService _toastService;
 
 		/// <summary>
 		/// Initializes the singleton application object.  This is the first line of authored code
@@ -39,16 +34,14 @@ namespace Hipstr.Client
 			InitializeComponent();
 			Suspending += OnSuspending;
 			UnhandledException += OnUnhandledException;
-
-			_toastService = IoCContainer.Resolve<IToastService>();
 		}
 
 		/// <summary>
 		/// Invoked when the application is launched normally by the end user.  Other entry points
 		/// will be used such as when the application is launched to open a specific file.
 		/// </summary>
-		/// <param name="e">Details about the launch request and process.</param>
-		protected override void OnLaunched(LaunchActivatedEventArgs e)
+		/// <param name="args">Details about the launch request and process.</param>
+		protected override void OnLaunched(LaunchActivatedEventArgs args)
 		{
 #if DEBUG
 			if (Debugger.IsAttached)
@@ -61,8 +54,6 @@ namespace Hipstr.Client
 			// just ensure that the window is active
 			if (Window.Current.Content == null)
 			{
-				Settings = IoCContainer.Resolve<IAppSettings>();
-
 				// Create a Frame to act as the navigation context and navigate to the first page
 				Frame = new Frame();
 
@@ -70,7 +61,7 @@ namespace Hipstr.Client
 				Frame.Navigating += OnNavigating;
 				Frame.Navigated += OnNavigated;
 
-				if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
+				if (args.PreviousExecutionState == ApplicationExecutionState.Terminated)
 				{
 					//TODO: Load state from previously suspended application
 				}
@@ -129,8 +120,7 @@ namespace Hipstr.Client
 			// Each time a navigation event occurs, update the Back button's visibility
 			UpdateBackButtonVisibility();
 
-			var page = Frame.Content as Page;
-			if (page != null)
+			if (Frame.Content is Page page)
 			{
 				page.Loaded += OnLoaded;
 			}
@@ -138,8 +128,7 @@ namespace Hipstr.Client
 
 		private static async void OnLoaded(object sender, RoutedEventArgs e)
 		{
-			var page = sender as Page;
-			if (page != null)
+			if (sender is Page page)
 			{
 				page.Loaded -= OnLoaded;
 			}
@@ -179,17 +168,17 @@ namespace Hipstr.Client
 			deferral.Complete();
 		}
 
-		private void OnUnhandledException(object sender, UnhandledExceptionEventArgs args)
+		private void OnUnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs args)
 		{
 			if (args.Exception is CommunicationException)
 			{
-				_toastService.ShowCommunicationErrorToast(args.Message);
+				// Show communication error toast
 				args.Handled = true;
 				return;
 			}
 
 			// TODO: We should probably have a better way of handling "Something terribly has gone wrong"
-			_toastService.ShowUnknownErrorToast(args.Message);
+			// Show unknown error toast
 			args.Handled = true;
 		}
 	}

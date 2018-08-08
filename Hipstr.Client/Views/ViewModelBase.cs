@@ -25,8 +25,8 @@ namespace Hipstr.Client.Views
 
 		public virtual void Initialize()
 		{
-			App.Settings.CurrentThemeChanged += OnCurrentThemeChange;
-			CurrentTheme = App.Settings.CurrentTheme;
+			//App.Settings.CurrentThemeChanged += OnCurrentThemeChange;
+			//CurrentTheme = App.Settings.CurrentTheme;
 		}
 
 		public virtual Task InitializeAsync()
@@ -47,7 +47,7 @@ namespace Hipstr.Client.Views
 
 		public virtual void Dispose()
 		{
-			App.Settings.CurrentThemeChanged -= OnCurrentThemeChange;
+			//App.Settings.CurrentThemeChanged -= OnCurrentThemeChange;
 		}
 	}
 }
