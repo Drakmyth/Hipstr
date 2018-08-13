@@ -4,12 +4,19 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:controls="using:Hipstr.Client.Controls"
-      mc:Ignorable="d"
-      RequestedTheme="Light">
+      mc:Ignorable="d">
     <!--RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">-->
 
     <Grid Background="{ThemeResource HipstrBackground}">
-        <Grid.RowDefinitions>
+        <controls:SplitViewSplitter AnchorPosition="200">
+            <controls:SplitViewSplitter.LeftPane>
+                <Grid Background="Blue"/>
+            </controls:SplitViewSplitter.LeftPane>
+            <controls:SplitViewSplitter.RightPane>
+                <Grid Background="Red"/>
+            </controls:SplitViewSplitter.RightPane>
+        </controls:SplitViewSplitter>
+        <!--<Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -52,15 +59,33 @@
         </Grid>
         <SplitView Grid.Row="1"
                    DisplayMode="Inline"
-				   IsPaneOpen="True"
+				   IsPaneOpen="False"
 				   PaneBackground="{ThemeResource HipstrPanel}">
             <SplitView.Pane>
-                <ListView BorderBrush="{ThemeResource HipstrPanelBorder}"
-                          BorderThickness="0 0 1 0"/>
+                <Grid>
+                    <ListView BorderBrush="{ThemeResource HipstrPanelBorder}"
+                              BorderThickness="0 0 1 0"/>
+                    <Button HorizontalAlignment="Right"
+                            Padding="0 10"
+                            Background="Transparent">
+                        <controls:MDLIcon Code="E00E"/>
+                    </Button>
+                </Grid>
             </SplitView.Pane>
             <SplitView.Content>
-                <Grid BorderBrush="Gray"
-                      BorderThickness="0">
+                <Grid Background="{ThemeResource HipstrPanel}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Background="Transparent"
+                            VerticalAlignment="Stretch">
+                        <controls:MDLIcon Code="E00E"/>
+                    </Button>
+                    <Grid Grid.Column="1"
+                          BorderBrush="Gray"
+                          BorderThickness="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
@@ -161,7 +186,8 @@
                         </SplitView.Pane>
                     </SplitView>
                 </Grid>
+                </Grid>
             </SplitView.Content>
-        </SplitView>
+        </SplitView>-->
     </Grid>
 </Page>

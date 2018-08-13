@@ -1,0 +1,59 @@
+﻿<UserControl
+    x:Class="Hipstr.Client.Controls.SplitViewSplitter"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <RelativePanel>
+        <SplitView Name="PaneSplitter"
+                   RelativePanel.AlignLeftWithPanel="True"
+                   RelativePanel.AlignTopWithPanel="True"
+                   RelativePanel.AlignRightWithPanel="True"
+                   RelativePanel.AlignBottomWithPanel="True"
+                   DisplayMode="Inline"
+                   IsPaneOpen="True"
+                   Pane="{x:Bind LeftPane, Mode=OneWay}"
+                   OpenPaneLength="{x:Bind AnchorPosition, Mode=TwoWay}">
+            <SplitView.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{x:Bind GetColumnWidth(AnchorWidth), Mode=OneWay}"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <ContentPresenter Grid.Column="1"
+                                      Content="{x:Bind RightPane, Mode=OneWay}"/>
+                </Grid>
+            </SplitView.Content>
+        </SplitView>
+        <Rectangle Name="PaneAnchor"
+                   RelativePanel.AlignVerticalCenterWith="PaneSplitter"
+                   RelativePanel.AlignTopWith="PaneSplitter"
+                   RelativePanel.AlignBottomWith="PaneSplitter"
+                   Width="{x:Bind AnchorWidth, Mode=OneWay}"
+                   Fill="{x:Bind AnchorBackground, Mode=OneWay}"
+                   Margin="{x:Bind ToLeftMargin(PaneSplitter, PaneSplitter.OpenPaneLength), Mode=OneWay}"
+                   ManipulationStarted="PaneAnchor_ManipulationStarted"
+                   ManipulationDelta="PaneAnchor_ManipulationDelta"
+                   ManipulationCompleted="PaneAnchor_ManipulationCompleted"
+                   ManipulationMode="TranslateX"
+                   PointerEntered="PaneAnchor_PointerEntered"
+                   PointerExited="PaneAnchor_PointerExited"
+                   PointerMoved="PaneAnchor_PointerMoved"/>
+        <SymbolIcon RelativePanel.AlignVerticalCenterWith="PaneAnchor"
+                    Symbol="GlobalNavigationButton"
+                    IsHitTestVisible="False"
+                    Foreground="{x:Bind AnchorForeground, Mode=OneWay}">
+            <SymbolIcon.RenderTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="90"/>
+                    <ScaleTransform ScaleX="0.6" ScaleY="1"/>
+                    <TranslateTransform X="{x:Bind OffsetIcon(PaneSplitter.OpenPaneLength), Mode=OneWay}"/>
+                </TransformGroup>
+            </SymbolIcon.RenderTransform>
+        </SymbolIcon>
+    </RelativePanel>
+</UserControl>
