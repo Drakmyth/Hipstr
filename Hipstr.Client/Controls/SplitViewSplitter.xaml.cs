@@ -67,6 +67,24 @@ namespace Hipstr.Client.Controls
 		public static readonly DependencyProperty AnchorForegroundProperty =
 			DependencyProperty.Register(nameof(AnchorForeground), typeof(Brush), typeof(SplitViewSplitter), new PropertyMetadata(Application.Current.Resources["SystemControlForegroundBaseHighBrush"]));
 
+		public double MinAnchorPosition
+		{
+			get { return (double)GetValue(MinAnchorPositionProperty); }
+			set { SetValue(MinAnchorPositionProperty, value); }
+		}
+
+		public static readonly DependencyProperty MinAnchorPositionProperty =
+			DependencyProperty.Register(nameof(MinAnchorPosition), typeof(double), typeof(SplitViewSplitter), new PropertyMetadata(0.0));
+
+		public double MaxAnchorPosition
+		{
+			get { return (double)GetValue(MaxAnchorPositionProperty); }
+			set { SetValue(MaxAnchorPositionProperty, value); }
+		}
+
+		public static readonly DependencyProperty MaxAnchorPositionProperty =
+			DependencyProperty.Register("MaxAnchorPosition", typeof(double), typeof(SplitViewSplitter), new PropertyMetadata(double.MaxValue));
+
 		public SplitViewSplitter()
 		{
 			InitializeComponent();
@@ -88,8 +106,11 @@ namespace Hipstr.Client.Controls
 
 			var transform = rect.TransformToVisual(PaneSplitter);
 			var point = transform.TransformPoint(e.Position);
+			var containerWidth = PaneSplitter.ActualWidth - rect.Width;
+			var min = Math.Max(0, MinAnchorPosition);
+			var max = Math.Min(containerWidth, MaxAnchorPosition);
 
-			var left = Math.Clamp(point.X - _dragOffset, 0, PaneSplitter.ActualWidth - rect.Width);
+			var left = Math.Clamp(point.X - _dragOffset, min, max);
 			rect.Margin = new Thickness(left, rect.Margin.Top, rect.Margin.Right, rect.Margin.Bottom);
 
 			PaneSplitter.OpenPaneLength = left;
