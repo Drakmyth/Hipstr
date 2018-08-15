@@ -49,6 +49,15 @@ namespace Hipstr.Client.Controls
 		public static readonly DependencyProperty AnchorWidthProperty =
 			DependencyProperty.Register(nameof(AnchorWidth), typeof(double), typeof(SplitViewSplitter), new PropertyMetadata(10.0));
 
+		public double AnchorHitWidth
+		{
+			get { return (double)GetValue(AnchorHitWidthProperty); }
+			set { SetValue(AnchorHitWidthProperty, value); }
+		}
+
+		public static readonly DependencyProperty AnchorHitWidthProperty =
+			DependencyProperty.Register(nameof(AnchorHitWidth), typeof(double), typeof(SplitViewSplitter), new PropertyMetadata(10.0));
+
 		public Brush AnchorBackground
 		{
 			get { return (Brush)GetValue(AnchorBackgroundProperty); }
@@ -154,6 +163,16 @@ namespace Hipstr.Client.Controls
 		private double OffsetIcon(double anchorPosition)
 		{
 			return anchorPosition + 11.5;
+		}
+
+		private double scaleIconX(double anchorWidth)
+		{
+			return anchorWidth * 0.6;
+		}
+
+		private double scaleIconY(double anchorWidth)
+		{
+			return anchorWidth < 10 ? 0 : anchorWidth / 10.0;
 		}
 
 		private GridLength GetColumnWidth(double width)

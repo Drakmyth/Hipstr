@@ -29,12 +29,12 @@
                 </Grid>
             </SplitView.Content>
         </SplitView>
-        <Rectangle Name="PaneAnchor"
+        <Rectangle Name="PaneAnchorHit"
                    RelativePanel.AlignVerticalCenterWith="PaneSplitter"
                    RelativePanel.AlignTopWith="PaneSplitter"
                    RelativePanel.AlignBottomWith="PaneSplitter"
-                   Width="{x:Bind AnchorWidth, Mode=OneWay}"
-                   Fill="{x:Bind AnchorBackground, Mode=OneWay}"
+                   Width="{x:Bind AnchorHitWidth, Mode=OneWay}"
+                   Fill="Transparent"
                    Margin="{x:Bind ToLeftMargin(PaneSplitter, PaneSplitter.OpenPaneLength), Mode=OneWay}"
                    ManipulationStarted="PaneAnchor_ManipulationStarted"
                    ManipulationDelta="PaneAnchor_ManipulationDelta"
@@ -43,14 +43,21 @@
                    PointerEntered="PaneAnchor_PointerEntered"
                    PointerExited="PaneAnchor_PointerExited"
                    PointerMoved="PaneAnchor_PointerMoved"/>
-        <SymbolIcon RelativePanel.AlignVerticalCenterWith="PaneAnchor"
+        <Rectangle Name="PaneAnchorRender"
+                   RelativePanel.AlignVerticalCenterWith="PaneSplitter"
+                   RelativePanel.AlignTopWith="PaneSplitter"
+                   RelativePanel.AlignBottomWith="PaneSplitter"
+                   Width="{x:Bind AnchorWidth, Mode=OneWay}"
+                   Fill="{x:Bind AnchorBackground, Mode=OneWay}"
+                   Margin="{x:Bind ToLeftMargin(PaneSplitter, PaneSplitter.OpenPaneLength), Mode=OneWay}"/>
+        <SymbolIcon RelativePanel.AlignVerticalCenterWith="PaneAnchorRender"
                     Symbol="GlobalNavigationButton"
                     IsHitTestVisible="False"
                     Foreground="{x:Bind AnchorForeground, Mode=OneWay}">
             <SymbolIcon.RenderTransform>
                 <TransformGroup>
                     <RotateTransform Angle="90"/>
-                    <ScaleTransform ScaleX="0.6" ScaleY="1"/>
+                    <ScaleTransform ScaleX="{x:Bind scaleIconX(AnchorWidth), Mode=OneWay}" ScaleY="{x:Bind scaleIconY(AnchorWidth), Mode=OneWay}"/>
                     <TranslateTransform X="{x:Bind OffsetIcon(PaneSplitter.OpenPaneLength), Mode=OneWay}"/>
                 </TransformGroup>
             </SymbolIcon.RenderTransform>

@@ -8,7 +8,7 @@
     <!--RequestedTheme="{x:Bind ViewModel.CurrentTheme, Mode=OneWay}">-->
 
     <Grid Background="{ThemeResource HipstrBackground}">
-        <controls:SplitViewSplitter AnchorPosition="200">
+        <controls:SplitViewSplitter AnchorPosition="200" AnchorWidth="1">
             <controls:SplitViewSplitter.LeftPane>
                 <Grid Background="Blue"/>
             </controls:SplitViewSplitter.LeftPane>
