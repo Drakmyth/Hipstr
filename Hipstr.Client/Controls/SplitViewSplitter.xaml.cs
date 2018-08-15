@@ -93,6 +93,8 @@ namespace Hipstr.Client.Controls
 			_resetCursor = true;
 		}
 
+
+
 		private void PaneAnchor_ManipulationStarted(object _, ManipulationStartedRoutedEventArgs e)
 		{
 			_dragOffset = e.Position.X;
@@ -106,9 +108,8 @@ namespace Hipstr.Client.Controls
 
 			var transform = rect.TransformToVisual(PaneSplitter);
 			var point = transform.TransformPoint(e.Position);
-			var containerWidth = PaneSplitter.ActualWidth - rect.Width;
 			var min = Math.Max(0, MinAnchorPosition);
-			var max = Math.Min(containerWidth, MaxAnchorPosition);
+			var max = Math.Min(PaneSplitter.ActualWidth - rect.Width, MaxAnchorPosition);
 
 			var left = Math.Clamp(point.X - _dragOffset, min, max);
 			rect.Margin = new Thickness(left, rect.Margin.Top, rect.Margin.Right, rect.Margin.Bottom);
